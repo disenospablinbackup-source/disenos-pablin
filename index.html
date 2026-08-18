@@ -3,276 +3,348 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diseños Pablin — Panel de Control</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Manrope:wght@400;500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Librería Supabase JS -->
+<title>Diseños Pablin — Panel Interno</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<!-- Librería Oficial de Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --carbon: #1D1D1D;
-    --sand: #F8F6F2;
-    --sand-2: #F0EDE6;
-    --gold: #B78652;
-    --gold-light: #C99B68;
-    --gold-dim: #DCCFBE;
-    --stone: #7B7B7B;
-    --border: #DCCFBE;
-    --border-dark: #2E2E2E;
+    --carbon:   #1D1D1D;
+    --ivory:    #F8F6F2;
+    --sand:     #DCCFBE;
+    --stone:    #7B7B7B;
+    --bronze:   #B78652;
+    --bronze-light: #C9A476;
+    --white:    #FFFFFF;
+    --danger:   #C0392B;
+    --success:  #2E7D32;
+
+    --font-title: 'Montserrat', sans-serif;
+    --font-body:  'Manrope', sans-serif;
+    --font-quote: 'Cormorant Garamond', serif;
+
     --sidebar-w: 240px;
+    --radius: 2px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
-    background: var(--sand);
+    font-family: var(--font-body);
+    background: var(--ivory);
     color: var(--carbon);
-    font-family: 'Manrope', sans-serif;
-    font-size: 13px;
-    display: flex;
     min-height: 100vh;
+    display: flex;
+    font-size: 14px;
+    line-height: 1.6;
   }
-  aside {
+
+  /* ── SIDEBAR ── */
+  .sidebar {
     width: var(--sidebar-w);
+    min-height: 100vh;
     background: var(--carbon);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
     position: fixed;
-    top: 0; bottom: 0; left: 0;
+    top: 0; left: 0;
     z-index: 100;
-    border-right: 1px solid var(--border-dark);
   }
-  .brand {
-    padding: 24px 20px 20px;
-    border-bottom: 1px solid var(--border-dark);
+
+  .sidebar-logo {
+    padding: 28px 24px 24px;
+    border-bottom: 1px solid rgba(220,207,190,0.15);
   }
-  .brand-name {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+  .sidebar-logo .brand-name {
+    font-family: var(--font-title);
+    font-size: 13px;
     font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--ivory);
+    text-transform: uppercase;
+  }
+  .sidebar-logo .brand-sub {
+    font-family: var(--font-title);
+    font-size: 9px;
     letter-spacing: 0.22em;
+    color: var(--bronze);
     text-transform: uppercase;
-    color: var(--sand);
+    margin-top: 3px;
   }
-  .brand-tag {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-top: 2px;
+  .sidebar-logo .brand-accent {
+    width: 28px;
+    height: 1px;
+    background: var(--bronze);
+    margin: 10px 0 0;
   }
-  .nav-group { padding: 16px 0 8px; }
-  .nav-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+  }
+  .nav-section-label {
+    font-family: var(--font-title);
+    font-size: 9px;
+    letter-spacing: 0.2em;
     color: var(--stone);
-    padding: 0 20px 8px;
+    text-transform: uppercase;
+    padding: 18px 24px 8px;
   }
   .nav-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 20px;
-    color: var(--sand);
-    opacity: 0.65;
-    text-decoration: none;
-    font-size: 12px;
+    padding: 10px 24px;
+    color: rgba(248,246,242,0.6);
+    font-size: 13px;
     font-weight: 500;
-    transition: all 0.15s;
     cursor: pointer;
+    transition: all 0.15s;
     border-left: 2px solid transparent;
+    text-decoration: none;
   }
-  .nav-item:hover { opacity: 1; background: rgba(255,255,255,0.04); }
+  .nav-item:hover {
+    color: var(--ivory);
+    background: rgba(248,246,242,0.05);
+  }
   .nav-item.active {
-    opacity: 1;
-    color: var(--gold);
-    border-left-color: var(--gold);
+    color: var(--bronze);
+    border-left-color: var(--bronze);
     background: rgba(183,134,82,0.08);
   }
-  .nav-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .nav-item svg { opacity: 0.7; flex-shrink: 0; }
+  .nav-item.active svg { opacity: 1; }
+
   .sidebar-footer {
-    margin-top: auto;
-    padding: 16px 20px;
-    border-top: 1px solid var(--border-dark);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
+    padding: 20px 24px;
+    border-top: 1px solid rgba(220,207,190,0.15);
+    font-size: 12px;
+    color: var(--stone);
   }
-  .sidebar-user { font-size: 11px; font-weight: 600; color: var(--sand); margin-top: 2px; }
-  main {
+  .sidebar-footer .user-name {
+    color: var(--ivory);
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .sidebar-footer .user-role {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--bronze);
+    text-transform: uppercase;
+  }
+
+  /* ── MAIN ── */
+  .main {
     margin-left: var(--sidebar-w);
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    min-height: 100vh;
   }
+
   .topbar {
-    height: 56px;
-    background: #FFF;
-    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    border-bottom: 1px solid var(--sand);
+    padding: 0 36px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 28px;
     position: sticky;
     top: 0;
     z-index: 50;
   }
   .topbar-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
+    font-family: var(--font-title);
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--stone);
-  }
-  .content { padding: 28px; flex: 1; }
-  .view { display: none; }
-  .view.active { display: block; }
-  .page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-  .page-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--carbon);
   }
-  .page-sub {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--stone);
-    margin-top: 2px;
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
+
+  .content {
+    padding: 36px;
+    flex: 1;
+  }
+
+  /* ── BOTONES ── */
   .btn {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 10px 18px;
-    border-radius: 2px;
-    border: none;
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
+    font-family: var(--font-title);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
     transition: all 0.15s;
+    border-radius: var(--radius);
   }
-  .btn-bronze { background: var(--gold); color: #FFF; }
-  .btn-bronze:hover { background: var(--gold-light); }
-  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--carbon); }
-  .btn-outline:hover { background: var(--sand-2); border-color: var(--gold); }
-  .btn-sm { padding: 6px 12px; font-size: 8px; }
-  
-  /* METRICAS DASHBOARD */
-  .metrics-grid {
+  .btn-primary {
+    background: var(--carbon);
+    color: var(--ivory);
+  }
+  .btn-primary:hover { background: #2d2d2d; }
+  .btn-bronze {
+    background: var(--bronze);
+    color: var(--white);
+  }
+  .btn-bronze:hover { background: var(--bronze-light); }
+  .btn-outline {
+    background: transparent;
+    color: var(--carbon);
+    border: 1px solid var(--sand);
+  }
+  .btn-outline:hover { border-color: var(--carbon); }
+  .btn-sm {
+    padding: 7px 14px;
+    font-size: 10px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .card-title {
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 16px;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-bottom: 28px;
   }
-  .metric-card {
-    background: #FFF;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 20px;
-    border-top: 3px solid var(--gold);
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--sand);
+    padding: 20px 24px;
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
   }
-  .metric-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--stone);
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--bronze);
   }
-  .metric-val {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
+  .stat-number {
+    font-family: var(--font-title);
+    font-size: 28px;
     font-weight: 700;
     color: var(--carbon);
-    margin: 8px 0 4px;
+    line-height: 1;
+    margin-bottom: 4px;
   }
-  .metric-note { font-size: 11px; color: var(--stone); }
-  
-  .card {
-    background: #FFF;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    margin-bottom: 20px;
+  .stat-label {
+    font-size: 11px;
+    color: var(--stone);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: var(--font-title);
+    font-weight: 600;
   }
-  .card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .stat-delta {
+    font-size: 11px;
+    color: var(--success);
+    margin-top: 6px;
   }
-  .card-title {
-    font-family: 'Montserrat', sans-serif;
+
+  /* ── TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    font-family: var(--font-title);
     font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--stone);
-  }
-  .table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .table th {
-    text-align: left;
     padding: 10px 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--stone);
-    border-bottom: 1px solid var(--border);
-    background: var(--sand);
+    text-align: left;
+    border-bottom: 1px solid var(--sand);
   }
-  .table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  .table tr:last-child td { border-bottom: none; }
-  .table tr:hover td { background: rgba(248,246,242,0.6); }
-  .avatar {
-    width: 30px; height: 30px;
-    background: var(--gold-dim);
-    color: var(--gold);
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--ivory);
+    color: var(--carbon);
+    font-size: 13px;
+    vertical-align: middle;
   }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--ivory); }
+
+  /* ── BADGES ── */
   .badge {
     display: inline-block;
-    padding: 3px 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
+    font-family: var(--font-title);
+    font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    border-radius: 2px;
+    padding: 3px 10px;
+    border-radius: 1px;
   }
-  
-  /* MODAL */
+  .badge-active   { background: #E8F5E9; color: var(--success); }
+  .badge-pending  { background: #FFF8E1; color: #F57F17; }
+  .badge-done     { background: var(--sand); color: var(--stone); }
+  .badge-cocina   { background: rgba(183,134,82,0.12); color: var(--bronze); }
+  .badge-bano     { background: rgba(29,29,29,0.06); color: var(--carbon); }
+  .badge-closet   { background: rgba(111,117,98,0.1); color: #4a4f3e; }
+  .badge-deco     { background: rgba(220,207,190,0.4); color: #6b5c48; }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    height: 3px;
+    background: var(--sand);
+    border-radius: 1px;
+    overflow: hidden;
+    width: 100px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--bronze);
+    border-radius: 1px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--stone);
+    margin-top: 3px;
+  }
+
+  /* ── MODAL ── */
   .modal-overlay {
     display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     background: rgba(29,29,29,0.5);
     z-index: 200;
     align-items: center;
@@ -280,320 +352,826 @@
   }
   .modal-overlay.open { display: flex; }
   .modal {
-    background: #FFF;
-    border: 1px solid var(--border);
-    width: 540px;
+    background: var(--white);
+    width: 560px;
     max-width: 95vw;
-    border-radius: 2px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
   }
   .modal-header {
-    padding: 18px 22px;
-    border-bottom: 1px solid var(--border);
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--sand);
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
   .modal-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-title);
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
-  .modal-close { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--stone); }
-  .modal-body { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
-  .modal-footer {
-    padding: 14px 22px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    background: var(--sand);
+  .modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--stone);
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
   }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .modal-close:hover { color: var(--carbon); }
+  .modal-body { padding: 24px 28px; }
+  .modal-footer {
+    padding: 16px 28px 24px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* ── FORM ── */
+  .form-group { margin-bottom: 18px; }
   .form-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 8px;
+    display: block;
+    font-family: var(--font-title);
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--stone);
+    margin-bottom: 7px;
   }
   .form-input, .form-select, .form-textarea {
-    padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-size: 12px;
-    font-family: 'Manrope', sans-serif;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--carbon);
+    background: var(--white);
     outline: none;
+    transition: border 0.15s;
   }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
-  .form-textarea { resize: vertical; min-height: 60px; }
-  
-  /* TOAST NOTIFICACIÓN */
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--bronze);
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--sand);
+    margin-bottom: 24px;
+    gap: 0;
+  }
+  .tab {
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: var(--stone);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--carbon); }
+  .tab.active {
+    color: var(--carbon);
+    border-bottom-color: var(--bronze);
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .page-header h1 {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--carbon);
+    line-height: 1;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: var(--stone);
+    margin-top: 4px;
+    font-style: italic;
+    font-family: var(--font-quote);
+    font-size: 15px;
+  }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    display: none;
+    position: fixed;
+    right: 0; top: 0;
+    width: 440px;
+    height: 100vh;
+    background: var(--white);
+    border-left: 1px solid var(--sand);
+    z-index: 150;
+    overflow-y: auto;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.08);
+  }
+  .detail-panel.open { display: flex; flex-direction: column; }
+  .detail-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--sand);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 2;
+  }
+  .detail-body { padding: 24px 28px; flex: 1; }
+  .detail-section { margin-bottom: 28px; }
+  .detail-section-title {
+    font-family: var(--font-title);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sand);
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ivory);
+    font-size: 13px;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { color: var(--stone); font-size: 12px; }
+  .detail-val { color: var(--carbon); font-weight: 500; text-align: right; max-width: 60%; }
+
+  /* Phase stepper */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 4px;
+  }
+  .phase-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    position: relative;
+  }
+  .phase-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 28px;
+    width: 1px;
+    height: calc(100% - 8px);
+    background: var(--sand);
+  }
+  .phase-dot {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    border: 2px solid var(--sand);
+    background: var(--white);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 1px;
+  }
+  .phase-dot.done { border-color: var(--bronze); background: var(--bronze); }
+  .phase-dot.current { border-color: var(--bronze); background: var(--white); }
+  .phase-dot.done::after {
+    content: '';
+    width: 8px; height: 5px;
+    border-left: 2px solid var(--white);
+    border-bottom: 2px solid var(--white);
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .phase-dot.current::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--bronze);
+  }
+  .phase-info { flex: 1; }
+  .phase-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--carbon);
+  }
+  .phase-name.pending { color: var(--stone); font-weight: 400; }
+  .phase-date { font-size: 11px; color: var(--stone); margin-top: 1px; }
+
+  /* Link generator */
+  .link-box {
+    background: var(--ivory);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .link-url {
+    font-size: 12px;
+    color: var(--bronze);
+    flex: 1;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+  }
+  .link-copy {
+    background: none;
+    border: 1px solid var(--sand);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 10px;
+    font-family: var(--font-title);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .link-copy:hover { border-color: var(--bronze); color: var(--bronze); }
+
+  /* Photo grid */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .photo-thumb {
+    aspect-ratio: 1;
+    background: var(--sand);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-thumb .photo-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(29,29,29,0.6);
+    color: var(--ivory);
+    font-size: 9px;
+    padding: 4px 6px;
+    font-family: var(--font-title);
+    letter-spacing: 0.08em;
+  }
+  .photo-add {
+    aspect-ratio: 1;
+    background: var(--ivory);
+    border: 1px dashed var(--sand);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--stone);
+    font-size: 22px;
+    transition: all 0.15s;
+  }
+  .photo-add:hover { border-color: var(--bronze); color: var(--bronze); }
+
+  /* Search */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .search-input {
+    flex: 1;
+    padding: 10px 14px 10px 36px;
+    border: 1px solid var(--sand);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--carbon);
+    outline: none;
+    background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237B7B7B' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;
+  }
+  .search-input:focus { border-color: var(--bronze); }
+
+  /* Avatar */
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bronze);
+    color: var(--white);
+    font-family: var(--font-title);
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Toast */
   .toast {
     position: fixed;
-    bottom: 24px; right: 24px;
+    bottom: 28px; right: 28px;
     background: var(--carbon);
-    color: var(--sand);
-    border-left: 3px solid var(--gold);
-    padding: 12px 18px;
-    font-size: 11px;
-    border-radius: 2px;
-    z-index: 300;
+    color: var(--ivory);
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    z-index: 999;
     display: none;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   }
-  .toast.show { display: block; }
+  .toast.show { display: flex; }
+  .toast-accent { width: 3px; height: 100%; background: var(--bronze); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .detail-panel { width: 100%; }
+  }
 </style>
 </head>
 <body>
 
-<aside>
-  <div class="brand">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
     <div class="brand-name">Diseños Pablin</div>
-    <div class="brand-tag">Arte en Madera</div>
+    <div class="brand-sub">Arte en Madera</div>
+    <div class="brand-accent"></div>
   </div>
-  <div class="nav-group">
-    <div class="nav-label">Principal</div>
-    <div class="nav-item active" onclick="showView('dashboard')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a class="nav-item active" onclick="showView('dashboard')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Dashboard
-    </div>
-    <div class="nav-item" onclick="showView('clientes')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </a>
+    <a class="nav-item" onclick="showView('clientes')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Clientes
-    </div>
-    <div class="nav-item" onclick="showView('obras')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    </a>
+    <a class="nav-item" onclick="showView('obras')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Obras
-    </div>
-    <div class="nav-item" onclick="showView('enlaces')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </a>
+    <a class="nav-item" onclick="showView('enlaces')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       Enlaces
-    </div>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Comunicación</div>
-    <div class="nav-item" onclick="showView('correos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </a>
+
+    <div class="nav-section-label">Comunicación</div>
+    <a class="nav-item" onclick="showView('correos')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Correos
-    </div>
-    <div class="nav-item" onclick="showView('bot')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </a>
+    <a class="nav-item" onclick="showView('bot')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Bot WhatsApp
-    </div>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Sistema</div>
-    <div class="nav-item" onclick="showView('tecnicos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </a>
+
+    <div class="nav-section-label">Sistema</div>
+    <a class="nav-item" onclick="showView('tecnicos')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Técnicos
-    </div>
-  </div>
+    </a>
+    <a class="nav-item" onclick="showView('configuracion')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.41 13.16l-1.41-1.41A8 8 0 0 0 5.34 5.34L3.93 3.93A10 10 0 0 1 19.07 4.93z"/></svg>
+      Configuración
+    </a>
+  </nav>
   <div class="sidebar-footer">
-    <div>Administrador</div>
-    <div class="sidebar-user">Diseños Pablin</div>
+    <div class="user-role">Administrador</div>
+    <div class="user-name">Diseños Pablin</div>
   </div>
 </aside>
 
-<main>
+<!-- MAIN -->
+<main class="main">
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard</div>
-    <div style="display:flex;gap:10px;">
-      <button class="btn btn-outline" onclick="openModal('nuevo-cliente')">+ Nuevo Cliente</button>
-      <button class="btn btn-bronze" onclick="openModal('nueva-obra')">+ Nueva Obra</button>
+    <div class="topbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="openModal('nuevo-cliente')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo Cliente
+      </button>
+      <button class="btn btn-bronze btn-sm" onclick="openModal('nueva-obra')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva Obra
+      </button>
     </div>
   </div>
 
   <div class="content">
+
     <!-- 1. DASHBOARD -->
     <div class="view active" id="view-dashboard">
       <div class="page-header">
         <div>
-          <div class="page-title">Dashboard</div>
-          <div class="page-sub">Espacios que inspiran</div>
+          <h1>Dashboard</h1>
+          <p>"Espacios que inspiran"</p>
         </div>
+        <span style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;" id="dash-date">Martes, 18 Agosto 2026</span>
       </div>
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-label">Obras Activas</div>
-          <div class="metric-val" id="met-obras-activas">0</div>
-          <div class="metric-note">En proceso de fabricación</div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number" id="dash-obras-activas">0</div>
+          <div class="stat-label">Obras Activas</div>
+          <div class="stat-delta">En producción</div>
         </div>
-        <div class="metric-card">
-          <div class="metric-label">Clientes Registrados</div>
-          <div class="metric-val" id="met-total-clientes">0</div>
-          <div class="metric-note">En base de datos</div>
+        <div class="stat-card">
+          <div class="stat-number" id="dash-clientes-total">0</div>
+          <div class="stat-label">Clientes</div>
+          <div class="stat-delta">Registrados</div>
         </div>
-        <div class="metric-card">
-          <div class="metric-label">Por Entregar</div>
-          <div class="metric-val" id="met-por-entregar">0</div>
-          <div class="metric-note">Fase final de acabados</div>
+        <div class="stat-card">
+          <div class="stat-number" id="dash-obras-entrega">0</div>
+          <div class="stat-label">Por Entregar</div>
+          <div class="stat-delta" style="color:var(--stone);">Acabados finales</div>
         </div>
-        <div class="metric-card">
-          <div class="metric-label">Completadas</div>
-          <div class="metric-val" id="met-completadas">0</div>
-          <div class="metric-note">Obras entregadas con éxito</div>
+        <div class="stat-card">
+          <div class="stat-number" id="dash-obras-completas">0</div>
+          <div class="stat-label">Completadas</div>
+          <div class="stat-delta">Entregadas</div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Obras Recientes</div>
+        <div class="card-title">Obras recientes</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Avance</th>
+                <th>Técnico</th>
+                <th>Entrega est.</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="dash-tabla-recent">
+              <tr><td colspan="7" style="text-align:center;color:var(--stone);">Cargando obras desde Supabase...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Categoría</th>
-              <th>Avance</th>
-              <th>Técnico</th>
-              <th>Entrega Est.</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-obras-recent-body">
-            <tr><td colspan="6" style="text-align:center;color:var(--stone);">Cargando...</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
     <!-- 2. CLIENTES -->
     <div class="view" id="view-clientes">
       <div class="page-header">
-        <div>
-          <div class="page-title">Clientes</div>
-          <div class="page-sub">Directorio conectado a Supabase</div>
-        </div>
-        <button class="btn btn-bronze" onclick="openModal('nuevo-cliente')">+ Nuevo Cliente</button>
+        <div><h1>Clientes</h1><p>"Cada espacio, una historia"</p></div>
+        <button class="btn btn-primary" onclick="openModal('nuevo-cliente')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nuevo Cliente
+        </button>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" id="busqueda-clientes" onkeyup="filtrarClientes()" placeholder="Buscar por nombre, cédula, correo o teléfono…">
+        <select class="form-select" id="filtro-tipo-cliente" onchange="filtrarClientes()" style="width:180px;">
+          <option value="">Todos los tipos</option>
+          <option value="NUEVO">NUEVO</option>
+          <option value="TRANSITORIO">TRANSITORIO</option>
+          <option value="FIJO">FIJO</option>
+          <option value="VIP">VIP</option>
+        </select>
       </div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Listado de Clientes</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Cliente</th><th>Teléfono</th><th>Cédula</th><th>Tipo</th><th>Fecha registro</th></tr>
+            </thead>
+            <tbody id="tabla-clientes-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando directorio...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Teléfono</th>
-              <th>Cédula</th>
-              <th>Tipo de Cliente</th>
-              <th>Fecha Registro</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-clientes-body">
-            <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando clientes...</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
     <!-- 3. OBRAS -->
     <div class="view" id="view-obras">
       <div class="page-header">
-        <div>
-          <div class="page-title">Obras</div>
-          <div class="page-sub">Control de proyectos y avances</div>
-        </div>
-        <button class="btn btn-bronze" onclick="openModal('nueva-obra')">+ Nueva Obra</button>
+        <div><h1>Obras</h1><p>"Del diseño a la realidad"</p></div>
+        <button class="btn btn-bronze" onclick="openModal('nueva-obra')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nueva Obra
+        </button>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="filtrarObrasTab('Todas', this)">Todas</div>
+        <div class="tab" onclick="filtrarObrasTab('Activa', this)">Activas</div>
+        <div class="tab" onclick="filtrarObrasTab('Por entregar', this)">Por entregar</div>
+        <div class="tab" onclick="filtrarObrasTab('Finalizada', this)">Finalizadas</div>
       </div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Todas las Obras</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Obra</th><th>Cliente</th><th>Tipo</th><th>Fase actual</th><th>Avance</th><th>Técnico</th><th>Entrega</th><th></th></tr>
+            </thead>
+            <tbody id="tabla-obras-body">
+              <tr><td colspan="8" style="text-align:center;color:var(--stone);">Cargando proyectos...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Cliente</th>
-              <th>Categoría</th>
-              <th>Avance</th>
-              <th>Fase</th>
-              <th>Tracking Link</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-obras-body">
-            <tr><td colspan="7" style="text-align:center;color:var(--stone);">Cargando obras...</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
     <!-- 4. ENLACES -->
     <div class="view" id="view-enlaces">
       <div class="page-header">
-        <div>
-          <div class="page-title">Enlaces de Seguimiento</div>
-          <div class="page-sub">Accesos temporales de clientes</div>
+        <div><h1>Enlaces</h1><p>"Acceso directo a cada proyecto"</p></div>
+        <button class="btn btn-primary" onclick="openModal('nueva-obra')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Generar Enlace
+        </button>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">Tracking de obras activas</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cliente</th><th>Obra</th><th>Enlace único</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-enlaces-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando enlaces...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Links de Tracking Activos</div>
+      <div class="card" style="border: 1px dashed var(--sand); background: var(--ivory);">
+        <div class="card-title">Módulos futuros</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
+            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Encuesta</div>
+            <div style="font-size:12px;color:var(--stone);">Post-entrega</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
+          </div>
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
+            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Aprobación</div>
+            <div style="font-size:12px;color:var(--stone);">Diseño / planos</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
+          </div>
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
+            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Cotización</div>
+            <div style="font-size:12px;color:var(--stone);">Interactiva</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
+          </div>
         </div>
-        <table class="table">
-          <thead>
+      </div>
+    </div>
+
+    <!-- 5. CORREOS -->
+    <div class="view" id="view-correos">
+      <div class="page-header">
+        <div><h1>Correos</h1><p>"Comunicación automática y personalizada"</p></div>
+        <a href="/correos.html" target="_blank" class="btn btn-primary" style="text-decoration:none;">Ver Plantillas HTML</a>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-number" id="correos-enviados-count">0</div><div class="stat-label">Enviados este mes</div></div>
+        <div class="stat-card"><div class="stat-number" style="color:var(--bronze);">100%</div><div class="stat-label">Conexión Resend API</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Disparadores automáticos</div>
+        <table>
+          <thead><tr><th>Evento</th><th>Plantilla</th><th>Activo</th><th></th></tr></thead>
+          <tbody>
             <tr>
-              <th>Obra</th>
-              <th>Cliente</th>
-              <th>URL de Seguimiento</th>
-              <th>Acción</th>
+              <td style="font-weight:600;">Nueva obra creada</td>
+              <td style="font-size:12px;color:var(--stone);">Bienvenida + enlace tracking</td>
+              <td><span class="badge badge-active">Activo</span></td>
+              <td><button class="btn btn-outline btn-sm">Ver</button></td>
             </tr>
-          </thead>
-          <tbody id="tabla-enlaces-body">
-            <tr><td colspan="4" style="text-align:center;color:var(--stone);">Cargando enlaces...</td></tr>
+            <tr>
+              <td style="font-weight:600;">Cambio de fase</td>
+              <td style="font-size:12px;color:var(--stone);">Notificación de avance</td>
+              <td><span class="badge badge-active">Activo</span></td>
+              <td><button class="btn btn-outline btn-sm">Ver</button></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">Obra finalizada</td>
+              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo! + Reseña</td>
+              <td><span class="badge badge-active">Activo</span></td>
+              <td><button class="btn btn-outline btn-sm">Ver</button></td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- 5. TÉCNICOS -->
+    <!-- 6. BOT WHATSAPP -->
+    <div class="view" id="view-bot">
+      <div class="page-header">
+        <div><h1>Bot WhatsApp</h1><p>"Tu asistente 24/7 con Gemini"</p></div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Disponibilidad</div></div>
+        <div class="stat-card"><div class="stat-number" id="bot-tecnicos-count">0</div><div class="stat-label">Técnicos conectados</div></div>
+        <div class="stat-card"><div class="stat-number">Gemini 2.5</div><div class="stat-label">IA Engine</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Comandos de WhatsApp para Técnicos</div>
+        <div style="font-size:13px;line-height:1.8;color:var(--carbon);">
+          <p>Los técnicos pueden enviar notas o fotos por WhatsApp usando su <b>ID Técnico</b> y el <b>ID de Obra</b>:</p>
+          <div style="background:var(--ivory);padding:14px;border:1px solid var(--sand);margin:10px 0;font-family:monospace;font-size:12px;">
+            UPDATE [ID_OBRA] FASE: [Ejecución] FOTO: [Adjunto] NOTA: [Instalación de mesones lista]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. TÉCNICOS -->
     <div class="view" id="view-tecnicos">
       <div class="page-header">
-        <div>
-          <div class="page-title">Técnicos de Obra</div>
-          <div class="page-sub">Personal con acceso a WhatsApp</div>
-        </div>
+        <div><h1>Técnicos</h1><p>"El equipo detrás de cada obra"</p></div>
+        <button class="btn btn-primary" onclick="openModal('nuevo-tecnico')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar Técnico
+        </button>
       </div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Lista de Técnicos</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Técnico</th><th>Código acceso ID</th><th>Cédula</th><th>Estado</th></tr></thead>
+            <tbody id="tabla-tecnicos-body">
+              <tr><td colspan="4" style="text-align:center;color:var(--stone);">Cargando técnicos...</td></tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Código ID</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Cédula</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-tecnicos-body">
-            <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando técnicos...</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
-    <!-- 6. CORREOS Y BOT -->
-    <div class="view" id="view-correos">
-      <div class="page-header"><div><div class="page-title">Plantillas de Correo</div></div></div>
-      <div class="card" style="padding:20px;line-height:1.6;">
-        <p>Las plantillas automáticas están listas para ser vinculadas con Resend en la siguiente etapa.</p>
+    <!-- 8. CONFIGURACIÓN -->
+    <div class="view" id="view-configuracion">
+      <div class="page-header">
+        <div><h1>Configuración</h1></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-title">Datos del negocio</div>
+          <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" value="Diseños Pablin"></div>
+          <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" value="+593 99 000 0000"></div>
+          <div class="form-group"><label class="form-label">Correo</label><input class="form-input" value="contacto@disenospablin.com"></div>
+          <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" value="@disenospablin"></div>
+          <button class="btn btn-primary" onclick="showToast('Datos de configuración guardados ✓')">Guardar</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Fases de obra predeterminadas</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
+              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">01</span> Diseño
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
+              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">02</span> Materiales
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
+              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">03</span> Ejecución
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
+              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">04</span> Acabados
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
+              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">05</span> Entrega
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="view" id="view-bot">
-      <div class="page-header"><div><div class="page-title">Bot de WhatsApp con Gemini</div></div></div>
-      <div class="card" style="padding:20px;line-height:1.6;">
-        <p>Integración de WhatsApp Webhook conectada al número de atención al cliente.</p>
+
+  </div><!-- /content -->
+</main>
+
+<!-- DETAIL PANEL DINÁMICO -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <div>
+      <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;" id="det-obra-id">#OBR-000</div>
+      <div style="font-family:var(--font-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;" id="det-cliente-nombre">Cliente</div>
+      <span class="badge badge-cocina" style="margin-top:6px;display:inline-block;" id="det-tipo-obra">Categoría</span>
+    </div>
+    <button class="modal-close" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="detail-body">
+    <div class="detail-section">
+      <div class="detail-section-title">Información del cliente</div>
+      <div class="detail-row"><span class="detail-key">Correo</span><span class="detail-val" id="det-correo">-</span></div>
+      <div class="detail-row"><span class="detail-key">WhatsApp</span><span class="detail-val" id="det-telefono">-</span></div>
+      <div class="detail-row"><span class="detail-key">Técnico</span><span class="detail-val" id="det-tecnico">-</span></div>
+      <div class="detail-row"><span class="detail-key">Entrega estimada</span><span class="detail-val" id="det-entrega">-</span></div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Fases de avance</div>
+      <div class="phases" id="det-phases-list">
+        <!-- Renderizado dinámico -->
       </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Enlace de tracking temporal</div>
+      <div class="link-box">
+        <span class="link-url" id="det-link-url">-</span>
+        <button class="link-copy" id="det-link-copy-btn">Copiar</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="showToast('Notificación enviada por correo ✓')">Enviar por correo</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="showToast('Enlace enviado por WhatsApp ✓')">Enviar por WhatsApp</button>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Notas de Obra</div>
+      <p id="det-descripcion" style="font-size:12px;color:var(--stone);margin-bottom:10px;">Sin notas registradas.</p>
     </div>
   </div>
-</main>
+</div>
+
+<!-- MODAL NUEVA OBRA -->
+<div class="modal-overlay" id="modal-nueva-obra">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Obra (ID Asignado Automáticamente)</div>
+      <button class="modal-close" onclick="closeModal('nueva-obra')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Cliente Asociado *</label>
+          <select class="form-select" id="obr-cliente-select">
+            <option value="">Seleccionar cliente…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de obra</label>
+          <select class="form-select" id="obr-tipo">
+            <option value="Cocina">Cocina</option>
+            <option value="Baño">Baño</option>
+            <option value="Closet">Closet</option>
+            <option value="Decoración">Decoración</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-textarea" id="obr-desc" placeholder="Detalles de materiales, acabados y especificaciones…"></textarea>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Técnico asignado</label>
+          <select class="form-select" id="obr-tecnico-select">
+            <option value="">Sin asignar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha estimada entrega</label>
+          <input class="form-input" id="obr-fecha" type="date">
+        </div>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+        <input type="checkbox" id="send-auto" checked style="accent-color:var(--bronze);width:16px;height:16px;">
+        <label for="send-auto" style="font-size:13px;cursor:pointer;">Generar enlace temporal y notificar al cliente</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('nueva-obra')">Cancelar</button>
+      <button class="btn btn-bronze" onclick="guardarNuevaObra()">Crear Obra</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL NUEVO CLIENTE -->
 <div class="modal-overlay" id="modal-nuevo-cliente">
@@ -605,7 +1183,7 @@
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Nombres *</label>
+          <label class="form-label">Nombres completos *</label>
           <input class="form-input" id="cli-nombres" placeholder="Ej: Roberto">
         </div>
         <div class="form-group">
@@ -620,16 +1198,16 @@
         </div>
         <div class="form-group">
           <label class="form-label">Correo electrónico *</label>
-          <input class="form-input" id="cli-correo" type="email" placeholder="cliente@correo.com">
+          <input class="form-input" id="cli-correo" type="email" placeholder="correo@ejemplo.com">
         </div>
       </div>
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Teléfono / WhatsApp *</label>
+          <label class="form-label">WhatsApp *</label>
           <input class="form-input" id="cli-telefono" placeholder="+593 99 000 0000">
         </div>
         <div class="form-group">
-          <label class="form-label">Tipo de Cliente</label>
+          <label class="form-label">Tipo de Cliente *</label>
           <select class="form-select" id="cli-tipo">
             <option value="NUEVO">NUEVO</option>
             <option value="TRANSITORIO">TRANSITORIO</option>
@@ -641,101 +1219,303 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('nuevo-cliente')">Cancelar</button>
-      <button class="btn btn-bronze" onclick="guardarNuevoCliente()">Guardar en Supabase</button>
+      <button class="btn btn-bronze" onclick="guardarNuevoCliente()">Guardar Cliente</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL NUEVA OBRA -->
-<div class="modal-overlay" id="modal-nueva-obra">
+<!-- MODAL NUEVO TÉCNICO -->
+<div class="modal-overlay" id="modal-nuevo-tecnico">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Registrar Nueva Obra</div>
-      <button class="modal-close" onclick="closeModal('nueva-obra')">✕</button>
+      <div class="modal-title">Agregar Técnico (ID Automático)</div>
+      <button class="modal-close" onclick="closeModal('nuevo-tecnico')">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Código de Obra *</label>
-          <input class="form-input" id="obr-codigo" placeholder="Ej: #OBR-049">
+          <label class="form-label">Nombres *</label>
+          <input class="form-input" id="tec-nombres" placeholder="Ej: Luis">
         </div>
         <div class="form-group">
-          <label class="form-label">Categoría *</label>
-          <select class="form-select" id="obr-categoria">
-            <option value="Cocina">Cocina</option>
-            <option value="Closet">Closet</option>
-            <option value="Baño">Baño</option>
-            <option value="Decoración">Decoración</option>
-            <option value="Otro">Otro</option>
-          </select>
+          <label class="form-label">Apellidos *</label>
+          <input class="form-input" id="tec-apellidos" placeholder="Ej: Guerrero">
         </div>
       </div>
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Cliente Asociado *</label>
-          <select class="form-select" id="obr-cliente-select">
-            <option value="">Selecciona un cliente</option>
-          </select>
+          <label class="form-label">Cédula</label>
+          <input class="form-input" id="tec-cedula" placeholder="0911223344">
         </div>
         <div class="form-group">
-          <label class="form-label">Técnico Responsable</label>
-          <select class="form-select" id="obr-tecnico-select">
-            <option value="">Selecciona un técnico</option>
-          </select>
+          <label class="form-label">WhatsApp</label>
+          <input class="form-input" id="tec-telefono" placeholder="+593 98 333 4444">
         </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Fecha de Entrega Est.</label>
-          <input class="form-input" id="obr-fecha" type="date">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Fase Inicial</label>
-          <select class="form-select" id="obr-fase">
-            <option value="Diseño">Diseño</option>
-            <option value="Materiales">Materiales</option>
-            <option value="Ejecución">Ejecución</option>
-            <option value="Acabados">Acabados</option>
-            <option value="Entrega">Entrega</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Descripción del Proyecto</label>
-        <textarea class="form-textarea" id="obr-desc" placeholder="Detalles de materiales y acabados..."></textarea>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('nueva-obra')">Cancelar</button>
-      <button class="btn btn-bronze" onclick="guardarNuevaObra()">Crear Obra y Generar Link</button>
+      <button class="btn btn-outline" onclick="closeModal('nuevo-tecnico')">Cancelar</button>
+      <button class="btn btn-bronze" onclick="guardarNuevoTecnico()">Guardar Técnico</button>
     </div>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast"><span id="toast-msg">Mensaje</span></div>
+<div class="toast" id="toast">
+  <div style="width:3px;height:36px;background:var(--bronze);flex-shrink:0;"></div>
+  <span id="toast-msg"></span>
+</div>
 
 <script>
-  // 1. TUS CREDENCIALES CONFIGURADAS
+  // 1. CONFIGURACIÓN SUPABASE
   const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   let clientesCache = [];
   let tecnicosCache = [];
+  let obrasCache = [];
 
-  // Función para obtener estilos según el tipo de cliente
-  function getBadgeStyle(tipo) {
+  // Helper de estilos para tipo de cliente
+  function getBadgeCliente(tipo) {
     switch (tipo) {
-      case 'VIP': return 'background:#EDE7F6;color:#512DA8;';
-      case 'FIJO': return 'background:#E8F5E9;color:#2E7D32;';
-      case 'TRANSITORIO': return 'background:#FFF8E1;color:#F57F17;';
+      case 'VIP': return '<span class="badge" style="background:#EDE7F6;color:#512DA8;">VIP</span>';
+      case 'FIJO': return '<span class="badge" style="background:#E8F5E9;color:#2E7D32;">FIJO</span>';
+      case 'TRANSITORIO': return '<span class="badge" style="background:#FFF8E1;color:#F57F17;">TRANSITORIO</span>';
       case 'NUEVO':
-      default: return 'background:#E3F2FD;color:#1565C0;';
+      default: return '<span class="badge" style="background:#E3F2FD;color:#1565C0;">NUEVO</span>';
     }
   }
 
-  // 2. FUNCIÓN: GUARDAR CLIENTE DIRECTO EN SUPABASE
+  function getBadgeTipoObra(tipo) {
+    switch(tipo?.toLowerCase()) {
+      case 'cocina': return 'badge-cocina';
+      case 'baño': return 'badge-bano';
+      case 'closet': return 'badge-closet';
+      default: return 'badge-deco';
+    }
+  }
+
+  // 2. CARGAR TODOS LOS DATOS
+  async function cargarTodo() {
+    try {
+      // Clientes
+      const { data: clientes } = await db.from('clientes').select('*').order('created_at', { ascending: false });
+      clientesCache = clientes || [];
+
+      // Técnicos
+      const { data: tecnicos } = await db.from('tecnicos').select('*').order('created_at', { ascending: true });
+      tecnicosCache = tecnicos || [];
+
+      // Obras
+      const { data: obras } = await db.from('obras').select('*, clientes(*), tecnicos(*)').order('created_at', { ascending: false });
+      obrasCache = obras || [];
+
+      renderDashboard();
+      renderClientes();
+      renderObras(obrasCache);
+      renderEnlaces();
+      renderTecnicos();
+      poblarSelects();
+    } catch(err) {
+      console.error('Error al sincronizar datos:', err);
+    }
+  }
+
+  // 3. RENDERIZAR DASHBOARD
+  function renderDashboard() {
+    const activas = obrasCache.filter(o => o.estado === 'Activa').length;
+    const entrega = obrasCache.filter(o => o.estado === 'Por entregar' || o.porcentaje_avance >= 90).length;
+    const finalizadas = obrasCache.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
+
+    document.getElementById('dash-obras-activas').textContent = activas;
+    document.getElementById('dash-clientes-total').textContent = clientesCache.length;
+    document.getElementById('dash-obras-entrega').textContent = entrega;
+    document.getElementById('dash-obras-completas').textContent = finalizadas;
+    document.getElementById('bot-tecnicos-count').textContent = tecnicosCache.length;
+
+    const tbody = document.getElementById('dash-tabla-recent');
+    if (!obrasCache.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--stone);">No hay obras registradas aún.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = obrasCache.slice(0, 5).map(o => {
+      const cli = o.clientes || {};
+      const tec = o.tecnicos || {};
+      const iniciales = ((cli.nombres?.[0] || '') + (cli.apellidos?.[0] || '')).toUpperCase() || 'DP';
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">${iniciales}</div>
+              <div>
+                <div style="font-weight:600;">${cli.nombres || 'Sin nombre'} ${cli.apellidos || ''}</div>
+                <div style="font-size:11px;color:var(--stone);">${cli.correo_electronico || '-'}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
+          <td>
+            <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance}%"></div></div>
+            <div class="progress-label">${o.porcentaje_avance}% — ${o.fase_actual}</div>
+          </td>
+          <td style="color:var(--stone);font-size:12px;">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
+          <td style="font-size:12px;">${o.fecha_entrega_estimada || 'Por definir'}</td>
+          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : (o.estado === 'Finalizada' ? 'badge-done' : 'badge-pending')}">${o.estado}</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="verDetalleObra('${o.id}')">Ver</button></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // 4. RENDERIZAR CLIENTES
+  function renderClientes(lista = clientesCache) {
+    const tbody = document.getElementById('tabla-clientes-body');
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No se encontraron clientes.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = lista.map(c => {
+      const ini = ((c.nombres?.[0] || '') + (c.apellidos?.[0] || '')).toUpperCase();
+      const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">${ini}</div>
+              <div>
+                <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
+                <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
+          <td style="font-weight:600;">${c.numero_cedula}</td>
+          <td>${getBadgeCliente(c.tipo_cliente)}</td>
+          <td style="font-size:12px;color:var(--stone);">${fecha}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filtrarClientes() {
+    const busqueda = document.getElementById('busqueda-clientes').value.toLowerCase();
+    const filtroTipo = document.getElementById('filtro-tipo-cliente').value;
+
+    const filtrados = clientesCache.filter(c => {
+      const matchText = (c.nombres + ' ' + c.apellidos + ' ' + c.numero_cedula + ' ' + c.correo_electronico + ' ' + c.telefono_1).toLowerCase().includes(busqueda);
+      const matchTipo = filtroTipo ? c.tipo_cliente === filtroTipo : true;
+      return matchText && matchTipo;
+    });
+    renderClientes(filtrados);
+  }
+
+  // 5. RENDERIZAR OBRAS
+  function renderObras(lista = obrasCache) {
+    const tbody = document.getElementById('tabla-obras-body');
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--stone);">No hay obras para mostrar.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = lista.map(o => {
+      const cli = o.clientes || {};
+      const tec = o.tecnicos || {};
+      return `
+        <tr>
+          <td style="font-weight:700;color:var(--bronze);">${o.id_obra}</td>
+          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
+          <td style="font-size:12px;">${o.fase_actual}</td>
+          <td>
+            <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance}%"></div></div>
+            <div class="progress-label">${o.porcentaje_avance}%</div>
+          </td>
+          <td style="font-size:12px;color:var(--stone);">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
+          <td style="font-size:12px;">${o.fecha_entrega_estimada || '-'}</td>
+          <td><button class="btn btn-outline btn-sm" onclick="verDetalleObra('${o.id}')">Ver</button></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filtrarObrasTab(estado, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    if (estado === 'Todas') {
+      renderObras(obrasCache);
+    } else {
+      renderObras(obrasCache.filter(o => o.estado === estado));
+    }
+  }
+
+  // 6. RENDERIZAR ENLACES
+  function renderEnlaces() {
+    const tbody = document.getElementById('tabla-enlaces-body');
+    if (!obrasCache.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay enlaces de seguimiento generados.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = obrasCache.map(o => {
+      const cli = o.clientes || {};
+      const url = `${window.location.origin}/tracking.html?t=${o.slug_tracking}`;
+      return `
+        <tr>
+          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra} ${o.id_obra}</span></td>
+          <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${url}</span></td>
+          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : 'badge-done'}">${o.estado}</span></td>
+          <td style="display:flex;gap:6px;padding:14px 0;">
+            <button class="btn btn-outline btn-sm" onclick="copyLink('${url}')">Copiar</button>
+            <button class="btn btn-outline btn-sm" onclick="window.open('${url}','_blank')">Abrir</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // 7. RENDERIZAR TÉCNICOS
+  function renderTecnicos() {
+    const tbody = document.getElementById('tabla-tecnicos-body');
+    if (!tecnicosCache.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--stone);">No hay técnicos registrados.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = tecnicosCache.map(t => {
+      const ini = ((t.nombres?.[0] || '') + (t.apellidos?.[0] || '')).toUpperCase();
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">${ini}</div>
+              <div>
+                <div style="font-weight:600;">${t.nombres} ${t.apellidos}</div>
+                <div style="font-size:11px;color:var(--stone);">${t.telefono_1 || '-'}</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="font-family:monospace;background:var(--ivory);padding:4px 8px;border-radius:2px;font-size:12px;font-weight:700;color:var(--bronze);">${t.codigo_id}</span></td>
+          <td>${t.numero_cedula || '-'}</td>
+          <td><span class="badge badge-active">${t.activo ? 'Activo' : 'Inactivo'}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function poblarSelects() {
+    const selCli = document.getElementById('obr-cliente-select');
+    if (selCli) {
+      selCli.innerHTML = '<option value="">Seleccionar cliente…</option>' + 
+        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula})</option>`).join('');
+    }
+    const selTec = document.getElementById('obr-tecnico-select');
+    if (selTec) {
+      selTec.innerHTML = '<option value="">Sin asignar</option>' + 
+        tecnicosCache.map(t => `<option value="${t.id}">${t.nombres} ${t.apellidos} (${t.codigo_id})</option>`).join('');
+    }
+  }
+
+  // 8. GUARDAR NUEVO CLIENTE
   async function guardarNuevoCliente() {
     const nombres = document.getElementById('cli-nombres')?.value.trim();
     const apellidos = document.getElementById('cli-apellidos')?.value.trim();
@@ -745,12 +1525,11 @@
     const tipo = document.getElementById('cli-tipo')?.value || 'NUEVO';
 
     if (!nombres || !apellidos || !cedula || !correo || !telefono) {
-      showToast('Por favor completa todos los campos requeridos (*)');
+      showToast('Por favor completa todos los campos requeridos');
       return;
     }
 
-    showToast('Guardando cliente...');
-
+    showToast('Guardando en Supabase...');
     const { error } = await db.from('clientes').insert([{
       nombres, apellidos, numero_cedula: cedula, correo_electronico: correo,
       telefono_1: telefono, tipo_cliente: tipo
@@ -765,40 +1544,43 @@
       document.getElementById('cli-cedula').value = '';
       document.getElementById('cli-correo').value = '';
       document.getElementById('cli-telefono').value = '';
-      showToast('¡Cliente registrado con éxito! ✓');
-      cargarTodoElPanel();
+      showToast('Cliente registrado correctamente ✓');
+      cargarTodo();
     }
   }
 
-  // 3. FUNCIÓN: GUARDAR NUEVA OBRA Y GENERAR LINK
+  // 9. GUARDAR NUEVA OBRA CON ID Y SLUG AUTOMÁTICOS
   async function guardarNuevaObra() {
-    const codigo = document.getElementById('obr-codigo')?.value.trim();
-    const categoria = document.getElementById('obr-categoria')?.value;
     const clienteId = document.getElementById('obr-cliente-select')?.value;
+    const tipo = document.getElementById('obr-tipo')?.value || 'Cocina';
+    const desc = document.getElementById('obr-desc')?.value.trim();
     const tecnicoId = document.getElementById('obr-tecnico-select')?.value || null;
     const fecha = document.getElementById('obr-fecha')?.value || null;
-    const fase = document.getElementById('obr-fase')?.value || 'Diseño';
-    const desc = document.getElementById('obr-desc')?.value.trim();
 
-    if (!codigo || !clienteId) {
-      showToast('Ingresa el código y selecciona un cliente');
+    if (!clienteId) {
+      showToast('Por favor selecciona un cliente');
       return;
     }
 
-    const slug = Math.random().toString(36).substring(2, 8);
+    // Generar ID de Obra automático correlativo/alfanumérico (#OBR-XXX)
+    const randomNum = Math.floor(100 + Math.random() * 900);
+    const autoIdObra = `#OBR-${randomNum}`;
 
-    showToast('Creando obra...');
+    // Generar enlace temporal alfanumérico único
+    const autoSlug = Math.random().toString(36).substring(2, 8);
+
+    showToast('Creando obra y generando enlace temporal...');
 
     const { error } = await db.from('obras').insert([{
-      id_obra: codigo,
+      id_obra: autoIdObra,
       cliente_id: clienteId,
-      tecnico_id: tecnicoId || null,
-      categoria_obra: categoria,
+      tecnico_id: tecnicoId,
+      categoria_obra: tipo,
       descripcion: desc,
-      fase_actual: fase,
+      fase_actual: 'Diseño',
       porcentaje_avance: 10,
       fecha_entrega_estimada: fecha,
-      slug_tracking: slug,
+      slug_tracking: autoSlug,
       estado: 'Activa'
     }]);
 
@@ -806,152 +1588,131 @@
       showToast('Error: ' + error.message);
     } else {
       closeModal('nueva-obra');
-      document.getElementById('obr-codigo').value = '';
       document.getElementById('obr-desc').value = '';
-      showToast('¡Obra creada y link generado con éxito! ✓');
-      cargarTodoElPanel();
+      showToast(`Obra ${autoIdObra} creada con éxito ✓`);
+      cargarTodo();
     }
   }
 
-  // 4. FUNCIÓN PRINCIPAL: CARGAR TODO EL PANEL
-  async function cargarTodoElPanel() {
-    // A. Clientes
-    const { data: clientes } = await db.from('clientes').select('*').order('created_at', { ascending: false });
-    clientesCache = clientes || [];
-    const tbodyCli = document.getElementById('tabla-clientes-body');
-    const selectCli = document.getElementById('obr-cliente-select');
+  // 10. GUARDAR NUEVO TÉCNICO CON ID AUTOMÁTICO
+  async function guardarNuevoTecnico() {
+    const nombres = document.getElementById('tec-nombres')?.value.trim();
+    const apellidos = document.getElementById('tec-apellidos')?.value.trim();
+    const cedula = document.getElementById('tec-cedula')?.value.trim();
+    const telefono = document.getElementById('tec-telefono')?.value.trim();
 
-    if (selectCli) {
-      selectCli.innerHTML = '<option value="">Selecciona un cliente</option>' + 
-        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula})</option>`).join('');
+    if (!nombres || !apellidos) {
+      showToast('Por favor ingresa al menos nombre y apellido');
+      return;
     }
 
-    if (tbodyCli) {
-      tbodyCli.innerHTML = clientesCache.length ? clientesCache.map(c => {
-        const tipo = c.tipo_cliente || 'NUEVO';
-        return `
-          <tr>
-            <td>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <div class="avatar">${(c.nombres[0] || '') + (c.apellidos[0] || '')}</div>
-                <div>
-                  <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
-                  <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
-                </div>
-              </div>
-            </td>
-            <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
-            <td style="font-weight:600;">${c.numero_cedula}</td>
-            <td><span class="badge" style="${getBadgeStyle(tipo)}">${tipo}</span></td>
-            <td style="font-size:12px;color:var(--stone);">${new Date(c.created_at).toLocaleDateString('es-EC')}</td>
-          </tr>
-        `;
-      }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay clientes registrados</td></tr>';
-    }
+    // Generar ID de Técnico automático (TEC-XXXX)
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const autoIdTecnico = `TEC-${randomNum}`;
 
-    // B. Técnicos
-    const { data: tecnicos } = await db.from('tecnicos').select('*').order('created_at', { ascending: true });
-    tecnicosCache = tecnicos || [];
-    const selectTec = document.getElementById('obr-tecnico-select');
-    const tbodyTec = document.getElementById('tabla-tecnicos-body');
+    showToast('Registrando técnico...');
 
-    if (selectTec) {
-      selectTec.innerHTML = '<option value="">Selecciona un técnico</option>' + 
-        tecnicosCache.map(t => `<option value="${t.id}">${t.nombres} ${t.apellidos} (${t.codigo_id})</option>`).join('');
-    }
+    const { error } = await db.from('tecnicos').insert([{
+      codigo_id: autoIdTecnico,
+      nombres,
+      apellidos,
+      numero_cedula: cedula,
+      telefono_1: telefono,
+      activo: true
+    }]);
 
-    if (tbodyTec) {
-      tbodyTec.innerHTML = tecnicosCache.length ? tecnicosCache.map(t => `
-        <tr>
-          <td style="font-weight:700;color:var(--gold);">${t.codigo_id}</td>
-          <td><b>${t.nombres} ${t.apellidos}</b></td>
-          <td style="font-size:12px;color:var(--stone);">${t.telefono_1}</td>
-          <td>${t.numero_cedula}</td>
-          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${t.activo ? 'Activo' : 'Inactivo'}</span></td>
-        </tr>
-      `).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay técnicos registrados</td></tr>';
-    }
-
-    // C. Obras
-    const { data: obras } = await db.from('obras').select('*, clientes(nombres, apellidos), tecnicos(nombres, apellidos)').order('created_at', { ascending: false });
-    const obrasList = obras || [];
-
-    // Métricas
-    document.getElementById('met-obras-activas').textContent = obrasList.filter(o => o.estado === 'Activa').length;
-    document.getElementById('met-total-clientes').textContent = clientesCache.length;
-    document.getElementById('met-por-entregar').textContent = obrasList.filter(o => o.estado === 'Por entregar').length;
-    document.getElementById('met-completadas').textContent = obrasList.filter(o => o.estado === 'Finalizada').length;
-
-    // Tabla Obras Dashboard, Vista Obras y Enlaces
-    const tbodyRecent = document.getElementById('tabla-obras-recent-body');
-    const tbodyObras = document.getElementById('tabla-obras-body');
-    const tbodyEnlaces = document.getElementById('tabla-enlaces-body');
-
-    if (tbodyRecent) {
-      tbodyRecent.innerHTML = obrasList.slice(0, 5).map(o => `
-        <tr>
-          <td><b>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</b></td>
-          <td><span class="badge" style="background:var(--sand-2);color:var(--stone);">${o.categoria_obra}</span></td>
-          <td><b>${o.porcentaje_avance}%</b> — <span style="font-size:11px;color:var(--stone);">${o.fase_actual}</span></td>
-          <td>${o.tecnicos?.nombres || 'Sin asignar'}</td>
-          <td>${o.fecha_entrega_estimada || 'Por definir'}</td>
-          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${o.estado}</span></td>
-        </tr>
-      `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--stone);">No hay obras activas</td></tr>';
-    }
-
-    if (tbodyObras) {
-      tbodyObras.innerHTML = obrasList.map(o => `
-        <tr>
-          <td style="font-weight:700;color:var(--gold);">${o.id_obra}</td>
-          <td><b>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</b></td>
-          <td><span class="badge" style="background:var(--sand-2);color:var(--stone);">${o.categoria_obra}</span></td>
-          <td><b>${o.porcentaje_avance}%</b></td>
-          <td>${o.fase_actual}</td>
-          <td><a href="/tracking.html?t=${o.slug_tracking}" target="_blank" style="color:var(--gold);font-size:11px;">/tracking?t=${o.slug_tracking}</a></td>
-          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${o.estado}</span></td>
-        </tr>
-      `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--stone);">No hay obras registradas</td></tr>';
-    }
-
-    if (tbodyEnlaces) {
-      tbodyEnlaces.innerHTML = obrasList.map(o => `
-        <tr>
-          <td style="font-weight:700;">${o.id_obra}</td>
-          <td>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</td>
-          <td><code style="background:var(--sand);padding:4px 8px;font-size:11px;">${window.location.origin}/tracking.html?t=${o.slug_tracking}</code></td>
-          <td><button class="btn btn-outline btn-sm" onclick="copyLink('${window.location.origin}/tracking.html?t=${o.slug_tracking}')">Copiar Link</button></td>
-        </tr>
-      `).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--stone);">No hay enlaces generados</td></tr>';
+    if (error) {
+      showToast('Error: ' + error.message);
+    } else {
+      closeModal('nuevo-tecnico');
+      document.getElementById('tec-nombres').value = '';
+      document.getElementById('tec-apellidos').value = '';
+      document.getElementById('tec-cedula').value = '';
+      document.getElementById('tec-telefono').value = '';
+      showToast(`Técnico registrado con ID: ${autoIdTecnico} ✓`);
+      cargarTodo();
     }
   }
 
-  // Inicialización
-  window.addEventListener('DOMContentLoaded', () => {
-    cargarTodoElPanel();
-    document.querySelectorAll('.modal-overlay').forEach(o => {
-      o.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('open');
-      });
-    });
-  });
+  // 11. DETALLE LATERAL DE OBRA
+  function verDetalleObra(obraId) {
+    const obra = obrasCache.find(o => o.id === obraId);
+    if (!obra) return;
 
+    const cli = obra.clientes || {};
+    const tec = obra.tecnicos || {};
+    const url = `${window.location.origin}/tracking.html?t=${obra.slug_tracking}`;
+
+    document.getElementById('det-obra-id').textContent = `Obra ${obra.id_obra}`;
+    document.getElementById('det-cliente-nombre').textContent = `${cli.nombres || ''} ${cli.apellidos || ''}`;
+    document.getElementById('det-tipo-obra').textContent = obra.categoria_obra;
+    document.getElementById('det-tipo-obra').className = `badge ${getBadgeTipoObra(obra.categoria_obra)}`;
+
+    document.getElementById('det-correo').textContent = cli.correo_electronico || '-';
+    document.getElementById('det-telefono').textContent = cli.telefono_1 || '-';
+    document.getElementById('det-tecnico').textContent = tec.nombres ? `${tec.nombres} ${tec.apellidos}` : 'Sin asignar';
+    document.getElementById('det-entrega').textContent = obra.fecha_entrega_estimada || 'Por definir';
+    document.getElementById('det-descripcion').textContent = obra.descripcion || 'Sin notas registradas.';
+
+    document.getElementById('det-link-url').textContent = url;
+    document.getElementById('det-link-copy-btn').onclick = () => copyLink(url);
+
+    // Fases Stepper
+    const fases = ['Diseño', 'Materiales', 'Ejecución', 'Acabados', 'Entrega'];
+    const idxActual = fases.indexOf(obra.fase_actual);
+
+    document.getElementById('det-phases-list').innerHTML = fases.map((f, i) => {
+      let dotClass = '';
+      let textClass = '';
+      let infoText = 'Pendiente';
+
+      if (i < idxActual) {
+        dotClass = 'done';
+        infoText = 'Completado';
+      } else if (i === idxActual) {
+        dotClass = 'current';
+        infoText = `En progreso — ${obra.porcentaje_avance}%`;
+      } else {
+        textClass = 'pending';
+      }
+
+      return `
+        <div class="phase-item">
+          <div class="phase-dot ${dotClass}"></div>
+          <div class="phase-info">
+            <div class="phase-name ${textClass}">${f}</div>
+            <div class="phase-date">${infoText}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    openDetail();
+  }
+
+  // 12. NAVEGACIÓN Y UTILIDADES
   function showView(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const target = document.getElementById('view-' + name);
     if (target) target.classList.add('active');
     if (event?.currentTarget) event.currentTarget.classList.add('active');
-    const titles = { dashboard:'Dashboard', clientes:'Clientes', obras:'Obras', enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp', tecnicos:'Técnicos' };
-    const titleEl = document.getElementById('topbar-title');
-    if (titleEl) titleEl.textContent = titles[name] || name;
+    const titles = {
+      dashboard:'Dashboard', clientes:'Clientes', obras:'Obras',
+      enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp',
+      tecnicos:'Técnicos', configuracion:'Configuración'
+    };
+    document.getElementById('topbar-title').textContent = titles[name] || name;
+    closeDetail();
   }
 
   function openModal(id) { document.getElementById('modal-' + id)?.classList.add('open'); }
   function closeModal(id) { document.getElementById('modal-' + id)?.classList.remove('open'); }
+  function openDetail() { document.getElementById('detail-panel')?.classList.add('open'); }
+  function closeDetail() { document.getElementById('detail-panel')?.classList.remove('open'); }
 
   function copyLink(url) {
-    navigator.clipboard?.writeText(url).catch(() => {});
+    navigator.clipboard?.writeText(url).catch(()=>{});
     showToast('Enlace copiado al portapapeles ✓');
   }
 
@@ -964,6 +1725,16 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
   }
+
+  // Inicialización
+  window.addEventListener('DOMContentLoaded', () => {
+    cargarTodo();
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+  });
 </script>
 </body>
 </html>
