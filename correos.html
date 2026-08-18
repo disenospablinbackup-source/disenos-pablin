@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantillas de Correo — Diseños Pablin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables ─────────────────────────────── */
+  :root {
+    --carbon:       #1D1D1D;
+    --ivory:        #F8F6F2;
+    --sand:         #DCCFBE;
+    --stone:        #7B7B7B;
+    --bronze:       #B78652;
+    --bronze-light: #C9A476;
+    --white:        #FFFFFF;
+    --font-title:   'Montserrat', sans-serif;
+    --font-body:    'Manrope', sans-serif;
+    --font-quote:   'Cormorant Garamond', serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #EDEBE7;
+    font-family: var(--font-body);
+    color: var(--carbon);
+    min-height: 100vh;
+  }
+
+  /* ── Shell UI (selector de plantillas) ──────── */
+  .shell {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--carbon);
+    color: var(--ivory);
+    padding: 32px 0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid rgba(220,207,190,0.15);
+  }
+
+  .sidebar-brand-label {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-brand-name {
+    font-family: var(--font-title);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ivory);
+  }
+
+  .sidebar-section-label {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 24px 24px 10px;
+  }
+
+  .tab-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 13px 24px;
+    cursor: pointer;
+    color: rgba(248,246,242,0.6);
+    font-family: var(--font-body);
+    font-size: 13px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .tab-btn:hover {
+    background: rgba(255,255,255,0.05);
+    color: var(--ivory);
+  }
+
+  .tab-btn.active {
+    background: rgba(183,134,82,0.12);
+    color: var(--ivory);
+    border-left-color: var(--bronze);
+  }
+
+  .tab-btn .tab-icon {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 3px;
+  }
+
+  .tab-btn .tab-title {
+    font-weight: 600;
+    font-size: 12px;
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tab-btn .tab-sub {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .sidebar-note {
+    margin-top: auto;
+    padding: 20px 24px;
+    border-top: 1px solid rgba(220,207,190,0.15);
+    font-size: 11px;
+    color: var(--stone);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+
+  /* ── Preview area ────────────────────────────── */
+  .preview-area {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  .preview-topbar {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .preview-topbar-left {
+    font-family: var(--font-title);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .preview-topbar-right {
+    display: flex;
+    gap: 8px;
+  }
+
+  .chip {
+    background: var(--carbon);
+    color: var(--ivory);
+    font-family: var(--font-title);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+  }
+
+  .chip:hover { background: var(--bronze); }
+
+  /* Metadata bar sobre el correo */
+  .email-meta {
+    width: 100%;
+    max-width: 680px;
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-bottom: none;
+    padding: 16px 24px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--stone);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .email-meta-row {
+    display: flex;
+    gap: 8px;
+    padding: 3px 0;
+  }
+
+  .email-meta-label {
+    font-weight: 600;
+    color: var(--carbon);
+    min-width: 48px;
+  }
+
+  /* ── Email wrapper ──────────────────────────── */
+  .email-wrapper {
+    width: 100%;
+    max-width: 680px;
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(29,29,29,0.08);
+  }
+
+  /* Ocultar plantillas inactivas */
+  .email-template { display: none; }
+  .email-template.active { display: block; }
+
+  /* ── Partes comunes del email ─────────────── */
+  .email-header {
+    background: var(--carbon);
+    padding: 36px 48px 28px;
+    text-align: center;
+  }
+
+  .email-logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid var(--bronze);
+    margin-bottom: 16px;
+  }
+
+  .email-logo-mark svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .email-brand {
+    font-family: var(--font-title);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ivory);
+    margin-bottom: 3px;
+  }
+
+  .email-brand-sub {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+
+  /* Banda de acento por debajo del header */
+  .email-accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--bronze) 0%, var(--bronze-light) 50%, var(--sand) 100%);
+  }
+
+  .email-body {
+    padding: 48px 48px 40px;
+    background: var(--ivory);
+  }
+
+  .email-greeting {
+    font-family: var(--font-title);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 12px;
+  }
+
+  .email-headline {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--carbon);
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .email-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--bronze);
+    margin-bottom: 24px;
+  }
+
+  .email-text {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #3A3A3A;
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .email-text strong {
+    color: var(--carbon);
+    font-weight: 600;
+  }
+
+  /* CTA principal */
+  .email-cta-wrap {
+    text-align: center;
+    margin: 36px 0;
+  }
+
+  .email-cta {
+    display: inline-block;
+    background: var(--carbon);
+    color: var(--ivory);
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 40px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .email-cta:hover { background: var(--bronze); }
+
+  .email-cta-bronze {
+    background: var(--bronze);
+  }
+
+  .email-cta-bronze:hover { background: var(--bronze-light); }
+
+  .email-link-note {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--stone);
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .email-link-url {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--bronze);
+    word-break: break-all;
+    background: rgba(183,134,82,0.08);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  /* Tarjeta de datos de obra */
+  .email-card {
+    background: var(--white);
+    border: 1px solid var(--sand);
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+
+  .email-card-label {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 16px;
+  }
+
+  .email-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sand);
+    font-size: 13px;
+  }
+
+  .email-card-row:last-child { border-bottom: none; }
+
+  .email-card-key {
+    color: var(--stone);
+    font-family: var(--font-body);
+  }
+
+  .email-card-val {
+    font-weight: 600;
+    color: var(--carbon);
+    font-family: var(--font-body);
+    text-align: right;
+    max-width: 60%;
+  }
+
+  /* Barra de progreso */
+  .email-progress-label {
+    font-family: var(--font-title);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 10px;
+  }
+
+  .email-progress-bar-wrap {
+    background: var(--sand);
+    height: 4px;
+    border-radius: 0;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+
+  .email-progress-fill {
+    height: 100%;
+    background: var(--bronze);
+    transition: width 1s ease;
+  }
+
+  .email-progress-pct {
+    font-family: var(--font-title);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bronze);
+    text-align: right;
+  }
+
+  /* Fases timeline (para correo de fase) */
+  .email-phases {
+    margin: 24px 0;
+  }
+
+  .email-phase-item {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--sand);
+    align-items: flex-start;
+  }
+
+  .email-phase-item:last-child { border-bottom: none; }
+
+  .phase-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sand);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .phase-dot.done { background: var(--bronze); }
+  .phase-dot.current {
+    background: var(--bronze);
+    box-shadow: 0 0 0 3px rgba(183,134,82,0.2);
+  }
+
+  .phase-name {
+    font-family: var(--font-title);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--carbon);
+  }
+
+  .phase-name.pending { color: var(--stone); font-weight: 400; }
+
+  .phase-date {
+    font-size: 11px;
+    color: var(--stone);
+    margin-top: 2px;
+  }
+
+  /* Galería de fotos (miniatura) */
+  .email-photos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 24px 0;
+  }
+
+  .email-photo-thumb {
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ivory);
+  }
+
+  /* Quote inspiracional */
+  .email-quote {
+    border-left: 2px solid var(--bronze);
+    padding: 16px 24px;
+    margin: 28px 0;
+    background: rgba(183,134,82,0.05);
+  }
+
+  .email-quote p {
+    font-family: var(--font-quote);
+    font-size: 17px;
+    font-style: italic;
+    color: var(--carbon);
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  .email-footer {
+    background: var(--carbon);
+    padding: 28px 48px;
+    text-align: center;
+  }
+
+  .email-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  .email-footer-link {
+    font-family: var(--font-title);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .email-footer-link:hover { color: var(--bronze); }
+
+  .email-footer-divider {
+    width: 1px;
+    background: rgba(220,207,190,0.2);
+    height: 12px;
+    align-self: center;
+  }
+
+  .email-footer-copy {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: #4A4A4A;
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  .email-footer-copy a {
+    color: var(--bronze);
+    text-decoration: none;
+  }
+
+  /* Notif toast */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--carbon);
+    color: var(--ivory);
+    font-family: var(--font-title);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 22px;
+    border-left: 3px solid var(--bronze);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+    z-index: 999;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar ────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-label">Sistema de correos</div>
+      <div class="sidebar-brand-name">Diseños Pablin</div>
+    </div>
+
+    <div class="sidebar-section-label">Plantillas automáticas</div>
+
+    <button class="tab-btn active" onclick="showTab('bienvenida', this)">
+      <span class="tab-icon">📩</span>
+      <span class="tab-title">Bienvenida</span>
+      <span class="tab-sub">Obra registrada + enlace tracking</span>
+    </button>
+
+    <button class="tab-btn" onclick="showTab('fase', this)">
+      <span class="tab-icon">🔄</span>
+      <span class="tab-title">Cambio de Fase</span>
+      <span class="tab-sub">Tu obra avanzó a la siguiente etapa</span>
+    </button>
+
+    <button class="tab-btn" onclick="showTab('fotos', this)">
+      <span class="tab-icon">📸</span>
+      <span class="tab-title">Nuevas Fotos</span>
+      <span class="tab-sub">Imágenes subidas por el técnico</span>
+    </button>
+
+    <button class="tab-btn" onclick="showTab('finalizada', this)">
+      <span class="tab-icon">🎉</span>
+      <span class="tab-title">Obra Finalizada</span>
+      <span class="tab-sub">Entrega + enlace de encuesta</span>
+    </button>
+
+    <div class="sidebar-note">
+      Variables disponibles:<br>
+      <code style="color:var(--bronze);font-size:10px;">{{nombre}}</code> &nbsp;
+      <code style="color:var(--bronze);font-size:10px;">{{tipo_obra}}</code><br>
+      <code style="color:var(--bronze);font-size:10px;">{{fase_actual}}</code> &nbsp;
+      <code style="color:var(--bronze);font-size:10px;">{{enlace}}</code><br>
+      <code style="color:var(--bronze);font-size:10px;">{{fecha_entrega}}</code> &nbsp;
+      <code style="color:var(--bronze);font-size:10px;">{{tecnico}}</code>
+    </div>
+  </aside>
+
+  <!-- ── Preview ───────────────────────────── -->
+  <main class="preview-area">
+
+    <div class="preview-topbar">
+      <span class="preview-topbar-left">Vista previa del correo</span>
+      <div class="preview-topbar-right">
+        <button class="chip" onclick="copySubject()">Copiar asunto</button>
+        <button class="chip" onclick="showToast('HTML listo para integrar en Resend / SendGrid')">Ver HTML</button>
+      </div>
+    </div>
+
+    <!-- Metadata -->
+    <div class="email-meta" id="emailMeta">
+      <div class="email-meta-row">
+        <span class="email-meta-label">De:</span>
+        <span>Diseños Pablin &lt;hola@diseñospablin.com&gt;</span>
+      </div>
+      <div class="email-meta-row">
+        <span class="email-meta-label">Para:</span>
+        <span>María Rodríguez &lt;maria@correo.com&gt;</span>
+      </div>
+      <div class="email-meta-row" id="emailSubjectRow">
+        <span class="email-meta-label">Asunto:</span>
+        <span id="emailSubjectText">Tu proyecto en Diseños Pablin ya está en marcha ✦</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PLANTILLA 1 — BIENVENIDA
+    ══════════════════════════════════════════ -->
+    <div class="email-wrapper">
+      <div class="email-template active" id="tpl-bienvenida">
+
+        <div class="email-header">
+          <div class="email-logo-mark">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 22V8L14 4L22 8V22" stroke="#B78652" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="10" y="14" width="8" height="8" stroke="#B78652" stroke-width="1.2"/>
+              <path d="M10 10h4M10 12h4" stroke="#DCCFBE" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="email-brand">Diseños Pablin</div>
+          <div class="email-brand-sub">Arte en Madera</div>
+        </div>
+        <div class="email-accent-bar"></div>
+
+        <div class="email-body">
+          <div class="email-greeting">Hola, María</div>
+          <div class="email-headline">Tu proyecto<br>ya está en marcha.</div>
+          <div class="email-divider"></div>
+
+          <p class="email-text">
+            Nos alegra darte la bienvenida. Tu obra ha sido registrada en nuestro sistema
+            y a partir de ahora podrás seguir cada etapa del proceso en tiempo real.
+          </p>
+
+          <div class="email-card">
+            <div class="email-card-label">Resumen de tu proyecto</div>
+            <div class="email-card-row">
+              <span class="email-card-key">Cliente</span>
+              <span class="email-card-val">María Rodríguez</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Tipo de obra</span>
+              <span class="email-card-val">Cocina integral</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fecha de inicio</span>
+              <span class="email-card-val">18 de agosto, 2026</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Entrega estimada</span>
+              <span class="email-card-val">15 de septiembre, 2026</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Técnico asignado</span>
+              <span class="email-card-val">Carlos Méndez</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fase actual</span>
+              <span class="email-card-val" style="color:var(--bronze);">Diseño</span>
+            </div>
+          </div>
+
+          <p class="email-text">
+            Sigue el avance de tu proyecto en tiempo real haciendo clic en el botón
+            de abajo. Tu enlace es personal y exclusivo para esta obra.
+          </p>
+
+          <div class="email-cta-wrap">
+            <a href="#" class="email-cta email-cta-bronze">Ver mi proyecto en tiempo real</a>
+            <div class="email-link-note" style="margin-top:14px;">
+              O copia este enlace: <span class="email-link-url">pablin.com/t/a8f3kd</span>
+            </div>
+          </div>
+
+          <div class="email-quote">
+            <p>"Diseñamos espacios que transforman la manera de vivir."</p>
+          </div>
+
+          <p class="email-text" style="margin-top:24px;">
+            Si tienes alguna duda, puedes escribirnos directamente por WhatsApp o responder
+            este correo. Estamos disponibles para ti en cada paso.
+          </p>
+        </div>
+
+        <div class="email-footer">
+          <div class="email-footer-links">
+            <a class="email-footer-link" href="#">Ver proyecto</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">WhatsApp</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">Portafolio</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">Cancelar suscripción</a>
+          </div>
+          <div class="email-footer-copy">
+            © 2026 Diseños Pablin · Arte en Madera<br>
+            <a href="#">diseñospablin.com</a> · Guayaquil, Ecuador
+          </div>
+        </div>
+
+      </div><!-- /tpl-bienvenida -->
+
+      <!-- ══════════════════════════════════════════
+           PLANTILLA 2 — CAMBIO DE FASE
+      ══════════════════════════════════════════ -->
+      <div class="email-template" id="tpl-fase">
+
+        <div class="email-header">
+          <div class="email-logo-mark">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 22V8L14 4L22 8V22" stroke="#B78652" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="10" y="14" width="8" height="8" stroke="#B78652" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div class="email-brand">Diseños Pablin</div>
+          <div class="email-brand-sub">Arte en Madera</div>
+        </div>
+        <div class="email-accent-bar"></div>
+
+        <div class="email-body">
+          <div class="email-greeting">Buenas noticias, María</div>
+          <div class="email-headline">Tu proyecto<br>avanzó de etapa.</div>
+          <div class="email-divider"></div>
+
+          <p class="email-text">
+            Queremos contarte que tu obra ha completado una etapa y ya se encuentra
+            en la siguiente fase del proceso. Aquí tienes el estado actualizado:
+          </p>
+
+          <!-- Barra de progreso -->
+          <div style="margin: 28px 0;">
+            <div class="email-progress-label">Progreso total de la obra</div>
+            <div class="email-progress-bar-wrap">
+              <div class="email-progress-fill" style="width: 40%;"></div>
+            </div>
+            <div class="email-progress-pct">40% completado</div>
+          </div>
+
+          <!-- Fases -->
+          <div class="email-card" style="padding: 20px 28px;">
+            <div class="email-card-label">Estado de las etapas</div>
+            <div class="email-phases">
+
+              <div class="email-phase-item">
+                <div class="phase-dot done"></div>
+                <div>
+                  <div class="phase-name">01 — Diseño</div>
+                  <div class="phase-date">Completado · 10 ago 2026</div>
+                </div>
+              </div>
+
+              <div class="email-phase-item">
+                <div class="phase-dot current"></div>
+                <div>
+                  <div class="phase-name" style="color:var(--bronze);">02 — Materiales ← Etapa actual</div>
+                  <div class="phase-date">Iniciado · 18 ago 2026</div>
+                </div>
+              </div>
+
+              <div class="email-phase-item">
+                <div class="phase-dot"></div>
+                <div>
+                  <div class="phase-name pending">03 — Ejecución</div>
+                  <div class="phase-date">Pendiente</div>
+                </div>
+              </div>
+
+              <div class="email-phase-item">
+                <div class="phase-dot"></div>
+                <div>
+                  <div class="phase-name pending">04 — Acabados</div>
+                  <div class="phase-date">Pendiente</div>
+                </div>
+              </div>
+
+              <div class="email-phase-item">
+                <div class="phase-dot"></div>
+                <div>
+                  <div class="phase-name pending">05 — Entrega</div>
+                  <div class="phase-date">Est. 15 sep 2026</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <p class="email-text">
+            Puedes ver el detalle completo, fotos y notas del técnico en tu página
+            de seguimiento personalizada.
+          </p>
+
+          <div class="email-cta-wrap">
+            <a href="#" class="email-cta">Ver avance completo</a>
+          </div>
+        </div>
+
+        <div class="email-footer">
+          <div class="email-footer-links">
+            <a class="email-footer-link" href="#">Ver proyecto</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">WhatsApp</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">Cancelar suscripción</a>
+          </div>
+          <div class="email-footer-copy">
+            © 2026 Diseños Pablin · Arte en Madera<br>
+            <a href="#">diseñospablin.com</a> · Guayaquil, Ecuador
+          </div>
+        </div>
+
+      </div><!-- /tpl-fase -->
+
+      <!-- ══════════════════════════════════════════
+           PLANTILLA 3 — NUEVAS FOTOS
+      ══════════════════════════════════════════ -->
+      <div class="email-template" id="tpl-fotos">
+
+        <div class="email-header">
+          <div class="email-logo-mark">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 22V8L14 4L22 8V22" stroke="#B78652" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="10" y="14" width="8" height="8" stroke="#B78652" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div class="email-brand">Diseños Pablin</div>
+          <div class="email-brand-sub">Arte en Madera</div>
+        </div>
+        <div class="email-accent-bar"></div>
+
+        <div class="email-body">
+          <div class="email-greeting">María, hay algo nuevo para ti</div>
+          <div class="email-headline">Nuevas fotos<br>de tu proyecto.</div>
+          <div class="email-divider"></div>
+
+          <p class="email-text">
+            El técnico Carlos acaba de subir <strong>3 nuevas fotos</strong> del avance de tu
+            cocina. Puedes verlas en detalle desde tu página de seguimiento.
+          </p>
+
+          <!-- Miniaturas de fotos -->
+          <div class="email-photos">
+            <div class="email-photo-thumb" style="background: linear-gradient(145deg,#2a2318,#B78652);">
+              Avance 1
+            </div>
+            <div class="email-photo-thumb" style="background: linear-gradient(145deg,#1D1D1D,#DCCFBE);">
+              Avance 2
+            </div>
+            <div class="email-photo-thumb" style="background: linear-gradient(145deg,#3b2e1e,#C9A476);">
+              Avance 3
+            </div>
+          </div>
+
+          <p class="email-text" style="font-size:12px;color:var(--stone);text-align:center;margin-top:-8px;margin-bottom:24px;">
+            Vista previa — haz clic para ver en alta resolución
+          </p>
+
+          <div class="email-card">
+            <div class="email-card-label">Detalle de la actualización</div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fase</span>
+              <span class="email-card-val" style="color:var(--bronze);">Materiales</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fotos subidas</span>
+              <span class="email-card-val">3 imágenes nuevas</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Subidas por</span>
+              <span class="email-card-val">Carlos Méndez</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fecha</span>
+              <span class="email-card-val">18 ago 2026, 2:35 PM</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Nota del técnico</span>
+              <span class="email-card-val" style="color:var(--stone);font-weight:400;">"Materiales seleccionados y listos para instalación la próxima semana."</span>
+            </div>
+          </div>
+
+          <div class="email-cta-wrap">
+            <a href="#" class="email-cta email-cta-bronze">Ver todas las fotos</a>
+          </div>
+        </div>
+
+        <div class="email-footer">
+          <div class="email-footer-links">
+            <a class="email-footer-link" href="#">Ver proyecto</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">WhatsApp</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">Cancelar suscripción</a>
+          </div>
+          <div class="email-footer-copy">
+            © 2026 Diseños Pablin · Arte en Madera<br>
+            <a href="#">diseñospablin.com</a> · Guayaquil, Ecuador
+          </div>
+        </div>
+
+      </div><!-- /tpl-fotos -->
+
+      <!-- ══════════════════════════════════════════
+           PLANTILLA 4 — OBRA FINALIZADA
+      ══════════════════════════════════════════ -->
+      <div class="email-template" id="tpl-finalizada">
+
+        <div class="email-header" style="padding-bottom:36px;">
+          <div class="email-logo-mark">
+            <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 22V8L14 4L22 8V22" stroke="#B78652" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="10" y="14" width="8" height="8" stroke="#B78652" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div class="email-brand">Diseños Pablin</div>
+          <div class="email-brand-sub">Arte en Madera</div>
+
+          <!-- Texto especial en el header para entrega -->
+          <div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(220,207,190,0.2);">
+            <div style="font-family:var(--font-quote);font-size:20px;font-style:italic;color:var(--sand);line-height:1.4;">
+              "Tu espacio está listo para ser vivido."
+            </div>
+          </div>
+        </div>
+        <div class="email-accent-bar"></div>
+
+        <div class="email-body">
+          <div class="email-greeting">¡Felicitaciones, María!</div>
+          <div class="email-headline">Tu proyecto<br>está terminado.</div>
+          <div class="email-divider"></div>
+
+          <p class="email-text">
+            Es un honor haberte acompañado en este proceso. Tu cocina está lista
+            y esperamos que cada momento en ese espacio refleje lo que buscabas
+            desde el primer día.
+          </p>
+
+          <!-- Barra de progreso completa -->
+          <div style="margin: 28px 0;">
+            <div class="email-progress-label">Progreso del proyecto</div>
+            <div class="email-progress-bar-wrap">
+              <div class="email-progress-fill" style="width: 100%;"></div>
+            </div>
+            <div class="email-progress-pct">100% completado ✦</div>
+          </div>
+
+          <div class="email-card">
+            <div class="email-card-label">Resumen final del proyecto</div>
+            <div class="email-card-row">
+              <span class="email-card-key">Tipo de obra</span>
+              <span class="email-card-val">Cocina integral</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Duración</span>
+              <span class="email-card-val">28 días</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Fecha de entrega</span>
+              <span class="email-card-val">15 sep 2026</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Técnico</span>
+              <span class="email-card-val">Carlos Méndez</span>
+            </div>
+            <div class="email-card-row">
+              <span class="email-card-key">Estado</span>
+              <span class="email-card-val" style="color:#2E7D32;font-weight:700;">✓ Entregado</span>
+            </div>
+          </div>
+
+          <p class="email-text">
+            Tu galería completa de fotos del proceso estará disponible por
+            <strong>90 días</strong> desde hoy. Descárgalas cuando quieras.
+          </p>
+
+          <div class="email-cta-wrap" style="margin-bottom:12px;">
+            <a href="#" class="email-cta email-cta-bronze">Ver galería final</a>
+          </div>
+
+          <!-- Separador -->
+          <div style="border-top:1px solid var(--sand);margin:36px 0;"></div>
+
+          <!-- Encuesta -->
+          <div style="text-align:center;">
+            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:10px;">
+              Tu opinión nos importa
+            </div>
+            <div style="font-family:var(--font-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--carbon);margin-bottom:8px;">
+              ¿Cómo fue tu experiencia?
+            </div>
+            <p class="email-text" style="text-align:center;max-width:440px;margin:0 auto 24px;">
+              Tus comentarios nos ayudan a seguir mejorando. Solo toma un minuto.
+            </p>
+            <a href="#" class="email-cta" style="font-size:9px;">Completar encuesta</a>
+          </div>
+        </div>
+
+        <div class="email-footer">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-family:var(--font-title);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bronze);margin-bottom:8px;">
+              ¿Tienes otro proyecto en mente?
+            </div>
+            <a href="#" style="font-family:var(--font-title);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--sand);text-decoration:none;">
+              Solicitar nueva cotización →
+            </a>
+          </div>
+          <div class="email-footer-links">
+            <a class="email-footer-link" href="#">Portafolio</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">WhatsApp</a>
+            <div class="email-footer-divider"></div>
+            <a class="email-footer-link" href="#">Cancelar suscripción</a>
+          </div>
+          <div class="email-footer-copy">
+            © 2026 Diseños Pablin · Arte en Madera<br>
+            <a href="#">diseñospablin.com</a> · Guayaquil, Ecuador
+          </div>
+        </div>
+
+      </div><!-- /tpl-finalizada -->
+
+    </div><!-- /email-wrapper -->
+  </main><!-- /preview-area -->
+</div><!-- /shell -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const subjects = {
+    bienvenida: 'Tu proyecto en Diseños Pablin ya está en marcha ✦',
+    fase:       'Tu obra avanzó a la siguiente etapa — Diseños Pablin',
+    fotos:      '📸 Nuevas fotos de tu proyecto están listas',
+    finalizada: '¡Tu proyecto está terminado! · Diseños Pablin'
+  };
+
+  function showTab(id, btn) {
+    // Ocultar todas las plantillas
+    document.querySelectorAll('.email-template').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    // Mostrar la seleccionada
+    document.getElementById('tpl-' + id).classList.add('active');
+    btn.classList.add('active');
+
+    // Actualizar asunto
+    document.getElementById('emailSubjectText').textContent = subjects[id];
+  }
+
+  function copySubject() {
+    const subj = document.getElementById('emailSubjectText').textContent;
+    navigator.clipboard.writeText(subj).then(() => {
+      showToast('Asunto copiado al portapapeles');
+    });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Animar barra de progreso al cargar
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.email-progress-fill').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = w; }, 100);
+      });
+    }, 300);
+  });
+</script>
+</body>
+</html>

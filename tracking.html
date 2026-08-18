@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Proyecto — Diseños Pablin</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --carbon:   #1D1D1D;
+    --ivory:    #F8F6F2;
+    --sand:     #DCCFBE;
+    --stone:    #7B7B7B;
+    --bronze:   #B78652;
+    --bronze-light: #C9A476;
+    --white:    #FFFFFF;
+    --font-title: 'Montserrat', sans-serif;
+    --font-body:  'Manrope', sans-serif;
+    --font-quote: 'Cormorant Garamond', serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ivory);
+    color: var(--carbon);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--carbon);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+  }
+  .header-brand-name {
+    font-family: var(--font-title);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ivory);
+    line-height: 1;
+  }
+  .header-brand-sub {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    color: var(--bronze);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #25D366;
+    color: var(--white);
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .btn-wa:hover { opacity: 0.88; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--carbon);
+    padding: 48px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(183,134,82,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-title);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 12px;
+  }
+  .hero-name {
+    font-family: var(--font-title);
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ivory);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .hero-type {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: clamp(16px, 3vw, 20px);
+    color: var(--sand);
+    margin-bottom: 28px;
+  }
+
+  /* Progress ring */
+  .progress-ring-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .ring-svg { transform: rotate(-90deg); }
+  .ring-bg   { fill: none; stroke: rgba(220,207,190,0.15); stroke-width: 6; }
+  .ring-fill {
+    fill: none;
+    stroke: var(--bronze);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 408;
+    stroke-dashoffset: 143; /* 408 * (1 - 0.65) */
+    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-pct {
+    font-family: var(--font-title);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ivory);
+    line-height: 1;
+  }
+  .ring-label {
+    font-size: 9px;
+    font-family: var(--font-title);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-top: 2px;
+  }
+  .hero-phase-current {
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-top: 6px;
+  }
+  .hero-delivery {
+    font-size: 13px;
+    color: rgba(248,246,242,0.5);
+    margin-top: 4px;
+    font-family: var(--font-title);
+    letter-spacing: 0.05em;
+  }
+  .hero-delivery span {
+    color: var(--sand);
+    font-weight: 600;
+  }
+
+  /* ── CONTENT ── */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 44px 0;
+    border-bottom: 1px solid var(--sand);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    font-family: var(--font-title);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--font-title);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--carbon);
+    margin-bottom: 24px;
+  }
+
+  /* ── PHASES ── */
+  .phases { display: flex; flex-direction: column; gap: 0; }
+  .phase-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 28px;
+  }
+  .phase-item:last-child { padding-bottom: 0; }
+  .phase-left { display: flex; flex-direction: column; align-items: center; }
+  .phase-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--sand);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .phase-dot.done {
+    border-color: var(--bronze);
+    background: var(--bronze);
+  }
+  .phase-dot.done::after {
+    content: '';
+    width: 10px; height: 6px;
+    border-left: 2px solid var(--white);
+    border-bottom: 2px solid var(--white);
+    transform: rotate(-45deg) translateY(-1px);
+  }
+  .phase-dot.current {
+    border-color: var(--bronze);
+    background: var(--white);
+  }
+  .phase-dot.current::after {
+    content: '';
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bronze);
+  }
+  .phase-line {
+    width: 1px;
+    flex: 1;
+    background: var(--sand);
+    margin: 4px 0;
+    min-height: 20px;
+  }
+  .phase-item:last-child .phase-line { display: none; }
+  .phase-content { flex: 1; padding-top: 3px; }
+  .phase-name {
+    font-family: var(--font-title);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--carbon);
+  }
+  .phase-name.pending { color: var(--stone); font-weight: 500; }
+  .phase-date { font-size: 12px; color: var(--stone); margin-top: 2px; }
+  .phase-note {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--ivory);
+    border-left: 2px solid var(--bronze);
+    font-size: 13px;
+    color: var(--carbon);
+    font-style: italic;
+  }
+  .phase-badge {
+    display: inline-block;
+    font-family: var(--font-title);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    margin-left: 8px;
+    background: rgba(183,134,82,0.12);
+    color: var(--bronze);
+    border-radius: 1px;
+    vertical-align: middle;
+  }
+
+  /* ── PHOTOS ── */
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .photo-card {
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    background: var(--sand);
+    aspect-ratio: 4/3;
+    cursor: pointer;
+  }
+  .photo-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .photo-card:hover img { transform: scale(1.03); }
+  .photo-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(29,29,29,0.75));
+    padding: 24px 12px 10px;
+  }
+  .photo-phase-tag {
+    font-family: var(--font-title);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sand);
+  }
+  .photo-date {
+    font-size: 11px;
+    color: rgba(248,246,242,0.65);
+    margin-top: 1px;
+  }
+
+  /* Mock photos with gradient placeholders */
+  .mock-photo {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mock-1 { background: linear-gradient(135deg, #2c2416 0%, #B78652 60%, #DCCFBE 100%); }
+  .mock-2 { background: linear-gradient(135deg, #1a1a1a 0%, #4a3728 50%, #B78652 100%); }
+  .mock-3 { background: linear-gradient(135deg, #DCCFBE 0%, #B78652 50%, #1D1D1D 100%); }
+  .mock-4 { background: linear-gradient(135deg, #3a2c1e 0%, #C9A476 70%, #F8F6F2 100%); }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(29,29,29,0.94);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-inner { position: relative; max-width: 800px; width: 100%; }
+  .lightbox-close {
+    position: absolute;
+    top: -40px; right: 0;
+    background: none; border: none;
+    color: var(--sand); font-size: 22px;
+    cursor: pointer; line-height: 1;
+    font-family: var(--font-title);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lightbox-img {
+    width: 100%; border-radius: 2px;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+  }
+  .lightbox-caption {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--stone);
+    font-family: var(--font-title);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── NOTES ── */
+  .notes { display: flex; flex-direction: column; gap: 14px; }
+  .note-item {
+    padding: 16px 18px;
+    background: var(--white);
+    border: 1px solid var(--sand);
+    border-radius: 2px;
+    border-left: 3px solid var(--bronze);
+  }
+  .note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .note-phase {
+    font-family: var(--font-title);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+  .note-date { font-size: 11px; color: var(--stone); }
+  .note-text { font-size: 13px; color: var(--carbon); line-height: 1.6; }
+
+  /* ── CONTACT ── */
+  .contact-card {
+    background: var(--carbon);
+    border-radius: 2px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .contact-quote {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--sand);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .contact-divider {
+    width: 40px; height: 1px;
+    background: var(--bronze);
+    margin: 0 auto 20px;
+  }
+  .contact-text {
+    font-size: 13px;
+    color: var(--stone);
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+  .contact-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-contact-wa {
+    background: #25D366;
+    color: var(--white);
+  }
+  .btn-contact-wa:hover { opacity: 0.88; }
+  .btn-contact-outline {
+    background: transparent;
+    border: 1px solid rgba(220,207,190,0.3);
+    color: var(--sand);
+  }
+  .btn-contact-outline:hover { border-color: var(--bronze); color: var(--bronze); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--carbon);
+    padding: 28px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(220,207,190,0.1);
+    margin-top: 0;
+  }
+  .footer-brand {
+    font-family: var(--font-title);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ivory);
+    margin-bottom: 4px;
+  }
+  .footer-sub {
+    font-family: var(--font-title);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+  .footer-services {
+    font-size: 11px;
+    color: var(--stone);
+    margin-top: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 480px) {
+    .photos-grid { grid-template-columns: 1fr; }
+    .contact-btns { flex-direction: column; align-items: stretch; }
+    .hero { padding: 36px 20px 44px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-brand">
+    <div class="header-brand-name">Diseños Pablin</div>
+    <div class="header-brand-sub">Arte en Madera</div>
+  </div>
+  <div class="header-contact">
+    <a class="btn-wa" href="https://wa.me/593990000000" target="_blank">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Escribirnos
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Seguimiento de proyecto</div>
+  <div class="hero-name">María Rodríguez</div>
+  <div class="hero-type">Cocina a medida</div>
+
+  <div class="progress-ring-wrap">
+    <svg class="ring-svg" width="130" height="130" viewBox="0 0 130 130">
+      <circle class="ring-bg" cx="65" cy="65" r="56"/>
+      <circle class="ring-fill" cx="65" cy="65" r="56" id="ring-fill"/>
+    </svg>
+    <div class="ring-center">
+      <div class="ring-pct" id="ring-pct">0%</div>
+      <div class="ring-label">Avance</div>
+    </div>
+  </div>
+
+  <div class="hero-phase-current">Fase actual: Ejecución</div>
+  <div class="hero-delivery">Entrega estimada: <span>28 de agosto, 2026</span></div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- FASES -->
+  <div class="section reveal">
+    <div class="section-label">Etapas del proyecto</div>
+    <div class="section-title">Historial de fases</div>
+    <div class="phases">
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot done"></div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-name">Diseño <span class="phase-badge">Completado</span></div>
+          <div class="phase-date">12 de julio, 2026</div>
+          <div class="phase-note">"Se finalizó el diseño con medidas reales del espacio. El cliente aprobó la distribución de gabinetes superiores e inferiores."</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot done"></div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-name">Materiales <span class="phase-badge">Completado</span></div>
+          <div class="phase-date">20 de julio, 2026</div>
+          <div class="phase-note">"Todos los materiales listos: MDF enchapado en roble, bisagras soft-close y manijas en acero inoxidable."</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot current"></div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-name">Ejecución <span class="phase-badge">En progreso</span></div>
+          <div class="phase-date">Desde el 25 de julio, 2026</div>
+          <div class="phase-note">"Armado de estructura inferior completado. Se inicia esta semana con gabinetes superiores y cubierta."</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot"></div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-name pending">Acabados</div>
+          <div class="phase-date">Pendiente</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-name pending">Entrega</div>
+          <div class="phase-date">Est. 28 de agosto, 2026</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOTOS -->
+  <div class="section reveal">
+    <div class="section-label">Registro visual</div>
+    <div class="section-title">Fotos de avance</div>
+    <div class="photos-grid">
+
+      <div class="photo-card" onclick="openLightbox(0)">
+        <div class="mock-photo mock-1"></div>
+        <div class="photo-overlay">
+          <div class="photo-phase-tag">Diseño</div>
+          <div class="photo-date">12 jul 2026</div>
+        </div>
+      </div>
+
+      <div class="photo-card" onclick="openLightbox(1)">
+        <div class="mock-photo mock-2"></div>
+        <div class="photo-overlay">
+          <div class="photo-phase-tag">Materiales</div>
+          <div class="photo-date">20 jul 2026</div>
+        </div>
+      </div>
+
+      <div class="photo-card" onclick="openLightbox(2)">
+        <div class="mock-photo mock-3"></div>
+        <div class="photo-overlay">
+          <div class="photo-phase-tag">Ejecución</div>
+          <div class="photo-date">28 jul 2026</div>
+        </div>
+      </div>
+
+      <div class="photo-card" onclick="openLightbox(3)">
+        <div class="mock-photo mock-4"></div>
+        <div class="photo-overlay">
+          <div class="photo-phase-tag">Ejecución</div>
+          <div class="photo-date">5 ago 2026</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NOTAS -->
+  <div class="section reveal">
+    <div class="section-label">Actualizaciones del equipo</div>
+    <div class="section-title">Notas del técnico</div>
+    <div class="notes">
+      <div class="note-item">
+        <div class="note-header">
+          <div class="note-phase">Ejecución — 5 ago 2026</div>
+          <div class="note-date">Hace 13 días</div>
+        </div>
+        <div class="note-text">El gabinete inferior izquierdo y central están listos y fijados. Esta semana comenzamos la instalación de la cubierta de granito y los gabinetes superiores. Todo va según el cronograma.</div>
+      </div>
+      <div class="note-item">
+        <div class="note-header">
+          <div class="note-phase">Ejecución — 28 jul 2026</div>
+          <div class="note-date">Hace 21 días</div>
+        </div>
+        <div class="note-text">Iniciamos la fase de ejecución. La estructura principal del módulo inferior fue instalada sin contratiempos. La madera está perfectamente nivelada.</div>
+      </div>
+      <div class="note-item">
+        <div class="note-header">
+          <div class="note-phase">Materiales — 20 jul 2026</div>
+          <div class="note-date">Hace 29 días</div>
+        </div>
+        <div class="note-text">Todos los materiales ingresaron al taller. El enchapado en roble tiene una textura excelente, va a quedar muy bien con los tonos del espacio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTO -->
+  <div class="section reveal">
+    <div class="contact-card">
+      <div class="contact-quote">"Estamos construyendo el espacio que mereces."</div>
+      <div class="contact-divider"></div>
+      <div class="contact-text">¿Tienes alguna duda sobre tu proyecto?<br>Escríbenos directamente y te respondemos de inmediato.</div>
+      <div class="contact-btns">
+        <a class="btn-contact btn-contact-wa" href="https://wa.me/593990000000?text=Hola%2C%20soy%20Mar%C3%ADa%20Rodr%C3%ADguez%20y%20tengo%20una%20pregunta%20sobre%20mi%20proyecto." target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribir por WhatsApp
+        </a>
+        <button class="btn-contact btn-contact-outline" onclick="copyPhone()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          Copiar teléfono
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕ Cerrar</button>
+    <div class="lightbox-img" id="lightbox-img" style="border-radius:2px;"></div>
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-brand">Diseños Pablin</div>
+  <div class="footer-sub">Arte en Madera</div>
+  <div class="footer-services">Diseño &nbsp;|&nbsp; Remodelación &nbsp;|&nbsp; Interiores</div>
+</footer>
+
+<script>
+  // Animated counter
+  function animateCounter(target, duration) {
+    let start = 0;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      document.getElementById('ring-pct').textContent = Math.round(ease * target) + '%';
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // Ring animation
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const fill = document.getElementById('ring-fill');
+      const pct = 65;
+      const circumference = 408;
+      fill.style.strokeDashoffset = circumference * (1 - pct / 100);
+      animateCounter(pct, 1200);
+    }, 300);
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Lightbox
+  const photos = [
+    { bg: 'linear-gradient(135deg,#2c2416 0%,#B78652 60%,#DCCFBE 100%)', label: 'Diseño — 12 jul 2026' },
+    { bg: 'linear-gradient(135deg,#1a1a1a 0%,#4a3728 50%,#B78652 100%)', label: 'Materiales — 20 jul 2026' },
+    { bg: 'linear-gradient(135deg,#DCCFBE 0%,#B78652 50%,#1D1D1D 100%)', label: 'Ejecución — 28 jul 2026' },
+    { bg: 'linear-gradient(135deg,#3a2c1e 0%,#C9A476 70%,#F8F6F2 100%)', label: 'Ejecución — 5 ago 2026' },
+  ];
+  function openLightbox(i) {
+    const img = document.getElementById('lightbox-img');
+    img.style.background = photos[i].bg;
+    img.style.aspectRatio = '4/3';
+    document.getElementById('lightbox-caption').textContent = photos[i].label;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  function copyPhone() {
+    navigator.clipboard?.writeText('+593 99 000 0000').catch(()=>{});
+    const btn = event.currentTarget;
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => {
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg> Copiar teléfono`;
+    }, 2000);
+  }
+</script>
+</body>
+</html>
