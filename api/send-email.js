@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // Cabeceras CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -84,4 +84,4 @@ module.exports = async (req, res) => {
     console.error('Error enviando correo:', error);
     return res.status(500).json({ error: error.message });
   }
-};
+}
