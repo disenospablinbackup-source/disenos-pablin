@@ -622,46 +622,6 @@
   }
   .link-copy:hover { border-color: var(--bronze); color: var(--bronze); }
 
-  /* Photo grid */
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .photo-thumb {
-    aspect-ratio: 1;
-    background: var(--sand);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-  }
-  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .photo-thumb .photo-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(29,29,29,0.6);
-    color: var(--ivory);
-    font-size: 9px;
-    padding: 4px 6px;
-    font-family: var(--font-title);
-    letter-spacing: 0.08em;
-  }
-  .photo-add {
-    aspect-ratio: 1;
-    background: var(--ivory);
-    border: 1px dashed var(--sand);
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--stone);
-    font-size: 22px;
-    transition: all 0.15s;
-  }
-  .photo-add:hover { border-color: var(--bronze); color: var(--bronze); }
-
   /* Search */
   .search-bar {
     display: flex;
@@ -715,7 +675,6 @@
   .toast.show { display: flex; }
   .toast-accent { width: 3px; height: 100%; background: var(--bronze); }
 
-  /* RESPONSIVE */
   @media (max-width: 900px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .detail-panel { width: 100%; }
@@ -801,7 +760,6 @@
           <h1>Dashboard</h1>
           <p>"Espacios que inspiran"</p>
         </div>
-        <span style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;" id="dash-date">Martes, 18 Agosto 2026</span>
       </div>
 
       <div class="stats-row">
@@ -843,7 +801,7 @@
               </tr>
             </thead>
             <tbody id="dash-tabla-recent">
-              <tr><td colspan="7" style="text-align:center;color:var(--stone);">Cargando obras desde Supabase...</td></tr>
+              <tr><td colspan="7" style="text-align:center;color:var(--stone);">Cargando obras...</td></tr>
             </tbody>
           </table>
         </div>
@@ -932,60 +890,26 @@
           </table>
         </div>
       </div>
-      <div class="card" style="border: 1px dashed var(--sand); background: var(--ivory);">
-        <div class="card-title">Módulos futuros</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
-            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Encuesta</div>
-            <div style="font-size:12px;color:var(--stone);">Post-entrega</div>
-            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
-          </div>
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
-            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Aprobación</div>
-            <div style="font-size:12px;color:var(--stone);">Diseño / planos</div>
-            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
-          </div>
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
-            <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Cotización</div>
-            <div style="font-size:12px;color:var(--stone);">Interactiva</div>
-            <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- 5. CORREOS -->
     <div class="view" id="view-correos">
       <div class="page-header">
-        <div><h1>Correos</h1><p>"Comunicación automática y personalizada"</p></div>
-        <a href="/correos.html" target="_blank" class="btn btn-primary" style="text-decoration:none;">Ver Plantillas HTML</a>
+        <div><h1>Correos</h1><p>"Comunicación automática conectada a Resend"</p></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
-        <div class="stat-card"><div class="stat-number" id="correos-enviados-count">0</div><div class="stat-label">Enviados este mes</div></div>
-        <div class="stat-card"><div class="stat-number" style="color:var(--bronze);">100%</div><div class="stat-label">Conexión Resend API</div></div>
+        <div class="stat-card"><div class="stat-number">3,000</div><div class="stat-label">Límite mensual gratuito</div></div>
+        <div class="stat-card"><div class="stat-number" style="color:var(--bronze);">Activo</div><div class="stat-label">Servidor Resend API</div></div>
       </div>
       <div class="card">
         <div class="card-title">Disparadores automáticos</div>
         <table>
-          <thead><tr><th>Evento</th><th>Plantilla</th><th>Activo</th><th></th></tr></thead>
+          <thead><tr><th>Evento</th><th>Plantilla</th><th>Estado</th></tr></thead>
           <tbody>
             <tr>
               <td style="font-weight:600;">Nueva obra creada</td>
-              <td style="font-size:12px;color:var(--stone);">Bienvenida + enlace tracking</td>
+              <td style="font-size:12px;color:var(--stone);">Bienvenida + enlace único de seguimiento</td>
               <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm">Ver</button></td>
-            </tr>
-            <tr>
-              <td style="font-weight:600;">Cambio de fase</td>
-              <td style="font-size:12px;color:var(--stone);">Notificación de avance</td>
-              <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm">Ver</button></td>
-            </tr>
-            <tr>
-              <td style="font-weight:600;">Obra finalizada</td>
-              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo! + Reseña</td>
-              <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm">Ver</button></td>
             </tr>
           </tbody>
         </table>
@@ -997,19 +921,9 @@
       <div class="page-header">
         <div><h1>Bot WhatsApp</h1><p>"Tu asistente 24/7 con Gemini"</p></div>
       </div>
-      <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Disponibilidad</div></div>
-        <div class="stat-card"><div class="stat-number" id="bot-tecnicos-count">0</div><div class="stat-label">Técnicos conectados</div></div>
-        <div class="stat-card"><div class="stat-number">Gemini 2.5</div><div class="stat-label">IA Engine</div></div>
-      </div>
       <div class="card">
-        <div class="card-title">Comandos de WhatsApp para Técnicos</div>
-        <div style="font-size:13px;line-height:1.8;color:var(--carbon);">
-          <p>Los técnicos pueden enviar notas o fotos por WhatsApp usando su <b>ID Técnico</b> y el <b>ID de Obra</b>:</p>
-          <div style="background:var(--ivory);padding:14px;border:1px solid var(--sand);margin:10px 0;font-family:monospace;font-size:12px;">
-            UPDATE [ID_OBRA] FASE: [Ejecución] FOTO: [Adjunto] NOTA: [Instalación de mesones lista]
-          </div>
-        </div>
+        <div class="card-title">Instrucciones de Bot</div>
+        <p style="font-size:13px;color:var(--stone);line-height:1.8;">Listo para conectar con el webhook de WhatsApp Cloud API y Gemini.</p>
       </div>
     </div>
 
@@ -1039,39 +953,14 @@
       <div class="page-header">
         <div><h1>Configuración</h1></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div class="card">
-          <div class="card-title">Datos del negocio</div>
-          <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" value="Diseños Pablin"></div>
-          <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" value="+593 99 000 0000"></div>
-          <div class="form-group"><label class="form-label">Correo</label><input class="form-input" value="contacto@disenospablin.com"></div>
-          <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" value="@disenospablin"></div>
-          <button class="btn btn-primary" onclick="showToast('Datos de configuración guardados ✓')">Guardar</button>
-        </div>
-        <div class="card">
-          <div class="card-title">Fases de obra predeterminadas</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
-              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">01</span> Diseño
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
-              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">02</span> Materiales
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
-              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">03</span> Ejecución
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
-              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">04</span> Acabados
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
-              <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">05</span> Entrega
-            </div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-title">Datos del negocio</div>
+        <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" value="Diseños Pablin"></div>
+        <button class="btn btn-primary" onclick="showToast('Configuración guardada ✓')">Guardar</button>
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 </main>
 
 <!-- DETAIL PANEL DINÁMICO -->
@@ -1095,9 +984,7 @@
 
     <div class="detail-section">
       <div class="detail-section-title">Fases de avance</div>
-      <div class="phases" id="det-phases-list">
-        <!-- Renderizado dinámico -->
-      </div>
+      <div class="phases" id="det-phases-list"></div>
     </div>
 
     <div class="detail-section">
@@ -1106,15 +993,6 @@
         <span class="link-url" id="det-link-url">-</span>
         <button class="link-copy" id="det-link-copy-btn">Copiar</button>
       </div>
-      <div style="display:flex;gap:8px;margin-top:10px;">
-        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="showToast('Notificación enviada por correo ✓')">Enviar por correo</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="showToast('Enlace enviado por WhatsApp ✓')">Enviar por WhatsApp</button>
-      </div>
-    </div>
-
-    <div class="detail-section">
-      <div class="detail-section-title">Notas de Obra</div>
-      <p id="det-descripcion" style="font-size:12px;color:var(--stone);margin-bottom:10px;">Sin notas registradas.</p>
     </div>
   </div>
 </div>
@@ -1163,7 +1041,7 @@
       </div>
       <div class="form-group" style="display:flex;align-items:center;gap:10px;">
         <input type="checkbox" id="send-auto" checked style="accent-color:var(--bronze);width:16px;height:16px;">
-        <label for="send-auto" style="font-size:13px;cursor:pointer;">Generar enlace temporal y notificar al cliente</label>
+        <label for="send-auto" style="font-size:13px;cursor:pointer;">Enviar correo con link de seguimiento al cliente automáticamente</label>
       </div>
     </div>
     <div class="modal-footer">
@@ -1276,7 +1154,6 @@
   let tecnicosCache = [];
   let obrasCache = [];
 
-  // Helper de estilos para tipo de cliente
   function getBadgeCliente(tipo) {
     switch (tipo) {
       case 'VIP': return '<span class="badge" style="background:#EDE7F6;color:#512DA8;">VIP</span>';
@@ -1299,15 +1176,12 @@
   // 2. CARGAR TODOS LOS DATOS
   async function cargarTodo() {
     try {
-      // Clientes
       const { data: clientes } = await db.from('clientes').select('*').order('created_at', { ascending: false });
       clientesCache = clientes || [];
 
-      // Técnicos
       const { data: tecnicos } = await db.from('tecnicos').select('*').order('created_at', { ascending: true });
       tecnicosCache = tecnicos || [];
 
-      // Obras
       const { data: obras } = await db.from('obras').select('*, clientes(*), tecnicos(*)').order('created_at', { ascending: false });
       obrasCache = obras || [];
 
@@ -1322,7 +1196,6 @@
     }
   }
 
-  // 3. RENDERIZAR DASHBOARD
   function renderDashboard() {
     const activas = obrasCache.filter(o => o.estado === 'Activa').length;
     const entrega = obrasCache.filter(o => o.estado === 'Por entregar' || o.porcentaje_avance >= 90).length;
@@ -1332,7 +1205,6 @@
     document.getElementById('dash-clientes-total').textContent = clientesCache.length;
     document.getElementById('dash-obras-entrega').textContent = entrega;
     document.getElementById('dash-obras-completas').textContent = finalizadas;
-    document.getElementById('bot-tecnicos-count').textContent = tecnicosCache.length;
 
     const tbody = document.getElementById('dash-tabla-recent');
     if (!obrasCache.length) {
@@ -1369,7 +1241,6 @@
     }).join('');
   }
 
-  // 4. RENDERIZAR CLIENTES
   function renderClientes(lista = clientesCache) {
     const tbody = document.getElementById('tabla-clientes-body');
     if (!lista.length) {
@@ -1411,7 +1282,6 @@
     renderClientes(filtrados);
   }
 
-  // 5. RENDERIZAR OBRAS
   function renderObras(lista = obrasCache) {
     const tbody = document.getElementById('tabla-obras-body');
     if (!lista.length) {
@@ -1449,7 +1319,6 @@
     }
   }
 
-  // 6. RENDERIZAR ENLACES
   function renderEnlaces() {
     const tbody = document.getElementById('tabla-enlaces-body');
     if (!obrasCache.length) {
@@ -1474,7 +1343,6 @@
     }).join('');
   }
 
-  // 7. RENDERIZAR TÉCNICOS
   function renderTecnicos() {
     const tbody = document.getElementById('tabla-tecnicos-body');
     if (!tecnicosCache.length) {
@@ -1515,7 +1383,6 @@
     }
   }
 
-  // 8. GUARDAR NUEVO CLIENTE
   async function guardarNuevoCliente() {
     const nombres = document.getElementById('cli-nombres')?.value.trim();
     const apellidos = document.getElementById('cli-apellidos')?.value.trim();
@@ -1549,27 +1416,25 @@
     }
   }
 
-  // 9. GUARDAR NUEVA OBRA CON ID Y SLUG AUTOMÁTICOS
+  // 3. GUARDAR NUEVA OBRA Y DISPARAR CORREO RESEND
   async function guardarNuevaObra() {
     const clienteId = document.getElementById('obr-cliente-select')?.value;
     const tipo = document.getElementById('obr-tipo')?.value || 'Cocina';
     const desc = document.getElementById('obr-desc')?.value.trim();
     const tecnicoId = document.getElementById('obr-tecnico-select')?.value || null;
     const fecha = document.getElementById('obr-fecha')?.value || null;
+    const enviarNotificacion = document.getElementById('send-auto')?.checked;
 
     if (!clienteId) {
       showToast('Por favor selecciona un cliente');
       return;
     }
 
-    // Generar ID de Obra automático correlativo/alfanumérico (#OBR-XXX)
     const randomNum = Math.floor(100 + Math.random() * 900);
     const autoIdObra = `#OBR-${randomNum}`;
-
-    // Generar enlace temporal alfanumérico único
     const autoSlug = Math.random().toString(36).substring(2, 8);
 
-    showToast('Creando obra y generando enlace temporal...');
+    showToast('Creando obra en Supabase...');
 
     const { error } = await db.from('obras').insert([{
       id_obra: autoIdObra,
@@ -1589,12 +1454,42 @@
     } else {
       closeModal('nueva-obra');
       document.getElementById('obr-desc').value = '';
-      showToast(`Obra ${autoIdObra} creada con éxito ✓`);
+
+      // DISPARO A RESEND
+      const clienteData = clientesCache.find(c => c.id === clienteId);
+      if (enviarNotificacion && clienteData && clienteData.correo_electronico) {
+        showToast('Enviando notificación por correo...');
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clienteNombre: `${clienteData.nombres} ${clienteData.apellidos}`,
+            clienteEmail: clienteData.correo_electronico,
+            tipoObra: tipo,
+            codigoObra: autoIdObra,
+            slugTracking: autoSlug
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showToast(`¡Obra creada y correo enviado a ${clienteData.correo_electronico}! ✓`);
+          } else {
+            showToast(`Obra creada. (Aviso: ${data.error || 'Correo no enviado'})`);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          showToast(`Obra ${autoIdObra} creada con éxito ✓`);
+        });
+      } else {
+        showToast(`Obra ${autoIdObra} creada con éxito ✓`);
+      }
+
       cargarTodo();
     }
   }
 
-  // 10. GUARDAR NUEVO TÉCNICO CON ID AUTOMÁTICO
   async function guardarNuevoTecnico() {
     const nombres = document.getElementById('tec-nombres')?.value.trim();
     const apellidos = document.getElementById('tec-apellidos')?.value.trim();
@@ -1606,7 +1501,6 @@
       return;
     }
 
-    // Generar ID de Técnico automático (TEC-XXXX)
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const autoIdTecnico = `TEC-${randomNum}`;
 
@@ -1629,12 +1523,11 @@
       document.getElementById('tec-apellidos').value = '';
       document.getElementById('tec-cedula').value = '';
       document.getElementById('tec-telefono').value = '';
-      showToast(`Técnico registrado con ID: ${autoIdTecnico} ✓`);
+      showToast(`Técnico registrado: ${autoIdTecnico} ✓`);
       cargarTodo();
     }
   }
 
-  // 11. DETALLE LATERAL DE OBRA
   function verDetalleObra(obraId) {
     const obra = obrasCache.find(o => o.id === obraId);
     if (!obra) return;
@@ -1652,29 +1545,17 @@
     document.getElementById('det-telefono').textContent = cli.telefono_1 || '-';
     document.getElementById('det-tecnico').textContent = tec.nombres ? `${tec.nombres} ${tec.apellidos}` : 'Sin asignar';
     document.getElementById('det-entrega').textContent = obra.fecha_entrega_estimada || 'Por definir';
-    document.getElementById('det-descripcion').textContent = obra.descripcion || 'Sin notas registradas.';
 
     document.getElementById('det-link-url').textContent = url;
     document.getElementById('det-link-copy-btn').onclick = () => copyLink(url);
 
-    // Fases Stepper
     const fases = ['Diseño', 'Materiales', 'Ejecución', 'Acabados', 'Entrega'];
     const idxActual = fases.indexOf(obra.fase_actual);
 
     document.getElementById('det-phases-list').innerHTML = fases.map((f, i) => {
-      let dotClass = '';
-      let textClass = '';
-      let infoText = 'Pendiente';
-
-      if (i < idxActual) {
-        dotClass = 'done';
-        infoText = 'Completado';
-      } else if (i === idxActual) {
-        dotClass = 'current';
-        infoText = `En progreso — ${obra.porcentaje_avance}%`;
-      } else {
-        textClass = 'pending';
-      }
+      let dotClass = i < idxActual ? 'done' : (i === idxActual ? 'current' : '');
+      let textClass = i <= idxActual ? '' : 'pending';
+      let infoText = i < idxActual ? 'Completado' : (i === idxActual ? `En progreso — ${obra.porcentaje_avance}%` : 'Pendiente');
 
       return `
         <div class="phase-item">
@@ -1690,7 +1571,6 @@
     openDetail();
   }
 
-  // 12. NAVEGACIÓN Y UTILIDADES
   function showView(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1726,7 +1606,6 @@
     }
   }
 
-  // Inicialización
   window.addEventListener('DOMContentLoaded', () => {
     cargarTodo();
     document.querySelectorAll('.modal-overlay').forEach(o => {
