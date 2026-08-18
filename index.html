@@ -1321,6 +1321,7 @@
       const cli = o.clientes || {};
       const tec = o.tecnicos || {};
       const iniciales = ((cli.nombres?.[0] || '') + (cli.apellidos?.[0] || '')).toUpperCase() || 'DP';
+      const correoCli = cli.correo_electronico || cli.email || '-';
       return `
         <tr>
           <td>
@@ -1328,7 +1329,7 @@
               <div class="avatar">${iniciales}</div>
               <div>
                 <div style="font-weight:600;">${cli.nombres || 'Sin nombre'} ${cli.apellidos || ''}</div>
-                <div style="font-size:11px;color:var(--stone);">${cli.correo_electronico || '-'}</div>
+                <div style="font-size:11px;color:var(--stone);">${correoCli}</div>
               </div>
             </div>
           </td>
@@ -1357,6 +1358,7 @@
     tbody.innerHTML = lista.map(c => {
       const ini = ((c.nombres?.[0] || '') + (c.apellidos?.[0] || '')).toUpperCase();
       const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+      const correoCli = c.correo_electronico || c.email || '-';
       return `
         <tr>
           <td>
@@ -1364,12 +1366,12 @@
               <div class="avatar">${ini}</div>
               <div>
                 <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
-                <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
+                <div style="font-size:11px;color:var(--stone);">${correoCli}</div>
               </div>
             </div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
-          <td style="font-weight:600;">${c.numero_cedula}</td>
+          <td style="font-size:12px;color:var(--stone);">${c.telefono_1 || c.telefono || '-'}</td>
+          <td style="font-weight:600;">${c.numero_cedula || '-'}</td>
           <td>${getBadgeCliente(c.tipo_cliente)}</td>
           <td style="font-size:12px;color:var(--stone);">${fecha}</td>
         </tr>
@@ -1382,7 +1384,9 @@
     const filtroTipo = document.getElementById('filtro-tipo-cliente')?.value;
 
     const filtrados = clientesCache.filter(c => {
-      const matchText = (c.nombres + ' ' + c.apellidos + ' ' + c.numero_cedula + ' ' + c.correo_electronico + ' ' + c.telefono_1).toLowerCase().includes(busqueda);
+      const correo = c.correo_electronico || c.email || '';
+      const tel = c.telefono_1 || c.telefono || '';
+      const matchText = (c.nombres + ' ' + c.apellidos + ' ' + (c.numero_cedula || '') + ' ' + correo + ' ' + tel).toLowerCase().includes(busqueda);
       const matchTipo = filtroTipo ? c.tipo_cliente === filtroTipo : true;
       return matchText && matchTipo;
     });
@@ -1402,7 +1406,7 @@
       const tec = o.tecnicos || {};
       return `
         <tr>
-          <td style="font-weight:700;color:var(--bronze);">${o.id_obra}</td>
+          <td style="font-weight:700;color:var(--bronze);">${o.id_obra || '#OBR'}</td>
           <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
           <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
           <td style="font-size:12px;">${o.fase_actual || 'Diseño'}</td>
@@ -1442,7 +1446,7 @@
       return `
         <tr>
           <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
-          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra} ${o.id_obra}</span></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra} ${o.id_obra || ''}</span></td>
           <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${url}</span></td>
           <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : 'badge-done'}">${o.estado || 'Activa'}</span></td>
           <td style="display:flex;gap:6px;padding:14px 0;">
@@ -1487,7 +1491,7 @@
     const selCli = document.getElementById('obr-cliente-select');
     if (selCli) {
       selCli.innerHTML = '<option value="">Seleccionar cliente…</option>' + 
-        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula})</option>`).join('');
+        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula || c.correo_electronico || ''})</option>`).join('');
     }
     const selTec = document.getElementById('obr-tecnico-select');
     if (selTec) {
@@ -1535,7 +1539,7 @@
     }
   };
 
-  // 9. GUARDAR NUEVA OBRA Y DISPARAR CORREO DE INICIO
+  // 9. GUARDAR NUEVA OBRA Y DISPARAR CORREO
   window.guardarNuevaObra = async function() {
     const clienteId = document.getElementById('obr-cliente-select')?.value;
     const tipo = document.getElementById('obr-tipo')?.value || 'Cocina';
@@ -1550,6 +1554,7 @@
     }
 
     const clienteSeleccionado = clientesCache.find(c => String(c.id) === String(clienteId));
+    const correoDestino = clienteSeleccionado?.correo_electronico || clienteSeleccionado?.email;
 
     const btn = document.getElementById('btn-submit-obra');
     if (btn) { btn.disabled = true; btn.textContent = 'Creando Obra...'; }
@@ -1580,14 +1585,14 @@
     }
 
     // Disparador de correo por Gmail SMTP
-    if (sendAuto && clienteSeleccionado && clienteSeleccionado.correo_electronico) {
+    if (sendAuto && correoDestino) {
       try {
         const res = await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             clienteNombre: `${clienteSeleccionado.nombres} ${clienteSeleccionado.apellidos}`,
-            clienteEmail: clienteSeleccionado.correo_electronico,
+            clienteEmail: correoDestino,
             tipoObra: tipo,
             codigoObra: autoIdObra,
             slugTracking: autoSlug,
@@ -1666,14 +1671,15 @@
     const cli = obra.clientes || {};
     const tec = obra.tecnicos || {};
     const url = `https://disenos-pablin.vercel.app/tracking.html?t=${obra.slug_tracking}`;
+    const correoCli = cli.correo_electronico || cli.email || '-';
 
-    document.getElementById('det-obra-id').textContent = `Obra ${obra.id_obra}`;
+    document.getElementById('det-obra-id').textContent = `Obra ${obra.id_obra || ''}`;
     document.getElementById('det-cliente-nombre').textContent = `${cli.nombres || ''} ${cli.apellidos || ''}`;
-    document.getElementById('det-tipo-obra').textContent = obra.categoria_obra;
+    document.getElementById('det-tipo-obra').textContent = obra.categoria_obra || 'Proyecto';
     document.getElementById('det-tipo-obra').className = `badge ${getBadgeTipoObra(obra.categoria_obra)}`;
 
-    document.getElementById('det-correo').textContent = cli.correo_electronico || '-';
-    document.getElementById('det-telefono').textContent = cli.telefono_1 || '-';
+    document.getElementById('det-correo').textContent = correoCli;
+    document.getElementById('det-telefono').textContent = cli.telefono_1 || cli.telefono || '-';
     document.getElementById('det-tecnico').textContent = tec.nombres ? `${tec.nombres} ${tec.apellidos}` : 'Sin asignar';
     document.getElementById('det-entrega').textContent = obra.fecha_entrega_estimada || 'Por definir';
     document.getElementById('det-descripcion').value = obra.descripcion || '';
@@ -1716,7 +1722,7 @@
     }).join('');
   }
 
-  // 12. AVANZAR FASE Y DISPARAR CORREO DE ACTUALIZACIÓN
+  // 12. AVANZAR FASE Y DISPARAR CORREO (CORREGIDO CON AWAIT)
   window.avanzarFaseObraActual = async function() {
     if (!currentObraDetalle) return;
     const idx = FASES.findIndex(f => f.nombre.toLowerCase() === (currentObraDetalle.fase_actual || 'diseño').toLowerCase());
@@ -1724,7 +1730,7 @@
     if (idx < FASES.length - 1) {
       const nextFase = FASES[idx + 1];
       const btn = document.getElementById('btn-next-phase');
-      if (btn) { btn.disabled = true; btn.textContent = 'Actualizando fase...'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Enviando actualización...'; }
 
       const updateData = {
         fase_actual: nextFase.nombre,
@@ -1746,31 +1752,42 @@
 
       renderFasesDetalle(nextFase.nombre);
 
-      // Disparar correo de actualización de fase al cliente
-      const cli = currentObraDetalle.clientes;
-      if (cli && cli.correo_electronico) {
+      // Obtener datos y correo del cliente
+      const cli = currentObraDetalle.clientes || {};
+      const correoCliente = cli.correo_electronico || cli.email;
+      const nombreCliente = `${cli.nombres || ''} ${cli.apellidos || ''}`.trim() || 'Cliente';
+
+      if (correoCliente && correoCliente.includes('@')) {
         try {
-          fetch('/api/send-email', {
+          const res = await fetch('/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              clienteNombre: `${cli.nombres} ${cli.apellidos}`,
-              clienteEmail: cli.correo_electronico,
-              tipoObra: currentObraDetalle.categoria_obra,
-              codigoObra: currentObraDetalle.id_obra,
+              clienteNombre: nombreCliente,
+              clienteEmail: correoCliente,
+              tipoObra: currentObraDetalle.categoria_obra || 'Proyecto',
+              codigoObra: currentObraDetalle.id_obra || '#OBR',
               slugTracking: currentObraDetalle.slug_tracking,
               tipoEvento: 'avance_fase',
               nuevaFase: nextFase.nombre,
               porcentaje: nextFase.porcentaje
             })
-          }).then();
+          });
+          
+          if (res.ok) {
+            window.showToast(`Fase: ${nextFase.nombre} (${nextFase.porcentaje}%) ➔ Correo enviado a ${correoCliente} ✓`);
+          } else {
+            const errData = await res.json();
+            window.showToast(`Fase avanzada. (Aviso correo: ${errData.error || 'No entregado'})`);
+          }
         } catch(e) {
-          console.warn('Fallo al disparar correo de avance:', e);
+          window.showToast(`Fase avanzada a ${nextFase.nombre} ✓`);
         }
+      } else {
+        window.showToast(`Fase avanzada a ${nextFase.nombre} (Sin correo válido registrado)`);
       }
 
       if (btn) { btn.disabled = false; btn.textContent = 'Avanzar a siguiente fase'; }
-      window.showToast(`Fase actualizada a: ${nextFase.nombre} (${nextFase.porcentaje}%) y correo enviado ✓`);
       await cargarTodo();
     } else {
       window.showToast('La obra ya se encuentra en la fase final (Entrega 100%)');
@@ -1789,9 +1806,10 @@
 
   window.enviarCorreoObraActual = async function() {
     if (!currentObraDetalle) return;
-    const cli = currentObraDetalle.clientes;
-    if (!cli || !cli.correo_electronico) {
-      window.showToast('El cliente no tiene un correo registrado.');
+    const cli = currentObraDetalle.clientes || {};
+    const correoCliente = cli.correo_electronico || cli.email;
+    if (!correoCliente || !correoCliente.includes('@')) {
+      window.showToast('El cliente no tiene un correo válido registrado.');
       return;
     }
     window.showToast('Enviando correo...');
@@ -1800,17 +1818,17 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          clienteNombre: `${cli.nombres} ${cli.apellidos}`,
-          clienteEmail: cli.correo_electronico,
-          tipoObra: currentObraDetalle.categoria_obra,
-          codigoObra: currentObraDetalle.id_obra,
+          clienteNombre: `${cli.nombres || ''} ${cli.apellidos || ''}`.trim() || 'Cliente',
+          clienteEmail: correoCliente,
+          tipoObra: currentObraDetalle.categoria_obra || 'Proyecto',
+          codigoObra: currentObraDetalle.id_obra || '#OBR',
           slugTracking: currentObraDetalle.slug_tracking,
           tipoEvento: 'avance_fase',
-          nuevaFase: currentObraDetalle.fase_actual,
-          porcentaje: currentObraDetalle.porcentaje_avance
+          nuevaFase: currentObraDetalle.fase_actual || 'Diseño',
+          porcentaje: currentObraDetalle.porcentaje_avance || 10
         })
       });
-      if (res.ok) window.showToast('Correo reenviado con éxito ✓');
+      if (res.ok) window.showToast(`Correo enviado a ${correoCliente} ✓`);
       else window.showToast('Error al enviar correo');
     } catch(e) {
       window.showToast('Error de conexión con el servidor de correo');
@@ -1819,10 +1837,10 @@
 
   window.enviarWhatsAppObraActual = function() {
     if (!currentObraDetalle) return;
-    const cli = currentObraDetalle.clientes;
-    const phone = (cli?.telefono_1 || '').replace(/\D/g, '');
+    const cli = currentObraDetalle.clientes || {};
+    const phone = (cli.telefono_1 || cli.telefono || '').replace(/\D/g, '');
     const url = `https://disenos-pablin.vercel.app/tracking.html?t=${currentObraDetalle.slug_tracking}`;
-    const msg = encodeURIComponent(`Hola ${cli?.nombres || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.categoria_obra} (${currentObraDetalle.id_obra}): ${url}`);
+    const msg = encodeURIComponent(`Hola ${cli.nombres || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.categoria_obra || 'Muebles'} (${currentObraDetalle.id_obra || ''}): ${url}`);
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
 
@@ -1866,7 +1884,7 @@
     if (msgEl) msgEl.textContent = msg;
     if (t) {
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3500);
+      setTimeout(() => t.classList.remove('show'), 4000);
     }
   };
 
