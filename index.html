@@ -176,6 +176,38 @@
   .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--carbon); }
   .btn-outline:hover { background: var(--sand-2); border-color: var(--gold); }
   .btn-sm { padding: 6px 12px; font-size: 8px; }
+  
+  /* METRICAS DASHBOARD */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .metric-card {
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px;
+    border-top: 3px solid var(--gold);
+  }
+  .metric-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .metric-val {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--carbon);
+    margin: 8px 0 4px;
+  }
+  .metric-note { font-size: 11px; color: var(--stone); }
+  
   .card {
     background: #FFF;
     border: 1px solid var(--border);
@@ -235,7 +267,6 @@
     text-transform: uppercase;
     border-radius: 2px;
   }
-  .badge-active { background: #E8F5E9; color: #2E7D32; }
   
   /* MODAL */
   .modal-overlay {
@@ -251,7 +282,7 @@
   .modal {
     background: #FFF;
     border: 1px solid var(--border);
-    width: 520px;
+    width: 540px;
     max-width: 95vw;
     border-radius: 2px;
   }
@@ -289,7 +320,7 @@
     text-transform: uppercase;
     color: var(--stone);
   }
-  .form-input, .form-select {
+  .form-input, .form-select, .form-textarea {
     padding: 9px 12px;
     border: 1px solid var(--border);
     border-radius: 2px;
@@ -297,7 +328,8 @@
     font-family: 'Manrope', sans-serif;
     outline: none;
   }
-  .form-input:focus, .form-select:focus { border-color: var(--gold); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-textarea { resize: vertical; min-height: 60px; }
   
   /* TOAST NOTIFICACIÓN */
   .toast {
@@ -324,9 +356,40 @@
   </div>
   <div class="nav-group">
     <div class="nav-label">Principal</div>
-    <div class="nav-item active" onclick="showView('dashboard')">Dashboard</div>
-    <div class="nav-item" onclick="showView('clientes')">Clientes</div>
-    <div class="nav-item" onclick="showView('obras')">Obras</div>
+    <div class="nav-item active" onclick="showView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="showView('clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clientes
+    </div>
+    <div class="nav-item" onclick="showView('obras')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Obras
+    </div>
+    <div class="nav-item" onclick="showView('enlaces')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Enlaces
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Comunicación</div>
+    <div class="nav-item" onclick="showView('correos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Correos
+    </div>
+    <div class="nav-item" onclick="showView('bot')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Bot WhatsApp
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Sistema</div>
+    <div class="nav-item" onclick="showView('tecnicos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Técnicos
+    </div>
   </div>
   <div class="sidebar-footer">
     <div>Administrador</div>
@@ -336,13 +399,69 @@
 
 <main>
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title">Clientes</div>
-    <button class="btn btn-bronze" onclick="openModal('nuevo-cliente')">+ Nuevo Cliente</button>
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline" onclick="openModal('nuevo-cliente')">+ Nuevo Cliente</button>
+      <button class="btn btn-bronze" onclick="openModal('nueva-obra')">+ Nueva Obra</button>
+    </div>
   </div>
 
   <div class="content">
-    <!-- VISTA CLIENTES -->
-    <div class="view active" id="view-clientes">
+    <!-- 1. DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Espacios que inspiran</div>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Obras Activas</div>
+          <div class="metric-val" id="met-obras-activas">0</div>
+          <div class="metric-note">En proceso de fabricación</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Clientes Registrados</div>
+          <div class="metric-val" id="met-total-clientes">0</div>
+          <div class="metric-note">En base de datos</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Por Entregar</div>
+          <div class="metric-val" id="met-por-entregar">0</div>
+          <div class="metric-note">Fase final de acabados</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Completadas</div>
+          <div class="metric-val" id="met-completadas">0</div>
+          <div class="metric-note">Obras entregadas con éxito</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Obras Recientes</div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Categoría</th>
+              <th>Avance</th>
+              <th>Técnico</th>
+              <th>Entrega Est.</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-obras-recent-body">
+            <tr><td colspan="6" style="text-align:center;color:var(--stone);">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. CLIENTES -->
+    <div class="view" id="view-clientes">
       <div class="page-header">
         <div>
           <div class="page-title">Clientes</div>
@@ -350,7 +469,6 @@
         </div>
         <button class="btn btn-bronze" onclick="openModal('nuevo-cliente')">+ Nuevo Cliente</button>
       </div>
-
       <div class="card">
         <div class="card-header">
           <div class="card-title">Listado de Clientes</div>
@@ -361,16 +479,117 @@
               <th>Cliente</th>
               <th>Teléfono</th>
               <th>Cédula</th>
-              <th>Tipo</th>
+              <th>Tipo de Cliente</th>
               <th>Fecha Registro</th>
             </tr>
           </thead>
           <tbody id="tabla-clientes-body">
-            <tr>
-              <td colspan="5" style="text-align:center;color:var(--stone);">Cargando clientes desde Supabase...</td>
-            </tr>
+            <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando clientes...</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- 3. OBRAS -->
+    <div class="view" id="view-obras">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Obras</div>
+          <div class="page-sub">Control de proyectos y avances</div>
+        </div>
+        <button class="btn btn-bronze" onclick="openModal('nueva-obra')">+ Nueva Obra</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Todas las Obras</div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Categoría</th>
+              <th>Avance</th>
+              <th>Fase</th>
+              <th>Tracking Link</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-obras-body">
+            <tr><td colspan="7" style="text-align:center;color:var(--stone);">Cargando obras...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. ENLACES -->
+    <div class="view" id="view-enlaces">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Enlaces de Seguimiento</div>
+          <div class="page-sub">Accesos temporales de clientes</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Links de Tracking Activos</div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Obra</th>
+              <th>Cliente</th>
+              <th>URL de Seguimiento</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-enlaces-body">
+            <tr><td colspan="4" style="text-align:center;color:var(--stone);">Cargando enlaces...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. TÉCNICOS -->
+    <div class="view" id="view-tecnicos">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Técnicos de Obra</div>
+          <div class="page-sub">Personal con acceso a WhatsApp</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Lista de Técnicos</div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Código ID</th>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Cédula</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tecnicos-body">
+            <tr><td colspan="5" style="text-align:center;color:var(--stone);">Cargando técnicos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. CORREOS Y BOT -->
+    <div class="view" id="view-correos">
+      <div class="page-header"><div><div class="page-title">Plantillas de Correo</div></div></div>
+      <div class="card" style="padding:20px;line-height:1.6;">
+        <p>Las plantillas automáticas están listas para ser vinculadas con Resend en la siguiente etapa.</p>
+      </div>
+    </div>
+    <div class="view" id="view-bot">
+      <div class="page-header"><div><div class="page-title">Bot de WhatsApp con Gemini</div></div></div>
+      <div class="card" style="padding:20px;line-height:1.6;">
+        <p>Integración de WhatsApp Webhook conectada al número de atención al cliente.</p>
       </div>
     </div>
   </div>
@@ -412,10 +631,10 @@
         <div class="form-group">
           <label class="form-label">Tipo de Cliente</label>
           <select class="form-select" id="cli-tipo">
-            <option value="En obra">En obra</option>
-            <option value="Prospecto">Prospecto</option>
+            <option value="NUEVO">NUEVO</option>
+            <option value="TRANSITORIO">TRANSITORIO</option>
+            <option value="FIJO">FIJO</option>
             <option value="VIP">VIP</option>
-            <option value="Finalizado">Finalizado</option>
           </select>
         </div>
       </div>
@@ -423,6 +642,72 @@
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('nuevo-cliente')">Cancelar</button>
       <button class="btn btn-bronze" onclick="guardarNuevoCliente()">Guardar en Supabase</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVA OBRA -->
+<div class="modal-overlay" id="modal-nueva-obra">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Registrar Nueva Obra</div>
+      <button class="modal-close" onclick="closeModal('nueva-obra')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Código de Obra *</label>
+          <input class="form-input" id="obr-codigo" placeholder="Ej: #OBR-049">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoría *</label>
+          <select class="form-select" id="obr-categoria">
+            <option value="Cocina">Cocina</option>
+            <option value="Closet">Closet</option>
+            <option value="Baño">Baño</option>
+            <option value="Decoración">Decoración</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Cliente Asociado *</label>
+          <select class="form-select" id="obr-cliente-select">
+            <option value="">Selecciona un cliente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Técnico Responsable</label>
+          <select class="form-select" id="obr-tecnico-select">
+            <option value="">Selecciona un técnico</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Fecha de Entrega Est.</label>
+          <input class="form-input" id="obr-fecha" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fase Inicial</label>
+          <select class="form-select" id="obr-fase">
+            <option value="Diseño">Diseño</option>
+            <option value="Materiales">Materiales</option>
+            <option value="Ejecución">Ejecución</option>
+            <option value="Acabados">Acabados</option>
+            <option value="Entrega">Entrega</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción del Proyecto</label>
+        <textarea class="form-textarea" id="obr-desc" placeholder="Detalles de materiales y acabados..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('nueva-obra')">Cancelar</button>
+      <button class="btn btn-bronze" onclick="guardarNuevaObra()">Crear Obra y Generar Link</button>
     </div>
   </div>
 </div>
@@ -436,6 +721,20 @@
   const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  let clientesCache = [];
+  let tecnicosCache = [];
+
+  // Función para obtener estilos según el tipo de cliente
+  function getBadgeStyle(tipo) {
+    switch (tipo) {
+      case 'VIP': return 'background:#EDE7F6;color:#512DA8;';
+      case 'FIJO': return 'background:#E8F5E9;color:#2E7D32;';
+      case 'TRANSITORIO': return 'background:#FFF8E1;color:#F57F17;';
+      case 'NUEVO':
+      default: return 'background:#E3F2FD;color:#1565C0;';
+    }
+  }
+
   // 2. FUNCIÓN: GUARDAR CLIENTE DIRECTO EN SUPABASE
   async function guardarNuevoCliente() {
     const nombres = document.getElementById('cli-nombres')?.value.trim();
@@ -443,89 +742,193 @@
     const cedula = document.getElementById('cli-cedula')?.value.trim();
     const correo = document.getElementById('cli-correo')?.value.trim();
     const telefono = document.getElementById('cli-telefono')?.value.trim();
-    const tipo = document.getElementById('cli-tipo')?.value || 'En obra';
+    const tipo = document.getElementById('cli-tipo')?.value || 'NUEVO';
 
     if (!nombres || !apellidos || !cedula || !correo || !telefono) {
-      showToast('Por favor completa todos los campos con asterisco (*)');
+      showToast('Por favor completa todos los campos requeridos (*)');
       return;
     }
 
-    showToast('Guardando en Supabase...');
+    showToast('Guardando cliente...');
 
-    const { data, error } = await db.from('clientes').insert([{
-      nombres: nombres,
-      apellidos: apellidos,
-      numero_cedula: cedula,
-      correo_electronico: correo,
-      telefono_1: telefono,
-      tipo_cliente: tipo
+    const { error } = await db.from('clientes').insert([{
+      nombres, apellidos, numero_cedula: cedula, correo_electronico: correo,
+      telefono_1: telefono, tipo_cliente: tipo
     }]);
 
     if (error) {
-      console.error(error);
       showToast('Error: ' + error.message);
     } else {
       closeModal('nuevo-cliente');
-      // Limpiar campos del formulario
       document.getElementById('cli-nombres').value = '';
       document.getElementById('cli-apellidos').value = '';
       document.getElementById('cli-cedula').value = '';
       document.getElementById('cli-correo').value = '';
       document.getElementById('cli-telefono').value = '';
-      
       showToast('¡Cliente registrado con éxito! ✓');
-      cargarClientesDesdeSupabase();
+      cargarTodoElPanel();
     }
   }
 
-  // 3. FUNCIÓN: CARGAR CLIENTES DE SUPABASE A LA TABLA
-  async function cargarClientesDesdeSupabase() {
-    const tbody = document.getElementById('tabla-clientes-body');
-    
-    const { data: clientes, error } = await db
-      .from('clientes')
-      .select('*')
-      .order('created_at', { ascending: false });
+  // 3. FUNCIÓN: GUARDAR NUEVA OBRA Y GENERAR LINK
+  async function guardarNuevaObra() {
+    const codigo = document.getElementById('obr-codigo')?.value.trim();
+    const categoria = document.getElementById('obr-categoria')?.value;
+    const clienteId = document.getElementById('obr-cliente-select')?.value;
+    const tecnicoId = document.getElementById('obr-tecnico-select')?.value || null;
+    const fecha = document.getElementById('obr-fecha')?.value || null;
+    const fase = document.getElementById('obr-fase')?.value || 'Diseño';
+    const desc = document.getElementById('obr-desc')?.value.trim();
+
+    if (!codigo || !clienteId) {
+      showToast('Ingresa el código y selecciona un cliente');
+      return;
+    }
+
+    const slug = Math.random().toString(36).substring(2, 8);
+
+    showToast('Creando obra...');
+
+    const { error } = await db.from('obras').insert([{
+      id_obra: codigo,
+      cliente_id: clienteId,
+      tecnico_id: tecnicoId || null,
+      categoria_obra: categoria,
+      descripcion: desc,
+      fase_actual: fase,
+      porcentaje_avance: 10,
+      fecha_entrega_estimada: fecha,
+      slug_tracking: slug,
+      estado: 'Activa'
+    }]);
 
     if (error) {
-      console.error(error);
-      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:red;text-align:center;">Error cargando datos: ${error.message}</td></tr>`;
-      return;
+      showToast('Error: ' + error.message);
+    } else {
+      closeModal('nueva-obra');
+      document.getElementById('obr-codigo').value = '';
+      document.getElementById('obr-desc').value = '';
+      showToast('¡Obra creada y link generado con éxito! ✓');
+      cargarTodoElPanel();
+    }
+  }
+
+  // 4. FUNCIÓN PRINCIPAL: CARGAR TODO EL PANEL
+  async function cargarTodoElPanel() {
+    // A. Clientes
+    const { data: clientes } = await db.from('clientes').select('*').order('created_at', { ascending: false });
+    clientesCache = clientes || [];
+    const tbodyCli = document.getElementById('tabla-clientes-body');
+    const selectCli = document.getElementById('obr-cliente-select');
+
+    if (selectCli) {
+      selectCli.innerHTML = '<option value="">Selecciona un cliente</option>' + 
+        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula})</option>`).join('');
     }
 
-    if (!clientes || clientes.length === 0) {
-      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay clientes registrados aún.</td></tr>`;
-      return;
-    }
-
-    if (tbody) {
-      tbody.innerHTML = clientes.map(cli => {
-        const iniciales = (cli.nombres?.[0] || '') + (cli.apellidos?.[0] || '');
-        const fecha = cli.created_at ? new Date(cli.created_at).toLocaleDateString('es-EC') : '-';
+    if (tbodyCli) {
+      tbodyCli.innerHTML = clientesCache.length ? clientesCache.map(c => {
+        const tipo = c.tipo_cliente || 'NUEVO';
         return `
           <tr>
             <td>
               <div style="display:flex;align-items:center;gap:10px;">
-                <div class="avatar">${iniciales.toUpperCase()}</div>
+                <div class="avatar">${(c.nombres[0] || '') + (c.apellidos[0] || '')}</div>
                 <div>
-                  <div style="font-weight:600;">${cli.nombres} ${cli.apellidos}</div>
-                  <div style="font-size:11px;color:var(--stone);">${cli.correo_electronico}</div>
+                  <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
+                  <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
                 </div>
               </div>
             </td>
-            <td style="font-size:12px;color:var(--stone);">${cli.telefono_1}</td>
-            <td style="font-weight:600;">${cli.numero_cedula}</td>
-            <td><span class="badge badge-active">${cli.tipo_cliente || 'En obra'}</span></td>
-            <td style="font-size:12px;color:var(--stone);">${fecha}</td>
+            <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
+            <td style="font-weight:600;">${c.numero_cedula}</td>
+            <td><span class="badge" style="${getBadgeStyle(tipo)}">${tipo}</span></td>
+            <td style="font-size:12px;color:var(--stone);">${new Date(c.created_at).toLocaleDateString('es-EC')}</td>
           </tr>
         `;
-      }).join('');
+      }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay clientes registrados</td></tr>';
+    }
+
+    // B. Técnicos
+    const { data: tecnicos } = await db.from('tecnicos').select('*').order('created_at', { ascending: true });
+    tecnicosCache = tecnicos || [];
+    const selectTec = document.getElementById('obr-tecnico-select');
+    const tbodyTec = document.getElementById('tabla-tecnicos-body');
+
+    if (selectTec) {
+      selectTec.innerHTML = '<option value="">Selecciona un técnico</option>' + 
+        tecnicosCache.map(t => `<option value="${t.id}">${t.nombres} ${t.apellidos} (${t.codigo_id})</option>`).join('');
+    }
+
+    if (tbodyTec) {
+      tbodyTec.innerHTML = tecnicosCache.length ? tecnicosCache.map(t => `
+        <tr>
+          <td style="font-weight:700;color:var(--gold);">${t.codigo_id}</td>
+          <td><b>${t.nombres} ${t.apellidos}</b></td>
+          <td style="font-size:12px;color:var(--stone);">${t.telefono_1}</td>
+          <td>${t.numero_cedula}</td>
+          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${t.activo ? 'Activo' : 'Inactivo'}</span></td>
+        </tr>
+      `).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--stone);">No hay técnicos registrados</td></tr>';
+    }
+
+    // C. Obras
+    const { data: obras } = await db.from('obras').select('*, clientes(nombres, apellidos), tecnicos(nombres, apellidos)').order('created_at', { ascending: false });
+    const obrasList = obras || [];
+
+    // Métricas
+    document.getElementById('met-obras-activas').textContent = obrasList.filter(o => o.estado === 'Activa').length;
+    document.getElementById('met-total-clientes').textContent = clientesCache.length;
+    document.getElementById('met-por-entregar').textContent = obrasList.filter(o => o.estado === 'Por entregar').length;
+    document.getElementById('met-completadas').textContent = obrasList.filter(o => o.estado === 'Finalizada').length;
+
+    // Tabla Obras Dashboard, Vista Obras y Enlaces
+    const tbodyRecent = document.getElementById('tabla-obras-recent-body');
+    const tbodyObras = document.getElementById('tabla-obras-body');
+    const tbodyEnlaces = document.getElementById('tabla-enlaces-body');
+
+    if (tbodyRecent) {
+      tbodyRecent.innerHTML = obrasList.slice(0, 5).map(o => `
+        <tr>
+          <td><b>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</b></td>
+          <td><span class="badge" style="background:var(--sand-2);color:var(--stone);">${o.categoria_obra}</span></td>
+          <td><b>${o.porcentaje_avance}%</b> — <span style="font-size:11px;color:var(--stone);">${o.fase_actual}</span></td>
+          <td>${o.tecnicos?.nombres || 'Sin asignar'}</td>
+          <td>${o.fecha_entrega_estimada || 'Por definir'}</td>
+          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${o.estado}</span></td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--stone);">No hay obras activas</td></tr>';
+    }
+
+    if (tbodyObras) {
+      tbodyObras.innerHTML = obrasList.map(o => `
+        <tr>
+          <td style="font-weight:700;color:var(--gold);">${o.id_obra}</td>
+          <td><b>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</b></td>
+          <td><span class="badge" style="background:var(--sand-2);color:var(--stone);">${o.categoria_obra}</span></td>
+          <td><b>${o.porcentaje_avance}%</b></td>
+          <td>${o.fase_actual}</td>
+          <td><a href="/tracking.html?t=${o.slug_tracking}" target="_blank" style="color:var(--gold);font-size:11px;">/tracking?t=${o.slug_tracking}</a></td>
+          <td><span class="badge" style="background:#E8F5E9;color:#2E7D32;">${o.estado}</span></td>
+        </tr>
+      `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--stone);">No hay obras registradas</td></tr>';
+    }
+
+    if (tbodyEnlaces) {
+      tbodyEnlaces.innerHTML = obrasList.map(o => `
+        <tr>
+          <td style="font-weight:700;">${o.id_obra}</td>
+          <td>${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}</td>
+          <td><code style="background:var(--sand);padding:4px 8px;font-size:11px;">${window.location.origin}/tracking.html?t=${o.slug_tracking}</code></td>
+          <td><button class="btn btn-outline btn-sm" onclick="copyLink('${window.location.origin}/tracking.html?t=${o.slug_tracking}')">Copiar Link</button></td>
+        </tr>
+      `).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--stone);">No hay enlaces generados</td></tr>';
     }
   }
 
-  // Inicialización al cargar la página
+  // Inicialización
   window.addEventListener('DOMContentLoaded', () => {
-    cargarClientesDesdeSupabase();
+    cargarTodoElPanel();
     document.querySelectorAll('.modal-overlay').forEach(o => {
       o.addEventListener('click', function(e) {
         if (e.target === this) this.classList.remove('open');
@@ -533,20 +936,24 @@
     });
   });
 
-  // Funciones de navegación
   function showView(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const target = document.getElementById('view-' + name);
     if (target) target.classList.add('active');
     if (event?.currentTarget) event.currentTarget.classList.add('active');
-    const titles = { dashboard:'Dashboard', clientes:'Clientes', obras:'Obras' };
+    const titles = { dashboard:'Dashboard', clientes:'Clientes', obras:'Obras', enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp', tecnicos:'Técnicos' };
     const titleEl = document.getElementById('topbar-title');
     if (titleEl) titleEl.textContent = titles[name] || name;
   }
 
   function openModal(id) { document.getElementById('modal-' + id)?.classList.add('open'); }
   function closeModal(id) { document.getElementById('modal-' + id)?.classList.remove('open'); }
+
+  function copyLink(url) {
+    navigator.clipboard?.writeText(url).catch(() => {});
+    showToast('Enlace copiado al portapapeles ✓');
+  }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
