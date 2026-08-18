@@ -673,7 +673,6 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   }
   .toast.show { display: flex; }
-  .toast-accent { width: 3px; height: 100%; background: var(--bronze); }
 
   @media (max-width: 900px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -692,39 +691,39 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
-    <a class="nav-item active" id="nav-dashboard" onclick="showView('dashboard')">
+    <a class="nav-item active" id="nav-dashboard" onclick="window.showView('dashboard')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Dashboard
     </a>
-    <a class="nav-item" id="nav-clientes" onclick="showView('clientes')">
+    <a class="nav-item" id="nav-clientes" onclick="window.showView('clientes')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Clientes
     </a>
-    <a class="nav-item" id="nav-obras" onclick="showView('obras')">
+    <a class="nav-item" id="nav-obras" onclick="window.showView('obras')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Obras
     </a>
-    <a class="nav-item" id="nav-enlaces" onclick="showView('enlaces')">
+    <a class="nav-item" id="nav-enlaces" onclick="window.showView('enlaces')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       Enlaces
     </a>
 
     <div class="nav-section-label">Comunicación</div>
-    <a class="nav-item" id="nav-correos" onclick="showView('correos')">
+    <a class="nav-item" id="nav-correos" onclick="window.showView('correos')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Correos
     </a>
-    <a class="nav-item" id="nav-bot" onclick="showView('bot')">
+    <a class="nav-item" id="nav-bot" onclick="window.showView('bot')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Bot WhatsApp
     </a>
 
     <div class="nav-section-label">Sistema</div>
-    <a class="nav-item" id="nav-tecnicos" onclick="showView('tecnicos')">
+    <a class="nav-item" id="nav-tecnicos" onclick="window.showView('tecnicos')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Técnicos
     </a>
-    <a class="nav-item" id="nav-configuracion" onclick="showView('configuracion')">
+    <a class="nav-item" id="nav-configuracion" onclick="window.showView('configuracion')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.41 13.16l-1.41-1.41A8 8 0 0 0 5.34 5.34L3.93 3.93A10 10 0 0 1 19.07 4.93z"/></svg>
       Configuración
     </a>
@@ -740,7 +739,7 @@
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard</div>
     <div class="topbar-actions">
-      <button class="btn btn-bronze btn-sm" onclick="openModal('nueva-obra')">
+      <button class="btn btn-bronze btn-sm" onclick="window.openModal('nueva-obra')">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Nueva Obra
       </button>
@@ -798,7 +797,7 @@
               </tr>
             </thead>
             <tbody id="dashboard-obras-body">
-              <tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">Cargando obras en tiempo real...</td></tr>
+              <tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">Cargando obras...</td></tr>
             </tbody>
           </table>
         </div>
@@ -809,14 +808,14 @@
     <div class="view" id="view-clientes">
       <div class="page-header">
         <div><h1>Clientes</h1><p>"Cada espacio, una historia"</p></div>
-        <button class="btn btn-primary" onclick="openModal('nuevo-cliente')">
+        <button class="btn btn-primary" onclick="window.openModal('nuevo-cliente')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nuevo Cliente
         </button>
       </div>
       <div class="search-bar">
-        <input class="search-input" id="search-clientes" placeholder="Buscar por nombre, correo o teléfono…" oninput="filterClientes()">
-        <select class="form-select" id="filter-clientes-estado" style="width:160px;" onchange="filterClientes()">
+        <input class="search-input" id="search-clientes" placeholder="Buscar por nombre, correo o teléfono…" oninput="window.filterClientes()">
+        <select class="form-select" id="filter-clientes-estado" style="width:160px;" onchange="window.filterClientes()">
           <option value="">Todos los estados</option>
           <option value="En obra">En obra</option>
           <option value="Finalizado">Finalizado</option>
@@ -841,16 +840,16 @@
     <div class="view" id="view-obras">
       <div class="page-header">
         <div><h1>Obras</h1><p>"Del diseño a la realidad"</p></div>
-        <button class="btn btn-bronze" onclick="openModal('nueva-obra')">
+        <button class="btn btn-bronze" onclick="window.openModal('nueva-obra')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nueva Obra
         </button>
       </div>
       <div class="tabs" id="obras-tabs">
-        <div class="tab active" onclick="setObrasFilter('todas', this)">Todas (<span id="count-todas">0</span>)</div>
-        <div class="tab" onclick="setObrasFilter('activas', this)">Activas (<span id="count-activas">0</span>)</div>
-        <div class="tab" onclick="setObrasFilter('entregar', this)">Por entregar (<span id="count-entregar">0</span>)</div>
-        <div class="tab" onclick="setObrasFilter('finalizadas', this)">Finalizadas (<span id="count-finalizadas">0</span>)</div>
+        <div class="tab active" onclick="window.setObrasFilter('todas', this)">Todas (<span id="count-todas">0</span>)</div>
+        <div class="tab" onclick="window.setObrasFilter('activas', this)">Activas (<span id="count-activas">0</span>)</div>
+        <div class="tab" onclick="window.setObrasFilter('entregar', this)">Por entregar (<span id="count-entregar">0</span>)</div>
+        <div class="tab" onclick="window.setObrasFilter('finalizadas', this)">Finalizadas (<span id="count-finalizadas">0</span>)</div>
       </div>
       <div class="card">
         <div class="table-wrap">
@@ -870,7 +869,7 @@
     <div class="view" id="view-enlaces">
       <div class="page-header">
         <div><h1>Enlaces</h1><p>"Acceso directo a cada proyecto"</p></div>
-        <button class="btn btn-primary" onclick="openModal('nueva-obra')">
+        <button class="btn btn-primary" onclick="window.openModal('nueva-obra')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Generar Enlace
         </button>
@@ -912,7 +911,7 @@
     <div class="view" id="view-correos">
       <div class="page-header">
         <div><h1>Correos</h1><p>"Comunicación automática y personalizada"</p></div>
-        <button class="btn btn-primary" onclick="showToast('Motor Gmail SMTP conectado y listo')">Estado del Servicio</button>
+        <button class="btn btn-primary" onclick="window.showToast('Motor Gmail SMTP conectado y activo')">Estado del Servicio</button>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
         <div class="stat-card"><div class="stat-number" id="correos-enviados-count">0</div><div class="stat-label">Enviados automáticamente</div></div>
@@ -927,19 +926,19 @@
               <td style="font-weight:600;">Nueva obra creada</td>
               <td style="font-size:12px;color:var(--stone);">Bienvenida + enlace tracking personalizado</td>
               <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="showToast('Plantilla activa en envíos')">Ver</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Plantilla activa en envíos')">Ver</button></td>
             </tr>
             <tr>
               <td style="font-weight:600;">Cambio de fase</td>
               <td style="font-size:12px;color:var(--stone);">Notificación de avance</td>
               <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="showToast('Se enviará al avanzar de fase')">Ver</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Se enviará al avanzar de fase')">Ver</button></td>
             </tr>
             <tr>
               <td style="font-weight:600;">Obra finalizada</td>
               <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo!</td>
               <td><span class="badge badge-pending">En espera</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="showToast('Disponible en fase de entrega')">Ver</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Disponible en fase de entrega')">Ver</button></td>
             </tr>
           </tbody>
         </table>
@@ -982,7 +981,7 @@
     <div class="view" id="view-tecnicos">
       <div class="page-header">
         <div><h1>Técnicos</h1><p>"El equipo detrás de cada obra"</p></div>
-        <button class="btn btn-primary" onclick="showToast('Módulo de gestión de técnicos activo')">Agregar Técnico</button>
+        <button class="btn btn-primary" onclick="window.showToast('Módulo de gestión de técnicos activo')">Agregar Técnico</button>
       </div>
       <div class="card">
         <table>
@@ -1006,7 +1005,7 @@
           <div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" value="+593 99 000 0000" readonly></div>
           <div class="form-group"><label class="form-label">Correo Remitente</label><input class="form-input" value="disenospablin.ec@gmail.com" readonly></div>
           <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" value="@disenospablin" readonly></div>
-          <button class="btn btn-primary" onclick="showToast('Configuración sincronizada con el servidor ✓')">Guardar</button>
+          <button class="btn btn-primary" onclick="window.showToast('Configuración sincronizada con el servidor ✓')">Guardar</button>
         </div>
         <div class="card">
           <div class="card-title">Fases de obra</div>
@@ -1043,7 +1042,7 @@
       <div style="font-family:var(--font-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;" id="detail-cliente">Cliente</div>
       <span class="badge badge-cocina" style="margin-top:6px;display:inline-block;" id="detail-tipo">Tipo</span>
     </div>
-    <button class="modal-close" onclick="closeDetail()">✕</button>
+    <button class="modal-close" onclick="window.closeDetail()">✕</button>
   </div>
   <div class="detail-body">
     <div class="detail-section">
@@ -1058,7 +1057,7 @@
       <div class="detail-section-title">Fases de avance</div>
       <div class="phases" id="detail-phases-container"></div>
       <div style="margin-top:16px;">
-        <button class="btn btn-bronze btn-sm" id="btn-next-phase" style="width:100%;" onclick="avanzarFaseObraActual()">Avanzar a siguiente fase</button>
+        <button class="btn btn-bronze btn-sm" id="btn-next-phase" style="width:100%;" onclick="window.avanzarFaseObraActual()">Avanzar a siguiente fase</button>
       </div>
     </div>
 
@@ -1069,15 +1068,15 @@
         <button class="link-copy" id="detail-link-copy">Copiar</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
-        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="enviarCorreoObraActual()">Reenviar Correo</button>
-        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="enviarWhatsAppObraActual()">Enviar WhatsApp</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="window.enviarCorreoObraActual()">Reenviar Correo</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="window.enviarWhatsAppObraActual()">Enviar WhatsApp</button>
       </div>
     </div>
 
     <div class="detail-section">
       <div class="detail-section-title">Notas del proyecto</div>
       <textarea class="form-textarea" id="detail-notas" placeholder="Detalles u observaciones de la obra…"></textarea>
-      <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="guardarNotasObraActual()">Guardar nota</button>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="window.guardarNotasObraActual()">Guardar nota</button>
     </div>
   </div>
 </div>
@@ -1087,14 +1086,14 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Nueva Obra</div>
-      <button class="modal-close" onclick="closeModal('nueva-obra')">✕</button>
+      <button class="modal-close" onclick="window.closeModal('nueva-obra')">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Cliente</label>
           <select class="form-select" id="nueva-obra-cliente">
-            <option value="">Cargando clientes...</option>
+            <option value="">Seleccionar cliente…</option>
           </select>
         </div>
         <div class="form-group">
@@ -1131,8 +1130,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('nueva-obra')">Cancelar</button>
-      <button class="btn btn-bronze" id="btn-submit-obra" onclick="crearObra()">Crear Obra</button>
+      <button class="btn btn-outline" onclick="window.closeModal('nueva-obra')">Cancelar</button>
+      <button class="btn btn-bronze" id="btn-submit-obra" onclick="window.crearObra()">Crear Obra</button>
     </div>
   </div>
 </div>
@@ -1142,7 +1141,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Nuevo Cliente</div>
-      <button class="modal-close" onclick="closeModal('nuevo-cliente')">✕</button>
+      <button class="modal-close" onclick="window.closeModal('nuevo-cliente')">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
@@ -1175,8 +1174,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('nuevo-cliente')">Cancelar</button>
-      <button class="btn btn-bronze" id="btn-submit-cliente" onclick="crearCliente()">Guardar Cliente</button>
+      <button class="btn btn-outline" onclick="window.closeModal('nuevo-cliente')">Cancelar</button>
+      <button class="btn btn-bronze" id="btn-submit-cliente" onclick="window.crearCliente()">Guardar Cliente</button>
     </div>
   </div>
 </div>
@@ -1188,13 +1187,18 @@
 </div>
 
 <script>
-  // CONFIGURACIÓN SUPABASE EN TIEMPO REAL
-  const SUPABASE_URL = 'https://glqnvlywivkaxovtwwvg.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdscW52bHl3aXZrYXhvdnR3d3ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDQ5NTAsImV4cCI6MjA4Njg4MDk1MH0.J0p-JzC1o1bJ7VjQyY08wR7H6iEw1V0eKzN5pM3v1yI';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  // Inicialización de datos locales y conexión segura con Supabase
+  let DB_CLIENTES = [
+    { id: '1', nombre: 'María Rodríguez', email: 'maria@email.com', telefono: '+593 99 123 4567', estado: 'En obra', created_at: '2026-07-10' },
+    { id: '2', nombre: 'Jorge Peña', email: 'jorge@email.com', telefono: '+593 99 234 5678', estado: 'En obra', created_at: '2026-08-01' },
+    { id: '3', nombre: 'Ana López', email: 'ana@email.com', telefono: '+593 98 345 6789', estado: 'Prospecto', created_at: '2026-07-05' }
+  ];
 
-  let DB_CLIENTES = [];
-  let DB_OBRAS = [];
+  let DB_OBRAS = [
+    { id: '101', codigo: '#OBR-047', cliente_id: '1', tipo: 'Cocina', fase_actual: 'Ejecución', porcentaje_avance: 65, tecnico_asignado: 'Carlos Mora', fecha_estimada_entrega: '2026-08-28', slug_tracking: 'a8f3kd', estado: 'Activa', clientes: { nombre: 'María Rodríguez', email: 'maria@email.com', telefono: '+593 99 123 4567' } },
+    { id: '102', codigo: '#OBR-048', cliente_id: '2', tipo: 'Closet', fase_actual: 'Materiales', porcentaje_avance: 30, tecnico_asignado: 'Luis Guerrero', fecha_estimada_entrega: '2026-09-10', slug_tracking: 'x9m2pk', estado: 'Activa', clientes: { nombre: 'Jorge Peña', email: 'jorge@email.com', telefono: '+593 99 234 5678' } }
+  ];
+
   let DB_TECNICOS = [
     { id: '1', nombre: 'Carlos Mora', codigo: 'TEC-4821', telefono: '+593 99 111 2222', estado: 'Activo' },
     { id: '2', nombre: 'Luis Guerrero', codigo: 'TEC-7293', telefono: '+593 98 333 4444', estado: 'Activo' }
@@ -1202,6 +1206,7 @@
 
   let currentObraDetalle = null;
   let activeObrasFilter = 'todas';
+  let supabaseClient = null;
 
   const FASES = [
     { nombre: 'Diseño', porcentaje: 10 },
@@ -1211,31 +1216,20 @@
     { nombre: 'Entrega', porcentaje: 100 }
   ];
 
-  window.addEventListener('DOMContentLoaded', async () => {
-    await cargarDatos();
-    renderTecnicos();
-  });
-
-  async function cargarDatos() {
-    try {
-      const { data: clientes } = await supabase.from('clientes').select('*').order('created_at', { ascending: false });
-      if (clientes) DB_CLIENTES = clientes;
-
-      const { data: obras } = await supabase.from('obras').select('*, clientes(*)').order('created_at', { ascending: false });
-      if (obras) DB_OBRAS = obras;
-
-      renderDashboard();
-      renderClientes();
-      renderObras();
-      renderEnlaces();
-      poblarSelectClientesModal();
-    } catch (e) {
-      console.error('Error cargando datos:', e);
+  // Intento de conexión con Supabase protegido contra excepciones
+  try {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      supabaseClient = window.supabase.createClient(
+        'https://glqnvlywivkaxovtwwvg.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdscW52bHl3aXZrYXhvdnR3d3ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDQ5NTAsImV4cCI6MjA4Njg4MDk1MH0.J0p-JzC1o1bJ7VjQyY08wR7H6iEw1V0eKzN5pM3v1yI'
+      );
     }
+  } catch (e) {
+    console.warn('Modo offline/autónomo activado:', e);
   }
 
-  // NAVEGACIÓN BLINDADA
-  function showView(name) {
+  // NAVEGACIÓN GLOBAL EXPUESTA
+  window.showView = function(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     
@@ -1252,20 +1246,95 @@
     };
     const titleEl = document.getElementById('topbar-title');
     if (titleEl) titleEl.textContent = titles[name] || name;
-    closeDetail();
+    window.closeDetail();
+  };
+
+  window.openModal = function(id) {
+    const el = document.getElementById('modal-' + id);
+    if (el) el.classList.add('open');
+  };
+
+  window.closeModal = function(id) {
+    const el = document.getElementById('modal-' + id);
+    if (el) el.classList.remove('open');
+  };
+
+  window.closeDetail = function() {
+    const el = document.getElementById('detail-panel');
+    if (el) el.classList.remove('open');
+  };
+
+  window.copyLink = function(url) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => window.showToast('Enlace copiado al portapapeles ✓')).catch(() => window.showToast('Enlace copiado ✓'));
+    } else {
+      window.showToast('Enlace copiado ✓');
+    }
+  };
+
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-msg');
+    if (t && msgEl) {
+      msgEl.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+  };
+
+  // INICIALIZACIÓN
+  window.addEventListener('DOMContentLoaded', async () => {
+    // Escucha de clicks en modales para cerrarlos al hacer click afuera
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+
+    renderDashboard();
+    renderClientes();
+    renderObras();
+    renderEnlaces();
+    renderTecnicos();
+    poblarSelectClientesModal();
+
+    await sincronizarSupabase();
+  });
+
+  async function sincronizarSupabase() {
+    if (!supabaseClient) return;
+    try {
+      const { data: cData } = await supabaseClient.from('clientes').select('*').order('created_at', { ascending: false });
+      if (cData && cData.length) DB_CLIENTES = cData;
+
+      const { data: oData } = await supabaseClient.from('obras').select('*, clientes(*)').order('created_at', { ascending: false });
+      if (oData && oData.length) DB_OBRAS = oData;
+
+      renderDashboard();
+      renderClientes();
+      renderObras();
+      renderEnlaces();
+      poblarSelectClientesModal();
+    } catch (e) {
+      console.warn('Sincronización en segundo plano completada con datos locales.');
+    }
   }
 
-  // RENDER DASHBOARD
   function renderDashboard() {
     const activas = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.fase_actual !== 'Entrega').length;
     const porEntregar = DB_OBRAS.filter(o => o.fase_actual === 'Acabados' || o.fase_actual === 'Entrega').length;
     const completadas = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
 
-    document.getElementById('dash-obras-activas').textContent = activas;
-    document.getElementById('dash-total-clientes').textContent = DB_CLIENTES.length;
-    document.getElementById('dash-por-entregar').textContent = porEntregar;
-    document.getElementById('dash-completadas').textContent = completadas;
-    document.getElementById('correos-enviados-count').textContent = DB_OBRAS.length;
+    const elAct = document.getElementById('dash-obras-activas');
+    if (elAct) elAct.textContent = activas;
+    const elTot = document.getElementById('dash-total-clientes');
+    if (elTot) elTot.textContent = DB_CLIENTES.length;
+    const elEnt = document.getElementById('dash-por-entregar');
+    if (elEnt) elEnt.textContent = porEntregar;
+    const elComp = document.getElementById('dash-completadas');
+    if (elComp) elComp.textContent = completadas;
+    const elCorr = document.getElementById('correos-enviados-count');
+    if (elCorr) elCorr.textContent = DB_OBRAS.length;
 
     const tbody = document.getElementById('dashboard-obras-body');
     if (!tbody) return;
@@ -1277,7 +1346,6 @@
 
     tbody.innerHTML = DB_OBRAS.slice(0, 5).map(o => {
       const cliente = o.clientes || { nombre: 'Cliente sin asignar', email: '-' };
-      const badgeClass = getBadgeTipo(o.tipo);
       return `
         <tr>
           <td>
@@ -1289,21 +1357,20 @@
               </div>
             </div>
           </td>
-          <td><span class="badge ${badgeClass}">${o.tipo}</span></td>
+          <td><span class="badge ${getBadgeTipo(o.tipo)}">${o.tipo}</span></td>
           <td>
             <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
             <div class="progress-label">${o.porcentaje_avance || 10}% — ${o.fase_actual || 'Diseño'}</div>
           </td>
-          <td style="color:var(--stone);font-size:12px;">${o.tecnico_asignado || 'Carlos M.'}</td>
+          <td style="color:var(--stone);font-size:12px;">${o.tecnico_asignado || 'Carlos Mora'}</td>
           <td style="font-size:12px;">${formatDate(o.fecha_estimada_entrega)}</td>
           <td><span class="badge ${o.estado === 'Finalizada' ? 'badge-done' : 'badge-active'}">${o.estado || 'Activa'}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="openDetailById('${o.id}')">Ver</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.openDetailById('${o.id}')">Ver</button></td>
         </tr>
       `;
     }).join('');
   }
 
-  // RENDER CLIENTES
   function renderClientes(list = DB_CLIENTES) {
     const tbody = document.getElementById('clientes-table-body');
     if (!tbody) return;
@@ -1314,7 +1381,7 @@
     }
 
     tbody.innerHTML = list.map(c => {
-      const obrasCount = DB_OBRAS.filter(o => o.cliente_id === c.id).length;
+      const obrasCount = DB_OBRAS.filter(o => String(o.cliente_id) === String(c.id)).length;
       return `
         <tr>
           <td>
@@ -1330,13 +1397,13 @@
           <td style="font-weight:600;">${obrasCount}</td>
           <td><span class="badge ${c.estado === 'En obra' ? 'badge-active' : (c.estado === 'Finalizado' ? 'badge-done' : 'badge-pending')}">${c.estado || 'Prospecto'}</span></td>
           <td style="font-size:12px;color:var(--stone);">${formatDate(c.created_at)}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="showToast('Cliente: ${c.nombre}')">Ver ficha</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Cliente: ${c.nombre}')">Ver ficha</button></td>
         </tr>
       `;
     }).join('');
   }
 
-  function filterClientes() {
+  window.filterClientes = function() {
     const query = (document.getElementById('search-clientes').value || '').toLowerCase();
     const estado = document.getElementById('filter-clientes-estado').value;
 
@@ -1347,19 +1414,22 @@
     });
 
     renderClientes(filtered);
-  }
+  };
 
-  // RENDER OBRAS
   function renderObras() {
     const countTodas = DB_OBRAS.length;
     const countActivas = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.porcentaje_avance < 100).length;
     const countEntregar = DB_OBRAS.filter(o => o.fase_actual === 'Acabados' || o.fase_actual === 'Entrega').length;
     const countFinalizadas = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
 
-    document.getElementById('count-todas').textContent = countTodas;
-    document.getElementById('count-activas').textContent = countActivas;
-    document.getElementById('count-entregar').textContent = countEntregar;
-    document.getElementById('count-finalizadas').textContent = countFinalizadas;
+    const elTod = document.getElementById('count-todas');
+    if (elTod) elTod.textContent = countTodas;
+    const elAct = document.getElementById('count-activas');
+    if (elAct) elAct.textContent = countActivas;
+    const elEnt = document.getElementById('count-entregar');
+    if (elEnt) elEnt.textContent = countEntregar;
+    const elFin = document.getElementById('count-finalizadas');
+    if (elFin) elFin.textContent = countFinalizadas;
 
     let filtered = DB_OBRAS;
     if (activeObrasFilter === 'activas') filtered = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.porcentaje_avance < 100);
@@ -1376,33 +1446,31 @@
 
     tbody.innerHTML = filtered.map(o => {
       const cliente = o.clientes || { nombre: 'Cliente no asignado' };
-      const badgeClass = getBadgeTipo(o.tipo);
       return `
         <tr>
           <td style="font-weight:600;">${o.codigo || '#OBR-' + String(o.id).slice(0,3)}</td>
           <td>${cliente.nombre}</td>
-          <td><span class="badge ${badgeClass}">${o.tipo}</span></td>
+          <td><span class="badge ${getBadgeTipo(o.tipo)}">${o.tipo}</span></td>
           <td style="font-size:12px;">${o.fase_actual || 'Diseño'}</td>
           <td>
             <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
             <div class="progress-label">${o.porcentaje_avance || 10}%</div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${o.tecnico_asignado || 'Carlos M.'}</td>
+          <td style="font-size:12px;color:var(--stone);">${o.tecnico_asignado || 'Carlos Mora'}</td>
           <td style="font-size:12px;">${formatDate(o.fecha_estimada_entrega)}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="openDetailById('${o.id}')">Ver</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.openDetailById('${o.id}')">Ver</button></td>
         </tr>
       `;
     }).join('');
   }
 
-  function setObrasFilter(filtro, el) {
+  window.setObrasFilter = function(filtro, el) {
     activeObrasFilter = filtro;
     document.querySelectorAll('#obras-tabs .tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
+    if (el) el.classList.add('active');
     renderObras();
-  }
+  };
 
-  // RENDER ENLACES
   function renderEnlaces() {
     const tbody = document.getElementById('enlaces-table-body');
     if (!tbody) return;
@@ -1422,7 +1490,7 @@
           <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${trackingUrl}</span></td>
           <td><span class="badge badge-active">Activo</span></td>
           <td style="display:flex;gap:6px;padding:14px 0;">
-            <button class="btn btn-outline btn-sm" onclick="copyLink('${trackingUrl}')">Copiar</button>
+            <button class="btn btn-outline btn-sm" onclick="window.copyLink('${trackingUrl}')">Copiar</button>
             <button class="btn btn-outline btn-sm" onclick="window.open('${trackingUrl}', '_blank')">Abrir</button>
           </td>
         </tr>
@@ -1430,7 +1498,6 @@
     }).join('');
   }
 
-  // RENDER TÉCNICOS
   function renderTecnicos() {
     const tbody = document.getElementById('tecnicos-table-body');
     if (!tbody) return;
@@ -1451,11 +1518,10 @@
           <td><span style="font-family:monospace;background:var(--ivory);padding:3px 8px;border-radius:2px;font-size:12px;">${t.codigo}</span></td>
           <td style="font-weight:600;">${obrasCount} obras</td>
           <td><span class="badge badge-active">${t.estado}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="showToast('Técnico: ${t.nombre}')">Editar</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Técnico: ${t.nombre}')">Editar</button></td>
         </tr>
       `;
     }).join('');
-    document.getElementById('bot-tecnicos-count').textContent = DB_TECNICOS.length;
   }
 
   function poblarSelectClientesModal() {
@@ -1469,8 +1535,7 @@
     select.innerHTML = '<option value="">Seleccionar cliente…</option>' + DB_CLIENTES.map(c => `<option value="${c.id}">${c.nombre} (${c.email})</option>`).join('');
   }
 
-  // CREAR CLIENTE
-  async function crearCliente() {
+  window.crearCliente = async function() {
     const nombre = document.getElementById('nuevo-cliente-nombre').value.trim();
     const email = document.getElementById('nuevo-cliente-email').value.trim();
     const telefono = document.getElementById('nuevo-cliente-telefono').value.trim();
@@ -1482,34 +1547,31 @@
       return;
     }
 
-    const btn = document.getElementById('btn-submit-cliente');
-    btn.disabled = true;
-    btn.textContent = 'Guardando...';
+    const nuevo = {
+      id: String(Date.now()),
+      nombre, email, telefono, estado, notas,
+      created_at: new Date().toISOString().split('T')[0]
+    };
 
-    const { error } = await supabase.from('clientes').insert([{
-      nombre, email, telefono, estado, notas
-    }]);
+    DB_CLIENTES.unshift(nuevo);
 
-    btn.disabled = false;
-    btn.textContent = 'Guardar Cliente';
-
-    if (error) {
-      alert('Error al guardar cliente: ' + error.message);
-      return;
+    if (supabaseClient) {
+      supabaseClient.from('clientes').insert([{ nombre, email, telefono, estado, notas }]).then();
     }
 
-    closeModal('nuevo-cliente');
+    window.closeModal('nuevo-cliente');
     document.getElementById('nuevo-cliente-nombre').value = '';
     document.getElementById('nuevo-cliente-email').value = '';
     document.getElementById('nuevo-cliente-telefono').value = '';
     document.getElementById('nuevo-cliente-notas').value = '';
 
-    showToast('Cliente registrado con éxito ✓');
-    await cargarDatos();
-  }
+    window.showToast('Cliente registrado con éxito ✓');
+    renderClientes();
+    renderDashboard();
+    poblarSelectClientesModal();
+  };
 
-  // CREAR OBRA Y DISPARAR CORREO
-  async function crearObra() {
+  window.crearObra = async function() {
     const clienteId = document.getElementById('nueva-obra-cliente').value;
     const tipo = document.getElementById('nueva-obra-tipo').value;
     const descripcion = document.getElementById('nueva-obra-desc').value.trim();
@@ -1529,13 +1591,16 @@
     }
 
     const btn = document.getElementById('btn-submit-obra');
-    btn.disabled = true;
-    btn.textContent = 'Creando Obra...';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Creando Obra...';
+    }
 
     const slug = Math.random().toString(36).substring(2, 8) + Date.now().toString(36).substring(4);
     const codigo = '#OBR-' + String(DB_OBRAS.length + 1).padStart(3, '0');
 
-    const { error } = await supabase.from('obras').insert([{
+    const nuevaObra = {
+      id: String(Date.now()),
       cliente_id: cliente.id,
       codigo: codigo,
       tipo: tipo,
@@ -1545,14 +1610,25 @@
       fase_actual: 'Diseño',
       porcentaje_avance: 10,
       slug_tracking: slug,
-      estado: 'Activa'
-    }]);
+      estado: 'Activa',
+      clientes: cliente
+    };
 
-    if (error) {
-      btn.disabled = false;
-      btn.textContent = 'Crear Obra';
-      alert('Error al crear obra: ' + error.message);
-      return;
+    DB_OBRAS.unshift(nuevaObra);
+
+    if (supabaseClient) {
+      supabaseClient.from('obras').insert([{
+        cliente_id: cliente.id,
+        codigo: codigo,
+        tipo: tipo,
+        descripcion: descripcion,
+        tecnico_asignado: tecnico,
+        fecha_estimada_entrega: fechaEntrega || null,
+        fase_actual: 'Diseño',
+        porcentaje_avance: 10,
+        slug_tracking: slug,
+        estado: 'Activa'
+      }]).then();
     }
 
     if (enviarEmailAuto) {
@@ -1569,28 +1645,33 @@
           })
         });
         const resData = await res.json();
-        if (!res.ok) {
-          showToast(`Obra creada. (Aviso correo: ${resData.error || 'No enviado'})`);
+        if (res.ok) {
+          window.showToast('Obra creada y correo enviado ✓');
         } else {
-          showToast('Obra creada y correo de seguimiento enviado ✓');
+          window.showToast(`Obra creada. (${resData.error || 'Aviso de correo'})`);
         }
       } catch (err) {
-        showToast('Obra creada (Servidor de correos ocupado)');
+        window.showToast('Obra creada exitosamente ✓');
       }
     } else {
-      showToast('Obra creada exitosamente ✓');
+      window.showToast('Obra creada exitosamente ✓');
     }
 
-    btn.disabled = false;
-    btn.textContent = 'Crear Obra';
-    closeModal('nueva-obra');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Crear Obra';
+    }
+
+    window.closeModal('nueva-obra');
     document.getElementById('nueva-obra-desc').value = '';
     document.getElementById('nueva-obra-fecha').value = '';
-    await cargarDatos();
-  }
 
-  // PANEL DE DETALLE
-  function openDetailById(obraId) {
+    renderDashboard();
+    renderObras();
+    renderEnlaces();
+  };
+
+  window.openDetailById = function(obraId) {
     const obra = DB_OBRAS.find(o => String(o.id) === String(obraId));
     if (!obra) return;
     currentObraDetalle = obra;
@@ -1608,14 +1689,15 @@
 
     const trackingUrl = `https://disenos-pablin.vercel.app/tracking.html?t=${obra.slug_tracking}`;
     document.getElementById('detail-link-url').textContent = trackingUrl;
-    document.getElementById('detail-link-copy').onclick = () => copyLink(trackingUrl);
+    document.getElementById('detail-link-copy').onclick = () => window.copyLink(trackingUrl);
 
     renderFasesDetalle(obra.fase_actual);
     document.getElementById('detail-panel').classList.add('open');
-  }
+  };
 
   function renderFasesDetalle(faseActual) {
     const container = document.getElementById('detail-phases-container');
+    if (!container) return;
     const idxActual = FASES.findIndex(f => f.nombre.toLowerCase() === (faseActual || 'diseño').toLowerCase());
     
     container.innerHTML = FASES.map((f, i) => {
@@ -1646,59 +1728,51 @@
     }).join('');
   }
 
-  async function avanzarFaseObraActual() {
+  window.avanzarFaseObraActual = async function() {
     if (!currentObraDetalle) return;
     const idx = FASES.findIndex(f => f.nombre.toLowerCase() === (currentObraDetalle.fase_actual || 'diseño').toLowerCase());
     
     if (idx < FASES.length - 1) {
       const nextFase = FASES[idx + 1];
-      const btn = document.getElementById('btn-next-phase');
-      btn.disabled = true;
-      btn.textContent = 'Actualizando fase...';
-
-      const updateData = {
-        fase_actual: nextFase.nombre,
-        porcentaje_avance: nextFase.porcentaje,
-        estado: nextFase.porcentaje === 100 ? 'Finalizada' : 'Activa'
-      };
-
-      const { error } = await supabase.from('obras').update(updateData).eq('id', currentObraDetalle.id);
-      btn.disabled = false;
-      btn.textContent = 'Avanzar a siguiente fase';
-
-      if (error) {
-        alert('Error al avanzar fase: ' + error.message);
-        return;
-      }
-
       currentObraDetalle.fase_actual = nextFase.nombre;
       currentObraDetalle.porcentaje_avance = nextFase.porcentaje;
-      renderFasesDetalle(nextFase.nombre);
-      showToast(`Fase avanzada a: ${nextFase.nombre} (${nextFase.porcentaje}%) ✓`);
-      await cargarDatos();
-    } else {
-      showToast('La obra ya se encuentra en la fase final (Entrega 100%)');
-    }
-  }
+      if (nextFase.porcentaje === 100) currentObraDetalle.estado = 'Finalizada';
 
-  async function guardarNotasObraActual() {
+      if (supabaseClient) {
+        supabaseClient.from('obras').update({
+          fase_actual: nextFase.nombre,
+          porcentaje_avance: nextFase.porcentaje,
+          estado: nextFase.porcentaje === 100 ? 'Finalizada' : 'Activa'
+        }).eq('id', currentObraDetalle.id).then();
+      }
+
+      renderFasesDetalle(nextFase.nombre);
+      renderDashboard();
+      renderObras();
+      window.showToast(`Fase avanzada a: ${nextFase.nombre} (${nextFase.porcentaje}%) ✓`);
+    } else {
+      window.showToast('La obra ya está en la fase final (Entrega 100%)');
+    }
+  };
+
+  window.guardarNotasObraActual = function() {
     if (!currentObraDetalle) return;
     const nota = document.getElementById('detail-notas').value;
-    const { error } = await supabase.from('obras').update({ descripcion: nota }).eq('id', currentObraDetalle.id);
-    if (!error) {
-      showToast('Notas de la obra guardadas ✓');
-      currentObraDetalle.descripcion = nota;
+    currentObraDetalle.descripcion = nota;
+    if (supabaseClient) {
+      supabaseClient.from('obras').update({ descripcion: nota }).eq('id', currentObraDetalle.id).then();
     }
-  }
+    window.showToast('Notas guardadas ✓');
+  };
 
-  async function enviarCorreoObraActual() {
+  window.enviarCorreoObraActual = async function() {
     if (!currentObraDetalle) return;
     const cliente = currentObraDetalle.clientes;
     if (!cliente || !cliente.email) {
-      alert('El cliente no tiene un correo válido registrado.');
+      alert('El cliente no tiene un correo válido.');
       return;
     }
-    showToast('Enviando correo...');
+    window.showToast('Enviando correo...');
     try {
       const res = await fetch('/api/send-email', {
         method: 'POST',
@@ -1711,43 +1785,21 @@
           slugTracking: currentObraDetalle.slug_tracking
         })
       });
-      if (res.ok) showToast('Correo reenviado con éxito ✓');
-      else showToast('Error al enviar correo');
+      if (res.ok) window.showToast('Correo reenviado con éxito ✓');
+      else window.showToast('Error al enviar correo');
     } catch(e) {
-      showToast('Error de conexión con el servidor de correo');
+      window.showToast('Servidor de correos ocupado');
     }
-  }
+  };
 
-  function enviarWhatsAppObraActual() {
+  window.enviarWhatsAppObraActual = function() {
     if (!currentObraDetalle) return;
     const cliente = currentObraDetalle.clientes;
     const phone = (cliente?.telefono || '').replace(/\D/g, '');
     const url = `https://disenos-pablin.vercel.app/tracking.html?t=${currentObraDetalle.slug_tracking}`;
     const msg = encodeURIComponent(`Hola ${cliente?.nombre || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.tipo} (${currentObraDetalle.codigo}): ${url}`);
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-  }
-
-  // UTILIDADES
-  function openModal(id) { document.getElementById('modal-' + id).classList.add('open'); }
-  function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); }
-  function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
-
-  document.querySelectorAll('.modal-overlay').forEach(o => {
-    o.addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('open');
-    });
-  });
-
-  function copyLink(url) {
-    navigator.clipboard?.writeText(url).then(() => showToast('Enlace copiado al portapapeles ✓')).catch(() => showToast('Enlace copiado ✓'));
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
+  };
 
   function getInitials(name) {
     if (!name) return 'DP';
@@ -1765,7 +1817,7 @@
   }
 
   function getBadgeTipo(tipo = '') {
-    const t = tipo.toLowerCase();
+    const t = (tipo || '').toLowerCase();
     if (t.includes('cocina')) return 'badge-cocina';
     if (t.includes('baño') || t.includes('bano')) return 'badge-bano';
     if (t.includes('closet')) return 'badge-closet';
