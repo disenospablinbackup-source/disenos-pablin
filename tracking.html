@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tu Proyecto — Diseños Pablin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -147,7 +149,7 @@
     stroke-width: 6;
     stroke-linecap: round;
     stroke-dasharray: 408;
-    stroke-dashoffset: 143; /* 408 * (1 - 0.65) */
+    stroke-dashoffset: 408;
     transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
   }
   .ring-center {
@@ -375,7 +377,7 @@
     position: absolute;
     top: -40px; right: 0;
     background: none; border: none;
-    color: var(--sand); font-size: 22px;
+    color: var(--sand);
     cursor: pointer; line-height: 1;
     font-family: var(--font-title);
     letter-spacing: 0.1em;
@@ -526,6 +528,17 @@
     transform: none;
   }
 
+  /* Pantalla de Carga / Error */
+  #loading-screen {
+    text-align: center;
+    padding: 100px 20px;
+    font-family: var(--font-title);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-size: 13px;
+  }
+
   /* ── MOBILE ── */
   @media (max-width: 480px) {
     .photos-grid { grid-template-columns: 1fr; }
@@ -543,193 +556,115 @@
     <div class="header-brand-sub">Arte en Madera</div>
   </div>
   <div class="header-contact">
-    <a class="btn-wa" href="https://wa.me/593990000000" target="_blank">
+    <a class="btn-wa" id="header-wa-btn" href="https://wa.me/593990000000" target="_blank">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Escribirnos
     </a>
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">Seguimiento de proyecto</div>
-  <div class="hero-name">María Rodríguez</div>
-  <div class="hero-type">Cocina a medida</div>
+<div id="loading-screen">Cargando la información de tu proyecto...</div>
 
-  <div class="progress-ring-wrap">
-    <svg class="ring-svg" width="130" height="130" viewBox="0 0 130 130">
-      <circle class="ring-bg" cx="65" cy="65" r="56"/>
-      <circle class="ring-fill" cx="65" cy="65" r="56" id="ring-fill"/>
-    </svg>
-    <div class="ring-center">
-      <div class="ring-pct" id="ring-pct">0%</div>
-      <div class="ring-label">Avance</div>
-    </div>
-  </div>
+<div id="tracking-main" style="display:none;">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Seguimiento de proyecto <span id="hero-obra-code" style="color:var(--sand);margin-left:6px;"></span></div>
+    <div class="hero-name" id="hero-name">Cliente</div>
+    <div class="hero-type" id="hero-type">Proyecto a medida</div>
 
-  <div class="hero-phase-current">Fase actual: Ejecución</div>
-  <div class="hero-delivery">Entrega estimada: <span>28 de agosto, 2026</span></div>
-</section>
-
-<!-- MAIN CONTENT -->
-<div class="container">
-
-  <!-- FASES -->
-  <div class="section reveal">
-    <div class="section-label">Etapas del proyecto</div>
-    <div class="section-title">Historial de fases</div>
-    <div class="phases">
-
-      <div class="phase-item">
-        <div class="phase-left">
-          <div class="phase-dot done"></div>
-          <div class="phase-line"></div>
-        </div>
-        <div class="phase-content">
-          <div class="phase-name">Diseño <span class="phase-badge">Completado</span></div>
-          <div class="phase-date">12 de julio, 2026</div>
-          <div class="phase-note">"Se finalizó el diseño con medidas reales del espacio. El cliente aprobó la distribución de gabinetes superiores e inferiores."</div>
-        </div>
-      </div>
-
-      <div class="phase-item">
-        <div class="phase-left">
-          <div class="phase-dot done"></div>
-          <div class="phase-line"></div>
-        </div>
-        <div class="phase-content">
-          <div class="phase-name">Materiales <span class="phase-badge">Completado</span></div>
-          <div class="phase-date">20 de julio, 2026</div>
-          <div class="phase-note">"Todos los materiales listos: MDF enchapado en roble, bisagras soft-close y manijas en acero inoxidable."</div>
-        </div>
-      </div>
-
-      <div class="phase-item">
-        <div class="phase-left">
-          <div class="phase-dot current"></div>
-          <div class="phase-line"></div>
-        </div>
-        <div class="phase-content">
-          <div class="phase-name">Ejecución <span class="phase-badge">En progreso</span></div>
-          <div class="phase-date">Desde el 25 de julio, 2026</div>
-          <div class="phase-note">"Armado de estructura inferior completado. Se inicia esta semana con gabinetes superiores y cubierta."</div>
-        </div>
-      </div>
-
-      <div class="phase-item">
-        <div class="phase-left">
-          <div class="phase-dot"></div>
-          <div class="phase-line"></div>
-        </div>
-        <div class="phase-content">
-          <div class="phase-name pending">Acabados</div>
-          <div class="phase-date">Pendiente</div>
-        </div>
-      </div>
-
-      <div class="phase-item">
-        <div class="phase-left">
-          <div class="phase-dot"></div>
-        </div>
-        <div class="phase-content">
-          <div class="phase-name pending">Entrega</div>
-          <div class="phase-date">Est. 28 de agosto, 2026</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- FOTOS -->
-  <div class="section reveal">
-    <div class="section-label">Registro visual</div>
-    <div class="section-title">Fotos de avance</div>
-    <div class="photos-grid">
-
-      <div class="photo-card" onclick="openLightbox(0)">
-        <div class="mock-photo mock-1"></div>
-        <div class="photo-overlay">
-          <div class="photo-phase-tag">Diseño</div>
-          <div class="photo-date">12 jul 2026</div>
-        </div>
-      </div>
-
-      <div class="photo-card" onclick="openLightbox(1)">
-        <div class="mock-photo mock-2"></div>
-        <div class="photo-overlay">
-          <div class="photo-phase-tag">Materiales</div>
-          <div class="photo-date">20 jul 2026</div>
-        </div>
-      </div>
-
-      <div class="photo-card" onclick="openLightbox(2)">
-        <div class="mock-photo mock-3"></div>
-        <div class="photo-overlay">
-          <div class="photo-phase-tag">Ejecución</div>
-          <div class="photo-date">28 jul 2026</div>
-        </div>
-      </div>
-
-      <div class="photo-card" onclick="openLightbox(3)">
-        <div class="mock-photo mock-4"></div>
-        <div class="photo-overlay">
-          <div class="photo-phase-tag">Ejecución</div>
-          <div class="photo-date">5 ago 2026</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- NOTAS -->
-  <div class="section reveal">
-    <div class="section-label">Actualizaciones del equipo</div>
-    <div class="section-title">Notas del técnico</div>
-    <div class="notes">
-      <div class="note-item">
-        <div class="note-header">
-          <div class="note-phase">Ejecución — 5 ago 2026</div>
-          <div class="note-date">Hace 13 días</div>
-        </div>
-        <div class="note-text">El gabinete inferior izquierdo y central están listos y fijados. Esta semana comenzamos la instalación de la cubierta de granito y los gabinetes superiores. Todo va según el cronograma.</div>
-      </div>
-      <div class="note-item">
-        <div class="note-header">
-          <div class="note-phase">Ejecución — 28 jul 2026</div>
-          <div class="note-date">Hace 21 días</div>
-        </div>
-        <div class="note-text">Iniciamos la fase de ejecución. La estructura principal del módulo inferior fue instalada sin contratiempos. La madera está perfectamente nivelada.</div>
-      </div>
-      <div class="note-item">
-        <div class="note-header">
-          <div class="note-phase">Materiales — 20 jul 2026</div>
-          <div class="note-date">Hace 29 días</div>
-        </div>
-        <div class="note-text">Todos los materiales ingresaron al taller. El enchapado en roble tiene una textura excelente, va a quedar muy bien con los tonos del espacio.</div>
+    <div class="progress-ring-wrap">
+      <svg class="ring-svg" width="130" height="130" viewBox="0 0 130 130">
+        <circle class="ring-bg" cx="65" cy="65" r="56"/>
+        <circle class="ring-fill" cx="65" cy="65" r="56" id="ring-fill"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct" id="ring-pct">0%</div>
+        <div class="ring-label">Avance</div>
       </div>
     </div>
-  </div>
 
-  <!-- CONTACTO -->
-  <div class="section reveal">
-    <div class="contact-card">
-      <div class="contact-quote">"Estamos construyendo el espacio que mereces."</div>
-      <div class="contact-divider"></div>
-      <div class="contact-text">¿Tienes alguna duda sobre tu proyecto?<br>Escríbenos directamente y te respondemos de inmediato.</div>
-      <div class="contact-btns">
-        <a class="btn-contact btn-contact-wa" href="https://wa.me/593990000000?text=Hola%2C%20soy%20Mar%C3%ADa%20Rodr%C3%ADguez%20y%20tengo%20una%20pregunta%20sobre%20mi%20proyecto." target="_blank">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Escribir por WhatsApp
-        </a>
-        <button class="btn-contact btn-contact-outline" onclick="copyPhone()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          Copiar teléfono
-        </button>
+    <div class="hero-phase-current" id="hero-phase">Fase actual: Diseño</div>
+    <div class="hero-delivery">Entrega estimada: <span id="hero-delivery">Por confirmar</span></div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+
+    <!-- FASES -->
+    <div class="section reveal">
+      <div class="section-label">Etapas del proyecto</div>
+      <div class="section-title">Historial de fases</div>
+      <div class="phases" id="phases-list">
+        <!-- Renderizado dinámico de fases -->
       </div>
     </div>
-  </div>
 
-</div><!-- /container -->
+    <!-- FOTOS -->
+    <div class="section reveal">
+      <div class="section-label">Registro visual</div>
+      <div class="section-title">Fotos de avance</div>
+      <div class="photos-grid" id="photos-grid">
+        <div class="photo-card" onclick="openLightbox(0)">
+          <div class="mock-photo mock-1"></div>
+          <div class="photo-overlay">
+            <div class="photo-phase-tag">Diseño</div>
+            <div class="photo-date">Aprobación inicial</div>
+          </div>
+        </div>
+        <div class="photo-card" onclick="openLightbox(1)">
+          <div class="mock-photo mock-2"></div>
+          <div class="photo-overlay">
+            <div class="photo-phase-tag">Materiales</div>
+            <div class="photo-date">En taller</div>
+          </div>
+        </div>
+        <div class="photo-card" onclick="openLightbox(2)">
+          <div class="mock-photo mock-3"></div>
+          <div class="photo-overlay">
+            <div class="photo-phase-tag">Ejecución</div>
+            <div class="photo-date">En proceso</div>
+          </div>
+        </div>
+        <div class="photo-card" onclick="openLightbox(3)">
+          <div class="mock-photo mock-4"></div>
+          <div class="photo-overlay">
+            <div class="photo-phase-tag">Acabados</div>
+            <div class="photo-date">Detalles finales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTAS -->
+    <div class="section reveal">
+      <div class="section-label">Actualizaciones del equipo</div>
+      <div class="section-title">Notas del técnico</div>
+      <div class="notes" id="notes-list">
+        <!-- Notas dinámicas -->
+      </div>
+    </div>
+
+    <!-- CONTACTO -->
+    <div class="section reveal">
+      <div class="contact-card">
+        <div class="contact-quote">"Estamos construyendo el espacio que mereces."</div>
+        <div class="contact-divider"></div>
+        <div class="contact-text">¿Tienes alguna duda sobre tu proyecto?<br>Escríbenos directamente y te respondemos de inmediato.</div>
+        <div class="contact-btns">
+          <a class="btn-contact btn-contact-wa" id="contact-wa-btn" href="https://wa.me/593990000000" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Escribir por WhatsApp
+          </a>
+          <button class="btn-contact btn-contact-outline" onclick="copyPhone()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+            Copiar teléfono
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
@@ -748,6 +683,19 @@
 </footer>
 
 <script>
+  // 1. CONEXIÓN SUPABASE
+  const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const FASES_DEF = [
+    { nombre: 'Diseño', desc: 'Planos, medidas y aprobación de acabados.' },
+    { nombre: 'Materiales', desc: 'Selección de tableros, enchapados y herrajes.' },
+    { nombre: 'Ejecución', desc: 'Fabricación, corte y armado en taller.' },
+    { nombre: 'Acabados', desc: 'Lijado, pintura, sellado y control de calidad.' },
+    { nombre: 'Entrega', desc: 'Instalación en sitio y entrega final de la obra.' }
+  ];
+
   // Animated counter
   function animateCounter(target, duration) {
     let start = 0;
@@ -755,41 +703,151 @@
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
-      document.getElementById('ring-pct').textContent = Math.round(ease * target) + '%';
+      const ringPctEl = document.getElementById('ring-pct');
+      if (ringPctEl) ringPctEl.textContent = Math.round(ease * target) + '%';
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }
 
-  // Ring animation
-  window.addEventListener('load', () => {
+  // Carga dinámica desde Supabase
+  async function cargarTrackingReal() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const slug = urlParams.get('t');
+
+    if (!slug) {
+      document.getElementById('loading-screen').innerHTML = `
+        <div style="color:var(--carbon);font-weight:700;margin-bottom:8px;">Enlace Incompleto</div>
+        <div style="color:var(--stone);text-transform:none;">No se especificó un código de seguimiento válido.</div>
+      `;
+      return;
+    }
+
+    const { data: obra, error } = await db
+      .from('obras')
+      .select('*, clientes(*), tecnicos(*)')
+      .eq('slug_tracking', slug)
+      .single();
+
+    if (error || !obra) {
+      document.getElementById('loading-screen').innerHTML = `
+        <div style="color:var(--carbon);font-weight:700;margin-bottom:8px;">Proyecto no encontrado</div>
+        <div style="color:var(--stone);text-transform:none;">El enlace ha expirado o el código no existe en nuestra base de datos.</div>
+      `;
+      return;
+    }
+
+    const cli = obra.clientes || {};
+    const tec = obra.tecnicos || {};
+    const pct = obra.porcentaje_avance || 0;
+    const nombreCompleto = `${cli.nombres || ''} ${cli.apellidos || ''}`.trim() || 'Estimado Cliente';
+
+    // Rellenar Hero
+    document.getElementById('hero-name').textContent = nombreCompleto;
+    document.getElementById('hero-type').textContent = `${obra.categoria_obra || 'Muebles'} a medida`;
+    document.getElementById('hero-obra-code').textContent = `[${obra.id_obra || ''}]`;
+    document.getElementById('hero-phase').textContent = `Fase actual: ${obra.fase_actual || 'Diseño'}`;
+
+    if (obra.fecha_entrega_estimada) {
+      const fechaObj = new Date(obra.fecha_entrega_estimada + 'T00:00:00');
+      document.getElementById('hero-delivery').textContent = fechaObj.toLocaleDateString('es-EC', { day: 'numeric', month: 'long', year: 'numeric' });
+    } else {
+      document.getElementById('hero-delivery').textContent = 'Por definir';
+    }
+
+    // Botones de WhatsApp personalizados
+    const waText = encodeURIComponent(`Hola, soy ${nombreCompleto} y tengo una pregunta sobre mi proyecto (${obra.id_obra || obra.categoria_obra}).`);
+    const waUrl = `https://wa.me/593990000000?text=${waText}`;
+    document.getElementById('header-wa-btn').href = waUrl;
+    document.getElementById('contact-wa-btn').href = waUrl;
+
+    // Renderizar Historial de Fases
+    const idxActual = FASES_DEF.findIndex(f => f.nombre.toLowerCase() === (obra.fase_actual || '').toLowerCase());
+    const phasesHtml = FASES_DEF.map((f, i) => {
+      let isDone = i < idxActual || (idxActual === -1 && pct === 100);
+      let isCurrent = i === idxActual;
+      let dotClass = isDone ? 'done' : (isCurrent ? 'current' : '');
+      let nameClass = isDone ? '' : (isCurrent ? '' : 'pending');
+      let badge = isDone ? '<span class="phase-badge">Completado</span>' : (isCurrent ? '<span class="phase-badge">En progreso</span>' : '');
+      let descText = f.desc;
+      
+      // Si es la fase actual y hay notas en la obra, se muestran aquí
+      let noteHtml = (isCurrent && obra.descripcion) ? `<div class="phase-note">"${obra.descripcion}"</div>` : '';
+
+      return `
+        <div class="phase-item">
+          <div class="phase-left">
+            <div class="phase-dot ${dotClass}"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <div class="phase-name ${nameClass}">${f.nombre} ${badge}</div>
+            <div class="phase-date">${descText}</div>
+            ${noteHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('phases-list').innerHTML = phasesHtml;
+
+    // Renderizar Notas del Técnico
+    const notesList = document.getElementById('notes-list');
+    if (obra.descripcion && obra.descripcion.trim()) {
+      const fechaNota = obra.created_at ? new Date(obra.created_at).toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Reciente';
+      const autorTec = tec.nombres ? `${tec.nombres} ${tec.apellidos}` : 'Equipo de Taller';
+      notesList.innerHTML = `
+        <div class="note-item">
+          <div class="note-header">
+            <div class="note-phase">${obra.fase_actual} — ${autorTec}</div>
+            <div class="note-date">${fechaNota}</div>
+          </div>
+          <div class="note-text">${obra.descripcion}</div>
+        </div>
+      `;
+    } else {
+      notesList.innerHTML = `
+        <div class="note-item">
+          <div class="note-header">
+            <div class="note-phase">${obra.fase_actual}</div>
+            <div class="note-date">Actualizado</div>
+          </div>
+          <div class="note-text">Proyecto en proceso conforme al cronograma establecido.</div>
+        </div>
+      `;
+    }
+
+    // Mostrar contenido
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('tracking-main').style.display = 'block';
+
+    // Activar Animación del Anillo
     setTimeout(() => {
       const fill = document.getElementById('ring-fill');
-      const pct = 65;
       const circumference = 408;
       fill.style.strokeDashoffset = circumference * (1 - pct / 100);
       animateCounter(pct, 1200);
-    }, 300);
-  });
+    }, 200);
 
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Activar Scroll Reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
 
   // Lightbox
   const photos = [
-    { bg: 'linear-gradient(135deg,#2c2416 0%,#B78652 60%,#DCCFBE 100%)', label: 'Diseño — 12 jul 2026' },
-    { bg: 'linear-gradient(135deg,#1a1a1a 0%,#4a3728 50%,#B78652 100%)', label: 'Materiales — 20 jul 2026' },
-    { bg: 'linear-gradient(135deg,#DCCFBE 0%,#B78652 50%,#1D1D1D 100%)', label: 'Ejecución — 28 jul 2026' },
-    { bg: 'linear-gradient(135deg,#3a2c1e 0%,#C9A476 70%,#F8F6F2 100%)', label: 'Ejecución — 5 ago 2026' },
+    { bg: 'linear-gradient(135deg,#2c2416 0%,#B78652 60%,#DCCFBE 100%)', label: 'Diseño — Aprobación inicial' },
+    { bg: 'linear-gradient(135deg,#1a1a1a 0%,#4a3728 50%,#B78652 100%)', label: 'Materiales — En taller' },
+    { bg: 'linear-gradient(135deg,#DCCFBE 0%,#B78652 50%,#1D1D1D 100%)', label: 'Ejecución — En proceso' },
+    { bg: 'linear-gradient(135deg,#3a2c1e 0%,#C9A476 70%,#F8F6F2 100%)', label: 'Acabados — Detalles finales' },
   ];
+
   function openLightbox(i) {
     const img = document.getElementById('lightbox-img');
     img.style.background = photos[i].bg;
@@ -798,10 +856,12 @@
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open');
     document.body.style.overflow = '';
   }
+
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
   function copyPhone() {
@@ -812,6 +872,8 @@
       btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg> Copiar teléfono`;
     }, 2000);
   }
+
+  window.addEventListener('DOMContentLoaded', cargarTrackingReal);
 </script>
 </body>
 </html>
