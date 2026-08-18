@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diseños Pablin — Panel Interno</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<!-- Librería Oficial de Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -673,6 +674,7 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   }
   .toast.show { display: flex; }
+  .toast-accent { width: 3px; height: 100%; background: var(--bronze); }
 
   @media (max-width: 900px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -739,6 +741,10 @@
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard</div>
     <div class="topbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.openModal('nuevo-cliente')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo Cliente
+      </button>
       <button class="btn btn-bronze btn-sm" onclick="window.openModal('nueva-obra')">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Nueva Obra
@@ -748,14 +754,14 @@
 
   <div class="content">
 
-    <!-- DASHBOARD -->
+    <!-- 1. DASHBOARD -->
     <div class="view active" id="view-dashboard">
       <div class="page-header">
         <div>
           <h1>Dashboard</h1>
           <p>"Espacios que inspiran"</p>
         </div>
-        <span style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;">Martes, 18 Agosto 2026</span>
+        <span style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;" id="dash-date">Martes, 18 Agosto 2026</span>
       </div>
 
       <div class="stats-row">
@@ -765,19 +771,19 @@
           <div class="stat-delta">En producción</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="dash-total-clientes">0</div>
+          <div class="stat-number" id="dash-clientes-total">0</div>
           <div class="stat-label">Clientes</div>
-          <div class="stat-delta">Base registrada</div>
+          <div class="stat-delta">Registrados</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="dash-por-entregar">0</div>
+          <div class="stat-number" id="dash-obras-entrega">0</div>
           <div class="stat-label">Por Entregar</div>
-          <div class="stat-delta" style="color:var(--stone);">Fase Acabados/Entrega</div>
+          <div class="stat-delta" style="color:var(--stone);">Acabados finales</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="dash-completadas">0</div>
+          <div class="stat-number" id="dash-obras-completas">0</div>
           <div class="stat-label">Completadas</div>
-          <div class="stat-delta" style="color:var(--bronze);">100% terminadas</div>
+          <div class="stat-delta">Entregadas</div>
         </div>
       </div>
 
@@ -796,15 +802,15 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody id="dashboard-obras-body">
-              <tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">Cargando obras...</td></tr>
+            <tbody id="dash-tabla-recent">
+              <tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">Cargando obras desde Supabase...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- CLIENTES -->
+    <!-- 2. CLIENTES -->
     <div class="view" id="view-clientes">
       <div class="page-header">
         <div><h1>Clientes</h1><p>"Cada espacio, una historia"</p></div>
@@ -814,29 +820,30 @@
         </button>
       </div>
       <div class="search-bar">
-        <input class="search-input" id="search-clientes" placeholder="Buscar por nombre, correo o teléfono…" oninput="window.filterClientes()">
-        <select class="form-select" id="filter-clientes-estado" style="width:160px;" onchange="window.filterClientes()">
-          <option value="">Todos los estados</option>
-          <option value="En obra">En obra</option>
-          <option value="Finalizado">Finalizado</option>
-          <option value="Prospecto">Prospecto</option>
+        <input class="search-input" id="busqueda-clientes" oninput="window.filtrarClientes()" placeholder="Buscar por nombre, cédula, correo o teléfono…">
+        <select class="form-select" id="filtro-tipo-cliente" onchange="window.filtrarClientes()" style="width:180px;">
+          <option value="">Todos los tipos</option>
+          <option value="NUEVO">NUEVO</option>
+          <option value="TRANSITORIO">TRANSITORIO</option>
+          <option value="FIJO">FIJO</option>
+          <option value="VIP">VIP</option>
         </select>
       </div>
       <div class="card">
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Cliente</th><th>Teléfono</th><th>Obras</th><th>Estado</th><th>Fecha registro</th><th></th></tr>
+              <tr><th>Cliente</th><th>Teléfono</th><th>Cédula</th><th>Tipo</th><th>Fecha registro</th></tr>
             </thead>
-            <tbody id="clientes-table-body">
-              <tr><td colspan="6" style="text-align:center;color:var(--stone);padding:20px;">Cargando base de clientes...</td></tr>
+            <tbody id="tabla-clientes-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">Cargando directorio...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- OBRAS -->
+    <!-- 3. OBRAS -->
     <div class="view" id="view-obras">
       <div class="page-header">
         <div><h1>Obras</h1><p>"Del diseño a la realidad"</p></div>
@@ -845,11 +852,11 @@
           Nueva Obra
         </button>
       </div>
-      <div class="tabs" id="obras-tabs">
-        <div class="tab active" onclick="window.setObrasFilter('todas', this)">Todas (<span id="count-todas">0</span>)</div>
-        <div class="tab" onclick="window.setObrasFilter('activas', this)">Activas (<span id="count-activas">0</span>)</div>
-        <div class="tab" onclick="window.setObrasFilter('entregar', this)">Por entregar (<span id="count-entregar">0</span>)</div>
-        <div class="tab" onclick="window.setObrasFilter('finalizadas', this)">Finalizadas (<span id="count-finalizadas">0</span>)</div>
+      <div class="tabs">
+        <div class="tab active" onclick="window.filtrarObrasTab('Todas', this)">Todas</div>
+        <div class="tab" onclick="window.filtrarObrasTab('Activa', this)">Activas</div>
+        <div class="tab" onclick="window.filtrarObrasTab('Por entregar', this)">Por entregar</div>
+        <div class="tab" onclick="window.filtrarObrasTab('Finalizada', this)">Finalizadas</div>
       </div>
       <div class="card">
         <div class="table-wrap">
@@ -857,15 +864,15 @@
             <thead>
               <tr><th>Obra</th><th>Cliente</th><th>Tipo</th><th>Fase actual</th><th>Avance</th><th>Técnico</th><th>Entrega</th><th></th></tr>
             </thead>
-            <tbody id="obras-table-body">
-              <tr><td colspan="8" style="text-align:center;color:var(--stone);padding:20px;">Cargando obras...</td></tr>
+            <tbody id="tabla-obras-body">
+              <tr><td colspan="8" style="text-align:center;color:var(--stone);padding:20px;">Cargando proyectos...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ENLACES -->
+    <!-- 4. ENLACES -->
     <div class="view" id="view-enlaces">
       <div class="page-header">
         <div><h1>Enlaces</h1><p>"Acceso directo a cada proyecto"</p></div>
@@ -878,9 +885,9 @@
         <div class="card-title">Tracking de obras activas</div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Cliente</th><th>Obra</th><th>Enlace único</th><th>Estado</th><th></th></tr></thead>
-            <tbody id="enlaces-table-body">
-              <tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">Cargando enlaces únicos...</td></tr>
+            <thead><tr><th>Cliente</th><th>Obra</th><th>Enlace único</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-enlaces-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">Cargando enlaces...</td></tr>
             </tbody>
           </table>
         </div>
@@ -888,17 +895,17 @@
       <div class="card" style="border: 1px dashed var(--sand); background: var(--ivory);">
         <div class="card-title">Módulos futuros</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;">
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
             <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Encuesta</div>
             <div style="font-size:12px;color:var(--stone);">Post-entrega</div>
             <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
           </div>
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;">
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
             <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Aprobación</div>
             <div style="font-size:12px;color:var(--stone);">Diseño / planos</div>
             <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
           </div>
-          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;">
+          <div style="padding:16px;border:1px dashed var(--sand);border-radius:2px;text-align:center;background:var(--white);">
             <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">Cotización</div>
             <div style="font-size:12px;color:var(--stone);">Interactiva</div>
             <div style="margin-top:8px;font-size:10px;color:var(--bronze);font-family:var(--font-title);letter-spacing:0.1em;">PRÓXIMAMENTE</div>
@@ -907,7 +914,7 @@
       </div>
     </div>
 
-    <!-- CORREOS -->
+    <!-- 5. CORREOS -->
     <div class="view" id="view-correos">
       <div class="page-header">
         <div><h1>Correos</h1><p>"Comunicación automática y personalizada"</p></div>
@@ -936,7 +943,7 @@
             </tr>
             <tr>
               <td style="font-weight:600;">Obra finalizada</td>
-              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo!</td>
+              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo! + Reseña</td>
               <td><span class="badge badge-pending">En espera</span></td>
               <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Disponible en fase de entrega')">Ver</button></td>
             </tr>
@@ -945,55 +952,49 @@
       </div>
     </div>
 
-    <!-- BOT -->
+    <!-- 6. BOT WHATSAPP -->
     <div class="view" id="view-bot">
       <div class="page-header">
-        <div><h1>Bot WhatsApp</h1><p>"Tu asistente 24/7"</p></div>
+        <div><h1>Bot WhatsApp</h1><p>"Tu asistente 24/7 con Gemini"</p></div>
       </div>
       <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
-        <div class="stat-card"><div class="stat-number">23</div><div class="stat-label">Conversaciones hoy</div></div>
-        <div class="stat-card"><div class="stat-number" id="bot-tecnicos-count">2</div><div class="stat-label">Técnicos activos</div></div>
-        <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Updates cargados</div></div>
+        <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Disponibilidad</div></div>
+        <div class="stat-card"><div class="stat-number" id="bot-tecnicos-count">0</div><div class="stat-label">Técnicos conectados</div></div>
+        <div class="stat-card"><div class="stat-number">Gemini 2.5</div><div class="stat-label">IA Engine</div></div>
       </div>
       <div class="card">
-        <div class="card-title">Últimas interacciones</div>
-        <table>
-          <thead><tr><th>Contacto</th><th>Tipo</th><th>Último mensaje</th><th>Hora</th></tr></thead>
-          <tbody>
-            <tr>
-              <td style="font-weight:600;">Carlos Mora <span class="badge badge-bano" style="margin-left:6px;">Técnico</span></td>
-              <td style="font-size:12px;">Subió fotos — Obra #OBR-001</td>
-              <td style="font-size:12px;color:var(--stone);">Fotos adjuntas, fase: Ejecución</td>
-              <td style="font-size:11px;color:var(--stone);">Hace 12 min</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600;">Cliente WhatsApp</td>
-              <td style="font-size:12px;">Consulta tracking</td>
-              <td style="font-size:12px;color:var(--stone);">"¿Cómo va mi proyecto?"</td>
-              <td style="font-size:11px;color:var(--stone);">Hace 1h</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="card-title">Comandos de WhatsApp para Técnicos</div>
+        <div style="font-size:13px;line-height:1.8;color:var(--carbon);">
+          <p>Los técnicos pueden enviar notas o fotos por WhatsApp usando su <b>ID Técnico</b> y el <b>ID de Obra</b>:</p>
+          <div style="background:var(--ivory);padding:14px;border:1px solid var(--sand);margin:10px 0;font-family:monospace;font-size:12px;">
+            UPDATE [ID_OBRA] FASE: [Ejecución] FOTO: [Adjunto] NOTA: [Instalación de mesones lista]
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- TECNICOS -->
+    <!-- 7. TÉCNICOS -->
     <div class="view" id="view-tecnicos">
       <div class="page-header">
         <div><h1>Técnicos</h1><p>"El equipo detrás de cada obra"</p></div>
-        <button class="btn btn-primary" onclick="window.showToast('Módulo de gestión de técnicos activo')">Agregar Técnico</button>
+        <button class="btn btn-primary" onclick="window.openModal('nuevo-tecnico')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar Técnico
+        </button>
       </div>
       <div class="card">
-        <table>
-          <thead><tr><th>Técnico</th><th>Código acceso</th><th>Obras asignadas</th><th>Estado</th><th></th></tr></thead>
-          <tbody id="tecnicos-table-body">
-            <tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">Cargando lista de técnicos...</td></tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Técnico</th><th>Código acceso ID</th><th>Cédula</th><th>Estado</th></tr></thead>
+            <tbody id="tabla-tecnicos-body">
+              <tr><td colspan="4" style="text-align:center;color:var(--stone);padding:20px;">Cargando técnicos...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- CONFIGURACION -->
+    <!-- 8. CONFIGURACIÓN -->
     <div class="view" id="view-configuracion">
       <div class="page-header">
         <div><h1>Configuración</h1></div>
@@ -1008,8 +1009,7 @@
           <button class="btn btn-primary" onclick="window.showToast('Configuración sincronizada con el servidor ✓')">Guardar</button>
         </div>
         <div class="card">
-          <div class="card-title">Fases de obra</div>
-          <p style="font-size:12px;color:var(--stone);margin-bottom:14px;">Fases operativas sincronizadas en tiempo real.</p>
+          <div class="card-title">Fases de obra predeterminadas</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--sand);border-radius:2px;background:var(--ivory);font-size:13px;font-weight:500;">
               <span style="color:var(--bronze);font-family:var(--font-title);font-size:10px;font-weight:700;">01</span> Diseño (10%)
@@ -1038,24 +1038,24 @@
 <div class="detail-panel" id="detail-panel">
   <div class="detail-header">
     <div>
-      <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;" id="detail-codigo">#OBR-000</div>
-      <div style="font-family:var(--font-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;" id="detail-cliente">Cliente</div>
-      <span class="badge badge-cocina" style="margin-top:6px;display:inline-block;" id="detail-tipo">Tipo</span>
+      <div style="font-family:var(--font-title);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:4px;" id="det-obra-id">#OBR-000</div>
+      <div style="font-family:var(--font-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;" id="det-cliente-nombre">Cliente</div>
+      <span class="badge badge-cocina" style="margin-top:6px;display:inline-block;" id="det-tipo-obra">Categoría</span>
     </div>
     <button class="modal-close" onclick="window.closeDetail()">✕</button>
   </div>
   <div class="detail-body">
     <div class="detail-section">
       <div class="detail-section-title">Información del cliente</div>
-      <div class="detail-row"><span class="detail-key">Correo</span><span class="detail-val" id="detail-email">-</span></div>
-      <div class="detail-row"><span class="detail-key">WhatsApp</span><span class="detail-val" id="detail-phone">-</span></div>
-      <div class="detail-row"><span class="detail-key">Técnico</span><span class="detail-val" id="detail-tecnico">-</span></div>
-      <div class="detail-row"><span class="detail-key">Entrega estimada</span><span class="detail-val" id="detail-fecha">-</span></div>
+      <div class="detail-row"><span class="detail-key">Correo</span><span class="detail-val" id="det-correo">-</span></div>
+      <div class="detail-row"><span class="detail-key">WhatsApp</span><span class="detail-val" id="det-telefono">-</span></div>
+      <div class="detail-row"><span class="detail-key">Técnico</span><span class="detail-val" id="det-tecnico">-</span></div>
+      <div class="detail-row"><span class="detail-key">Entrega estimada</span><span class="detail-val" id="det-entrega">-</span></div>
     </div>
 
     <div class="detail-section">
       <div class="detail-section-title">Fases de avance</div>
-      <div class="phases" id="detail-phases-container"></div>
+      <div class="phases" id="det-phases-list"></div>
       <div style="margin-top:16px;">
         <button class="btn btn-bronze btn-sm" id="btn-next-phase" style="width:100%;" onclick="window.avanzarFaseObraActual()">Avanzar a siguiente fase</button>
       </div>
@@ -1064,8 +1064,8 @@
     <div class="detail-section">
       <div class="detail-section-title">Enlace de tracking</div>
       <div class="link-box">
-        <span class="link-url" id="detail-link-url">-</span>
-        <button class="link-copy" id="detail-link-copy">Copiar</button>
+        <span class="link-url" id="det-link-url">-</span>
+        <button class="link-copy" id="det-link-copy-btn">Copiar</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button class="btn btn-outline btn-sm" style="flex:1;" onclick="window.enviarCorreoObraActual()">Reenviar Correo</button>
@@ -1074,8 +1074,8 @@
     </div>
 
     <div class="detail-section">
-      <div class="detail-section-title">Notas del proyecto</div>
-      <textarea class="form-textarea" id="detail-notas" placeholder="Detalles u observaciones de la obra…"></textarea>
+      <div class="detail-section-title">Notas de Obra</div>
+      <textarea class="form-textarea" id="det-descripcion" placeholder="Detalles u observaciones de la obra…"></textarea>
       <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="window.guardarNotasObraActual()">Guardar nota</button>
     </div>
   </div>
@@ -1085,20 +1085,20 @@
 <div class="modal-overlay" id="modal-nueva-obra">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Nueva Obra</div>
+      <div class="modal-title">Nueva Obra (ID Asignado Automáticamente)</div>
       <button class="modal-close" onclick="window.closeModal('nueva-obra')">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Cliente</label>
-          <select class="form-select" id="nueva-obra-cliente">
+          <label class="form-label">Cliente Asociado *</label>
+          <select class="form-select" id="obr-cliente-select">
             <option value="">Seleccionar cliente…</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Tipo de obra</label>
-          <select class="form-select" id="nueva-obra-tipo">
+          <select class="form-select" id="obr-tipo">
             <option value="Cocina">Cocina</option>
             <option value="Baño">Baño</option>
             <option value="Closet">Closet</option>
@@ -1108,30 +1108,29 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Descripción del proyecto</label>
-        <textarea class="form-textarea" id="nueva-obra-desc" placeholder="Detalles de materiales, medidas, acabados…"></textarea>
+        <label class="form-label">Descripción</label>
+        <textarea class="form-textarea" id="obr-desc" placeholder="Detalles de materiales, acabados y especificaciones…"></textarea>
       </div>
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Técnico asignado</label>
-          <select class="form-select" id="nueva-obra-tecnico">
-            <option value="Carlos Mora">Carlos Mora</option>
-            <option value="Luis Guerrero">Luis Guerrero</option>
+          <select class="form-select" id="obr-tecnico-select">
+            <option value="">Sin asignar</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Fecha estimada entrega</label>
-          <input class="form-input" type="date" id="nueva-obra-fecha">
+          <input class="form-input" id="obr-fecha" type="date">
         </div>
       </div>
       <div class="form-group" style="display:flex;align-items:center;gap:10px;">
         <input type="checkbox" id="send-auto" checked style="accent-color:var(--bronze);width:16px;height:16px;">
-        <label for="send-auto" style="font-size:13px;cursor:pointer;">Enviar correo de bienvenida con tracking automático</label>
+        <label for="send-auto" style="font-size:13px;cursor:pointer;">Generar enlace y notificar por correo al cliente</label>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="window.closeModal('nueva-obra')">Cancelar</button>
-      <button class="btn btn-bronze" id="btn-submit-obra" onclick="window.crearObra()">Crear Obra</button>
+      <button class="btn btn-bronze" id="btn-submit-obra" onclick="window.guardarNuevaObra()">Crear Obra</button>
     </div>
   </div>
 </div>
@@ -1146,36 +1145,79 @@
     <div class="modal-body">
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">Nombre completo</label>
-          <input class="form-input" id="nuevo-cliente-nombre" placeholder="Ej: Juan Pérez">
+          <label class="form-label">Nombres completos *</label>
+          <input class="form-input" id="cli-nombres" placeholder="Ej: Roberto">
         </div>
         <div class="form-group">
-          <label class="form-label">Correo electrónico</label>
-          <input class="form-input" type="email" id="nuevo-cliente-email" placeholder="correo@ejemplo.com">
+          <label class="form-label">Apellidos *</label>
+          <input class="form-input" id="cli-apellidos" placeholder="Ej: Mendoza">
         </div>
       </div>
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">WhatsApp</label>
-          <input class="form-input" id="nuevo-cliente-telefono" placeholder="+593 99 000 0000">
+          <label class="form-label">Número de Cédula *</label>
+          <input class="form-input" id="cli-cedula" placeholder="0923456789">
         </div>
         <div class="form-group">
-          <label class="form-label">Rol / Estado</label>
-          <select class="form-select" id="nuevo-cliente-estado">
-            <option value="En obra">En obra</option>
-            <option value="Prospecto">Prospecto</option>
-            <option value="Finalizado">Finalizado</option>
-          </select>
+          <label class="form-label">Correo electrónico *</label>
+          <input class="form-input" id="cli-correo" type="email" placeholder="correo@ejemplo.com">
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Notas iniciales</label>
-        <textarea class="form-textarea" id="nuevo-cliente-notas" placeholder="Intereses, referencias del cliente…"></textarea>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">WhatsApp *</label>
+          <input class="form-input" id="cli-telefono" placeholder="+593 99 000 0000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de Cliente *</label>
+          <select class="form-select" id="cli-tipo">
+            <option value="NUEVO">NUEVO</option>
+            <option value="TRANSITORIO">TRANSITORIO</option>
+            <option value="FIJO">FIJO</option>
+            <option value="VIP">VIP</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="window.closeModal('nuevo-cliente')">Cancelar</button>
-      <button class="btn btn-bronze" id="btn-submit-cliente" onclick="window.crearCliente()">Guardar Cliente</button>
+      <button class="btn btn-bronze" id="btn-submit-cliente" onclick="window.guardarNuevoCliente()">Guardar Cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO TÉCNICO -->
+<div class="modal-overlay" id="modal-nuevo-tecnico">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Técnico (ID Automático)</div>
+      <button class="modal-close" onclick="window.closeModal('nuevo-tecnico')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nombres *</label>
+          <input class="form-input" id="tec-nombres" placeholder="Ej: Luis">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellidos *</label>
+          <input class="form-input" id="tec-apellidos" placeholder="Ej: Guerrero">
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Cédula</label>
+          <input class="form-input" id="tec-cedula" placeholder="0911223344">
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input class="form-input" id="tec-telefono" placeholder="+593 98 333 4444">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="window.closeModal('nuevo-tecnico')">Cancelar</button>
+      <button class="btn btn-bronze" id="btn-submit-tecnico" onclick="window.guardarNuevoTecnico()">Guardar Técnico</button>
     </div>
   </div>
 </div>
@@ -1187,26 +1229,23 @@
 </div>
 
 <script>
-  // Inicialización de datos locales y conexión segura con Supabase
-  let DB_CLIENTES = [
-    { id: '1', nombre: 'María Rodríguez', email: 'maria@email.com', telefono: '+593 99 123 4567', estado: 'En obra', created_at: '2026-07-10' },
-    { id: '2', nombre: 'Jorge Peña', email: 'jorge@email.com', telefono: '+593 99 234 5678', estado: 'En obra', created_at: '2026-08-01' },
-    { id: '3', nombre: 'Ana López', email: 'ana@email.com', telefono: '+593 98 345 6789', estado: 'Prospecto', created_at: '2026-07-05' }
-  ];
+  // 1. CONFIGURACIÓN SUPABASE
+  const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
+  let db = null;
+  
+  try {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+  } catch(e) {
+    console.warn('Error inicializando Supabase:', e);
+  }
 
-  let DB_OBRAS = [
-    { id: '101', codigo: '#OBR-047', cliente_id: '1', tipo: 'Cocina', fase_actual: 'Ejecución', porcentaje_avance: 65, tecnico_asignado: 'Carlos Mora', fecha_estimada_entrega: '2026-08-28', slug_tracking: 'a8f3kd', estado: 'Activa', clientes: { nombre: 'María Rodríguez', email: 'maria@email.com', telefono: '+593 99 123 4567' } },
-    { id: '102', codigo: '#OBR-048', cliente_id: '2', tipo: 'Closet', fase_actual: 'Materiales', porcentaje_avance: 30, tecnico_asignado: 'Luis Guerrero', fecha_estimada_entrega: '2026-09-10', slug_tracking: 'x9m2pk', estado: 'Activa', clientes: { nombre: 'Jorge Peña', email: 'jorge@email.com', telefono: '+593 99 234 5678' } }
-  ];
-
-  let DB_TECNICOS = [
-    { id: '1', nombre: 'Carlos Mora', codigo: 'TEC-4821', telefono: '+593 99 111 2222', estado: 'Activo' },
-    { id: '2', nombre: 'Luis Guerrero', codigo: 'TEC-7293', telefono: '+593 98 333 4444', estado: 'Activo' }
-  ];
-
+  let clientesCache = [];
+  let tecnicosCache = [];
+  let obrasCache = [];
   let currentObraDetalle = null;
-  let activeObrasFilter = 'todas';
-  let supabaseClient = null;
 
   const FASES = [
     { nombre: 'Diseño', porcentaje: 10 },
@@ -1216,512 +1255,463 @@
     { nombre: 'Entrega', porcentaje: 100 }
   ];
 
-  // Intento de conexión con Supabase protegido contra excepciones
-  try {
-    if (window.supabase && typeof window.supabase.createClient === 'function') {
-      supabaseClient = window.supabase.createClient(
-        'https://glqnvlywivkaxovtwwvg.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdscW52bHl3aXZrYXhvdnR3d3ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDQ5NTAsImV4cCI6MjA4Njg4MDk1MH0.J0p-JzC1o1bJ7VjQyY08wR7H6iEw1V0eKzN5pM3v1yI'
-      );
+  // Helper de badges
+  function getBadgeCliente(tipo) {
+    switch (tipo) {
+      case 'VIP': return '<span class="badge" style="background:#EDE7F6;color:#512DA8;">VIP</span>';
+      case 'FIJO': return '<span class="badge" style="background:#E8F5E9;color:#2E7D32;">FIJO</span>';
+      case 'TRANSITORIO': return '<span class="badge" style="background:#FFF8E1;color:#F57F17;">TRANSITORIO</span>';
+      case 'NUEVO':
+      default: return '<span class="badge" style="background:#E3F2FD;color:#1565C0;">NUEVO</span>';
     }
-  } catch (e) {
-    console.warn('Modo offline/autónomo activado:', e);
   }
 
-  // NAVEGACIÓN GLOBAL EXPUESTA
-  window.showView = function(name) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
-    const targetView = document.getElementById('view-' + name);
-    if (targetView) targetView.classList.add('active');
-
-    const activeNav = document.getElementById('nav-' + name);
-    if (activeNav) activeNav.classList.add('active');
-    
-    const titles = {
-      dashboard: 'Dashboard', clientes: 'Clientes', obras: 'Obras',
-      enlaces: 'Enlaces', correos: 'Correos', bot: 'Bot WhatsApp',
-      tecnicos: 'Técnicos', configuracion: 'Configuración'
-    };
-    const titleEl = document.getElementById('topbar-title');
-    if (titleEl) titleEl.textContent = titles[name] || name;
-    window.closeDetail();
-  };
-
-  window.openModal = function(id) {
-    const el = document.getElementById('modal-' + id);
-    if (el) el.classList.add('open');
-  };
-
-  window.closeModal = function(id) {
-    const el = document.getElementById('modal-' + id);
-    if (el) el.classList.remove('open');
-  };
-
-  window.closeDetail = function() {
-    const el = document.getElementById('detail-panel');
-    if (el) el.classList.remove('open');
-  };
-
-  window.copyLink = function(url) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(() => window.showToast('Enlace copiado al portapapeles ✓')).catch(() => window.showToast('Enlace copiado ✓'));
-    } else {
-      window.showToast('Enlace copiado ✓');
+  function getBadgeTipoObra(tipo) {
+    switch(tipo?.toLowerCase()) {
+      case 'cocina': return 'badge-cocina';
+      case 'baño': case 'bano': return 'badge-bano';
+      case 'closet': return 'badge-closet';
+      default: return 'badge-deco';
     }
-  };
+  }
 
-  window.showToast = function(msg) {
-    const t = document.getElementById('toast');
-    const msgEl = document.getElementById('toast-msg');
-    if (t && msgEl) {
-      msgEl.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3500);
-    }
-  };
-
-  // INICIALIZACIÓN
-  window.addEventListener('DOMContentLoaded', async () => {
-    // Escucha de clicks en modales para cerrarlos al hacer click afuera
-    document.querySelectorAll('.modal-overlay').forEach(o => {
-      o.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('open');
-      });
-    });
-
-    renderDashboard();
-    renderClientes();
-    renderObras();
-    renderEnlaces();
-    renderTecnicos();
-    poblarSelectClientesModal();
-
-    await sincronizarSupabase();
-  });
-
-  async function sincronizarSupabase() {
-    if (!supabaseClient) return;
+  // 2. CARGAR TODOS LOS DATOS
+  async function cargarTodo() {
+    if (!db) return;
     try {
-      const { data: cData } = await supabaseClient.from('clientes').select('*').order('created_at', { ascending: false });
-      if (cData && cData.length) DB_CLIENTES = cData;
+      const { data: clientes } = await db.from('clientes').select('*').order('created_at', { ascending: false });
+      if (clientes) clientesCache = clientes;
 
-      const { data: oData } = await supabaseClient.from('obras').select('*, clientes(*)').order('created_at', { ascending: false });
-      if (oData && oData.length) DB_OBRAS = oData;
+      const { data: tecnicos } = await db.from('tecnicos').select('*').order('created_at', { ascending: true });
+      if (tecnicos) tecnicosCache = tecnicos;
+
+      const { data: obras } = await db.from('obras').select('*, clientes(*), tecnicos(*)').order('created_at', { ascending: false });
+      if (obras) obrasCache = obras;
 
       renderDashboard();
       renderClientes();
-      renderObras();
+      renderObras(obrasCache);
       renderEnlaces();
-      poblarSelectClientesModal();
-    } catch (e) {
-      console.warn('Sincronización en segundo plano completada con datos locales.');
+      renderTecnicos();
+      poblarSelects();
+    } catch(err) {
+      console.error('Error al sincronizar datos:', err);
     }
   }
 
+  // 3. RENDERIZAR DASHBOARD
   function renderDashboard() {
-    const activas = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.fase_actual !== 'Entrega').length;
-    const porEntregar = DB_OBRAS.filter(o => o.fase_actual === 'Acabados' || o.fase_actual === 'Entrega').length;
-    const completadas = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
+    const activas = obrasCache.filter(o => o.estado === 'Activa').length;
+    const entrega = obrasCache.filter(o => o.estado === 'Por entregar' || o.porcentaje_avance >= 90).length;
+    const finalizadas = obrasCache.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
 
-    const elAct = document.getElementById('dash-obras-activas');
-    if (elAct) elAct.textContent = activas;
-    const elTot = document.getElementById('dash-total-clientes');
-    if (elTot) elTot.textContent = DB_CLIENTES.length;
-    const elEnt = document.getElementById('dash-por-entregar');
-    if (elEnt) elEnt.textContent = porEntregar;
-    const elComp = document.getElementById('dash-completadas');
-    if (elComp) elComp.textContent = completadas;
-    const elCorr = document.getElementById('correos-enviados-count');
-    if (elCorr) elCorr.textContent = DB_OBRAS.length;
+    document.getElementById('dash-obras-activas').textContent = activas;
+    document.getElementById('dash-clientes-total').textContent = clientesCache.length;
+    document.getElementById('dash-obras-entrega').textContent = entrega;
+    document.getElementById('dash-obras-completas').textContent = finalizadas;
+    document.getElementById('correos-enviados-count').textContent = obrasCache.length;
+    document.getElementById('bot-tecnicos-count').textContent = tecnicosCache.length;
 
-    const tbody = document.getElementById('dashboard-obras-body');
-    if (!tbody) return;
-
-    if (!DB_OBRAS.length) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">No hay obras creadas aún.</td></tr>`;
+    const tbody = document.getElementById('dash-tabla-recent');
+    if (!obrasCache.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">No hay obras registradas aún.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = DB_OBRAS.slice(0, 5).map(o => {
-      const cliente = o.clientes || { nombre: 'Cliente sin asignar', email: '-' };
+    tbody.innerHTML = obrasCache.slice(0, 5).map(o => {
+      const cli = o.clientes || {};
+      const tec = o.tecnicos || {};
+      const iniciales = ((cli.nombres?.[0] || '') + (cli.apellidos?.[0] || '')).toUpperCase() || 'DP';
       return `
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${getInitials(cliente.nombre)}</div>
+              <div class="avatar">${iniciales}</div>
               <div>
-                <div style="font-weight:600;">${cliente.nombre}</div>
-                <div style="font-size:11px;color:var(--stone);">${cliente.email}</div>
+                <div style="font-weight:600;">${cli.nombres || 'Sin nombre'} ${cli.apellidos || ''}</div>
+                <div style="font-size:11px;color:var(--stone);">${cli.correo_electronico || '-'}</div>
               </div>
             </div>
           </td>
-          <td><span class="badge ${getBadgeTipo(o.tipo)}">${o.tipo}</span></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
           <td>
             <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
             <div class="progress-label">${o.porcentaje_avance || 10}% — ${o.fase_actual || 'Diseño'}</div>
           </td>
-          <td style="color:var(--stone);font-size:12px;">${o.tecnico_asignado || 'Carlos Mora'}</td>
-          <td style="font-size:12px;">${formatDate(o.fecha_estimada_entrega)}</td>
-          <td><span class="badge ${o.estado === 'Finalizada' ? 'badge-done' : 'badge-active'}">${o.estado || 'Activa'}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.openDetailById('${o.id}')">Ver</button></td>
+          <td style="color:var(--stone);font-size:12px;">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
+          <td style="font-size:12px;">${o.fecha_entrega_estimada || 'Por definir'}</td>
+          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : (o.estado === 'Finalizada' ? 'badge-done' : 'badge-pending')}">${o.estado || 'Activa'}</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.verDetalleObra('${o.id}')">Ver</button></td>
         </tr>
       `;
     }).join('');
   }
 
-  function renderClientes(list = DB_CLIENTES) {
-    const tbody = document.getElementById('clientes-table-body');
+  // 4. RENDERIZAR CLIENTES
+  function renderClientes(lista = clientesCache) {
+    const tbody = document.getElementById('tabla-clientes-body');
     if (!tbody) return;
-
-    if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--stone);padding:20px;">No se encontraron clientes.</td></tr>`;
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">No se encontraron clientes.</td></tr>';
       return;
     }
-
-    tbody.innerHTML = list.map(c => {
-      const obrasCount = DB_OBRAS.filter(o => String(o.cliente_id) === String(c.id)).length;
+    tbody.innerHTML = lista.map(c => {
+      const ini = ((c.nombres?.[0] || '') + (c.apellidos?.[0] || '')).toUpperCase();
+      const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
       return `
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${getInitials(c.nombre)}</div>
+              <div class="avatar">${ini}</div>
               <div>
-                <div style="font-weight:600;">${c.nombre}</div>
-                <div style="font-size:11px;color:var(--stone);">${c.email}</div>
+                <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
+                <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
               </div>
             </div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${c.telefono || '-'}</td>
-          <td style="font-weight:600;">${obrasCount}</td>
-          <td><span class="badge ${c.estado === 'En obra' ? 'badge-active' : (c.estado === 'Finalizado' ? 'badge-done' : 'badge-pending')}">${c.estado || 'Prospecto'}</span></td>
-          <td style="font-size:12px;color:var(--stone);">${formatDate(c.created_at)}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Cliente: ${c.nombre}')">Ver ficha</button></td>
+          <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
+          <td style="font-weight:600;">${c.numero_cedula}</td>
+          <td>${getBadgeCliente(c.tipo_cliente)}</td>
+          <td style="font-size:12px;color:var(--stone);">${fecha}</td>
         </tr>
       `;
     }).join('');
   }
 
-  window.filterClientes = function() {
-    const query = (document.getElementById('search-clientes').value || '').toLowerCase();
-    const estado = document.getElementById('filter-clientes-estado').value;
+  window.filtrarClientes = function() {
+    const busqueda = (document.getElementById('busqueda-clientes')?.value || '').toLowerCase();
+    const filtroTipo = document.getElementById('filtro-tipo-cliente')?.value;
 
-    const filtered = DB_CLIENTES.filter(c => {
-      const matchText = (c.nombre || '').toLowerCase().includes(query) || (c.email || '').toLowerCase().includes(query) || (c.telefono || '').includes(query);
-      const matchEstado = !estado || c.estado === estado;
-      return matchText && matchEstado;
+    const filtrados = clientesCache.filter(c => {
+      const matchText = (c.nombres + ' ' + c.apellidos + ' ' + c.numero_cedula + ' ' + c.correo_electronico + ' ' + c.telefono_1).toLowerCase().includes(busqueda);
+      const matchTipo = filtroTipo ? c.tipo_cliente === filtroTipo : true;
+      return matchText && matchTipo;
     });
-
-    renderClientes(filtered);
+    renderClientes(filtrados);
   };
 
-  function renderObras() {
-    const countTodas = DB_OBRAS.length;
-    const countActivas = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.porcentaje_avance < 100).length;
-    const countEntregar = DB_OBRAS.filter(o => o.fase_actual === 'Acabados' || o.fase_actual === 'Entrega').length;
-    const countFinalizadas = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100).length;
-
-    const elTod = document.getElementById('count-todas');
-    if (elTod) elTod.textContent = countTodas;
-    const elAct = document.getElementById('count-activas');
-    if (elAct) elAct.textContent = countActivas;
-    const elEnt = document.getElementById('count-entregar');
-    if (elEnt) elEnt.textContent = countEntregar;
-    const elFin = document.getElementById('count-finalizadas');
-    if (elFin) elFin.textContent = countFinalizadas;
-
-    let filtered = DB_OBRAS;
-    if (activeObrasFilter === 'activas') filtered = DB_OBRAS.filter(o => o.estado !== 'Finalizada' && o.porcentaje_avance < 100);
-    if (activeObrasFilter === 'entregar') filtered = DB_OBRAS.filter(o => o.fase_actual === 'Acabados' || o.fase_actual === 'Entrega');
-    if (activeObrasFilter === 'finalizadas') filtered = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100);
-
-    const tbody = document.getElementById('obras-table-body');
+  // 5. RENDERIZAR OBRAS
+  function renderObras(lista = obrasCache) {
+    const tbody = document.getElementById('tabla-obras-body');
     if (!tbody) return;
-
-    if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--stone);padding:20px;">No hay obras en esta categoría.</td></tr>`;
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--stone);padding:20px;">No hay obras para mostrar.</td></tr>';
       return;
     }
-
-    tbody.innerHTML = filtered.map(o => {
-      const cliente = o.clientes || { nombre: 'Cliente no asignado' };
+    tbody.innerHTML = lista.map(o => {
+      const cli = o.clientes || {};
+      const tec = o.tecnicos || {};
       return `
         <tr>
-          <td style="font-weight:600;">${o.codigo || '#OBR-' + String(o.id).slice(0,3)}</td>
-          <td>${cliente.nombre}</td>
-          <td><span class="badge ${getBadgeTipo(o.tipo)}">${o.tipo}</span></td>
+          <td style="font-weight:700;color:var(--bronze);">${o.id_obra}</td>
+          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
           <td style="font-size:12px;">${o.fase_actual || 'Diseño'}</td>
           <td>
             <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
             <div class="progress-label">${o.porcentaje_avance || 10}%</div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${o.tecnico_asignado || 'Carlos Mora'}</td>
-          <td style="font-size:12px;">${formatDate(o.fecha_estimada_entrega)}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.openDetailById('${o.id}')">Ver</button></td>
+          <td style="font-size:12px;color:var(--stone);">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
+          <td style="font-size:12px;">${o.fecha_entrega_estimada || '-'}</td>
+          <td><button class="btn btn-outline btn-sm" onclick="window.verDetalleObra('${o.id}')">Ver</button></td>
         </tr>
       `;
     }).join('');
   }
 
-  window.setObrasFilter = function(filtro, el) {
-    activeObrasFilter = filtro;
-    document.querySelectorAll('#obras-tabs .tab').forEach(t => t.classList.remove('active'));
+  window.filtrarObrasTab = function(estado, el) {
+    document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
     if (el) el.classList.add('active');
-    renderObras();
+    if (estado === 'Todas') {
+      renderObras(obrasCache);
+    } else {
+      renderObras(obrasCache.filter(o => o.estado === estado));
+    }
   };
 
+  // 6. RENDERIZAR ENLACES
   function renderEnlaces() {
-    const tbody = document.getElementById('enlaces-table-body');
+    const tbody = document.getElementById('tabla-enlaces-body');
     if (!tbody) return;
-
-    if (!DB_OBRAS.length) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">No hay enlaces generados.</td></tr>`;
+    if (!obrasCache.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">No hay enlaces de seguimiento generados.</td></tr>';
       return;
     }
-
-    tbody.innerHTML = DB_OBRAS.map(o => {
-      const cliente = o.clientes || { nombre: 'Cliente no asignado' };
-      const trackingUrl = `https://disenos-pablin.vercel.app/tracking.html?t=${o.slug_tracking}`;
+    tbody.innerHTML = obrasCache.map(o => {
+      const cli = o.clientes || {};
+      const url = `https://disenos-pablin.vercel.app/tracking.html?t=${o.slug_tracking}`;
       return `
         <tr>
-          <td>${cliente.nombre}</td>
-          <td><span class="badge ${getBadgeTipo(o.tipo)}">${o.tipo} ${o.codigo || ''}</span></td>
-          <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${trackingUrl}</span></td>
-          <td><span class="badge badge-active">Activo</span></td>
+          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra} ${o.id_obra}</span></td>
+          <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${url}</span></td>
+          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : 'badge-done'}">${o.estado || 'Activa'}</span></td>
           <td style="display:flex;gap:6px;padding:14px 0;">
-            <button class="btn btn-outline btn-sm" onclick="window.copyLink('${trackingUrl}')">Copiar</button>
-            <button class="btn btn-outline btn-sm" onclick="window.open('${trackingUrl}', '_blank')">Abrir</button>
+            <button class="btn btn-outline btn-sm" onclick="window.copyLink('${url}')">Copiar</button>
+            <button class="btn btn-outline btn-sm" onclick="window.open('${url}','_blank')">Abrir</button>
           </td>
         </tr>
       `;
     }).join('');
   }
 
+  // 7. RENDERIZAR TÉCNICOS
   function renderTecnicos() {
-    const tbody = document.getElementById('tecnicos-table-body');
+    const tbody = document.getElementById('tabla-tecnicos-body');
     if (!tbody) return;
-
-    tbody.innerHTML = DB_TECNICOS.map(t => {
-      const obrasCount = DB_OBRAS.filter(o => o.tecnico_asignado === t.nombre).length;
+    if (!tecnicosCache.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--stone);padding:20px;">No hay técnicos registrados.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = tecnicosCache.map(t => {
+      const ini = ((t.nombres?.[0] || '') + (t.apellidos?.[0] || '')).toUpperCase();
       return `
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${getInitials(t.nombre)}</div>
+              <div class="avatar">${ini}</div>
               <div>
-                <div style="font-weight:600;">${t.nombre}</div>
-                <div style="font-size:11px;color:var(--stone);">${t.telefono}</div>
+                <div style="font-weight:600;">${t.nombres} ${t.apellidos}</div>
+                <div style="font-size:11px;color:var(--stone);">${t.telefono_1 || '-'}</div>
               </div>
             </div>
           </td>
-          <td><span style="font-family:monospace;background:var(--ivory);padding:3px 8px;border-radius:2px;font-size:12px;">${t.codigo}</span></td>
-          <td style="font-weight:600;">${obrasCount} obras</td>
-          <td><span class="badge badge-active">${t.estado}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Técnico: ${t.nombre}')">Editar</button></td>
+          <td><span style="font-family:monospace;background:var(--ivory);padding:4px 8px;border-radius:2px;font-size:12px;font-weight:700;color:var(--bronze);">${t.codigo_id}</span></td>
+          <td>${t.numero_cedula || '-'}</td>
+          <td><span class="badge badge-active">${t.activo ? 'Activo' : 'Inactivo'}</span></td>
         </tr>
       `;
     }).join('');
   }
 
-  function poblarSelectClientesModal() {
-    const select = document.getElementById('nueva-obra-cliente');
-    if (!select) return;
-
-    if (!DB_CLIENTES.length) {
-      select.innerHTML = '<option value="">No hay clientes (crea uno primero)</option>';
-      return;
+  function poblarSelects() {
+    const selCli = document.getElementById('obr-cliente-select');
+    if (selCli) {
+      selCli.innerHTML = '<option value="">Seleccionar cliente…</option>' + 
+        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula})</option>`).join('');
     }
-    select.innerHTML = '<option value="">Seleccionar cliente…</option>' + DB_CLIENTES.map(c => `<option value="${c.id}">${c.nombre} (${c.email})</option>`).join('');
+    const selTec = document.getElementById('obr-tecnico-select');
+    if (selTec) {
+      selTec.innerHTML = '<option value="">Sin asignar</option>' + 
+        tecnicosCache.map(t => `<option value="${t.id}">${t.nombres} ${t.apellidos} (${t.codigo_id})</option>`).join('');
+    }
   }
 
-  window.crearCliente = async function() {
-    const nombre = document.getElementById('nuevo-cliente-nombre').value.trim();
-    const email = document.getElementById('nuevo-cliente-email').value.trim();
-    const telefono = document.getElementById('nuevo-cliente-telefono').value.trim();
-    const estado = document.getElementById('nuevo-cliente-estado').value;
-    const notas = document.getElementById('nuevo-cliente-notas').value.trim();
+  // 8. GUARDAR NUEVO CLIENTE
+  window.guardarNuevoCliente = async function() {
+    const nombres = document.getElementById('cli-nombres')?.value.trim();
+    const apellidos = document.getElementById('cli-apellidos')?.value.trim();
+    const cedula = document.getElementById('cli-cedula')?.value.trim();
+    const correo = document.getElementById('cli-correo')?.value.trim();
+    const telefono = document.getElementById('cli-telefono')?.value.trim();
+    const tipo = document.getElementById('cli-tipo')?.value || 'NUEVO';
 
-    if (!nombre || !email) {
-      alert('Por favor ingresa al menos nombre y correo electrónico del cliente.');
+    if (!nombres || !apellidos || !cedula || !correo || !telefono) {
+      window.showToast('Por favor completa todos los campos requeridos');
       return;
     }
 
-    const nuevo = {
-      id: String(Date.now()),
-      nombre, email, telefono, estado, notas,
-      created_at: new Date().toISOString().split('T')[0]
-    };
+    const btn = document.getElementById('btn-submit-cliente');
+    if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
 
-    DB_CLIENTES.unshift(nuevo);
+    window.showToast('Guardando en Supabase...');
+    const { error } = await db.from('clientes').insert([{
+      nombres, apellidos, numero_cedula: cedula, correo_electronico: correo,
+      telefono_1: telefono, tipo_cliente: tipo
+    }]);
 
-    if (supabaseClient) {
-      supabaseClient.from('clientes').insert([{ nombre, email, telefono, estado, notas }]).then();
+    if (btn) { btn.disabled = false; btn.textContent = 'Guardar Cliente'; }
+
+    if (error) {
+      window.showToast('Error: ' + error.message);
+    } else {
+      window.closeModal('nuevo-cliente');
+      document.getElementById('cli-nombres').value = '';
+      document.getElementById('cli-apellidos').value = '';
+      document.getElementById('cli-cedula').value = '';
+      document.getElementById('cli-correo').value = '';
+      document.getElementById('cli-telefono').value = '';
+      window.showToast('Cliente registrado correctamente ✓');
+      await cargarTodo();
     }
-
-    window.closeModal('nuevo-cliente');
-    document.getElementById('nuevo-cliente-nombre').value = '';
-    document.getElementById('nuevo-cliente-email').value = '';
-    document.getElementById('nuevo-cliente-telefono').value = '';
-    document.getElementById('nuevo-cliente-notas').value = '';
-
-    window.showToast('Cliente registrado con éxito ✓');
-    renderClientes();
-    renderDashboard();
-    poblarSelectClientesModal();
   };
 
-  window.crearObra = async function() {
-    const clienteId = document.getElementById('nueva-obra-cliente').value;
-    const tipo = document.getElementById('nueva-obra-tipo').value;
-    const descripcion = document.getElementById('nueva-obra-desc').value.trim();
-    const tecnico = document.getElementById('nueva-obra-tecnico').value;
-    const fechaEntrega = document.getElementById('nueva-obra-fecha').value;
-    const enviarEmailAuto = document.getElementById('send-auto').checked;
+  // 9. GUARDAR NUEVA OBRA Y DISPARAR CORREO
+  window.guardarNuevaObra = async function() {
+    const clienteId = document.getElementById('obr-cliente-select')?.value;
+    const tipo = document.getElementById('obr-tipo')?.value || 'Cocina';
+    const desc = document.getElementById('obr-desc')?.value.trim();
+    const tecnicoId = document.getElementById('obr-tecnico-select')?.value || null;
+    const fecha = document.getElementById('obr-fecha')?.value || null;
+    const sendAuto = document.getElementById('send-auto')?.checked;
 
     if (!clienteId) {
-      alert('Por favor selecciona un cliente para la obra.');
+      window.showToast('Por favor selecciona un cliente');
       return;
     }
 
-    const cliente = DB_CLIENTES.find(c => String(c.id) === String(clienteId));
-    if (!cliente) {
-      alert('Cliente no válido.');
-      return;
-    }
+    const clienteSeleccionado = clientesCache.find(c => String(c.id) === String(clienteId));
 
     const btn = document.getElementById('btn-submit-obra');
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Creando Obra...';
-    }
+    if (btn) { btn.disabled = true; btn.textContent = 'Creando Obra...'; }
 
-    const slug = Math.random().toString(36).substring(2, 8) + Date.now().toString(36).substring(4);
-    const codigo = '#OBR-' + String(DB_OBRAS.length + 1).padStart(3, '0');
+    // Generar ID de Obra (#OBR-XXX)
+    const randomNum = Math.floor(100 + Math.random() * 900);
+    const autoIdObra = `#OBR-${randomNum}`;
+    const autoSlug = Math.random().toString(36).substring(2, 8);
 
-    const nuevaObra = {
-      id: String(Date.now()),
-      cliente_id: cliente.id,
-      codigo: codigo,
-      tipo: tipo,
-      descripcion: descripcion,
-      tecnico_asignado: tecnico,
-      fecha_estimada_entrega: fechaEntrega || null,
+    window.showToast('Creando obra en Supabase...');
+
+    const { error } = await db.from('obras').insert([{
+      id_obra: autoIdObra,
+      cliente_id: clienteId,
+      tecnico_id: tecnicoId,
+      categoria_obra: tipo,
+      descripcion: desc,
       fase_actual: 'Diseño',
       porcentaje_avance: 10,
-      slug_tracking: slug,
-      estado: 'Activa',
-      clientes: cliente
-    };
+      fecha_entrega_estimada: fecha,
+      slug_tracking: autoSlug,
+      estado: 'Activa'
+    }]);
 
-    DB_OBRAS.unshift(nuevaObra);
-
-    if (supabaseClient) {
-      supabaseClient.from('obras').insert([{
-        cliente_id: cliente.id,
-        codigo: codigo,
-        tipo: tipo,
-        descripcion: descripcion,
-        tecnico_asignado: tecnico,
-        fecha_estimada_entrega: fechaEntrega || null,
-        fase_actual: 'Diseño',
-        porcentaje_avance: 10,
-        slug_tracking: slug,
-        estado: 'Activa'
-      }]).then();
+    if (error) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Crear Obra'; }
+      window.showToast('Error: ' + error.message);
+      return;
     }
 
-    if (enviarEmailAuto) {
+    // Disparador de correo por Gmail SMTP
+    if (sendAuto && clienteSeleccionado && clienteSeleccionado.correo_electronico) {
       try {
         const res = await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            clienteNombre: cliente.nombre,
-            clienteEmail: cliente.email,
+            clienteNombre: `${clienteSeleccionado.nombres} ${clienteSeleccionado.apellidos}`,
+            clienteEmail: clienteSeleccionado.correo_electronico,
             tipoObra: tipo,
-            codigoObra: codigo,
-            slugTracking: slug
+            codigoObra: autoIdObra,
+            slugTracking: autoSlug
           })
         });
         const resData = await res.json();
         if (res.ok) {
-          window.showToast('Obra creada y correo enviado ✓');
+          window.showToast(`Obra ${autoIdObra} creada y correo enviado ✓`);
         } else {
-          window.showToast(`Obra creada. (${resData.error || 'Aviso de correo'})`);
+          window.showToast(`Obra ${autoIdObra} creada. (${resData.error || 'Aviso correo'})`);
         }
       } catch (err) {
-        window.showToast('Obra creada exitosamente ✓');
+        window.showToast(`Obra ${autoIdObra} creada exitosamente ✓`);
       }
     } else {
-      window.showToast('Obra creada exitosamente ✓');
+      window.showToast(`Obra ${autoIdObra} creada exitosamente ✓`);
     }
 
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Crear Obra';
-    }
-
+    if (btn) { btn.disabled = false; btn.textContent = 'Crear Obra'; }
     window.closeModal('nueva-obra');
-    document.getElementById('nueva-obra-desc').value = '';
-    document.getElementById('nueva-obra-fecha').value = '';
-
-    renderDashboard();
-    renderObras();
-    renderEnlaces();
+    document.getElementById('obr-desc').value = '';
+    document.getElementById('obr-fecha').value = '';
+    await cargarTodo();
   };
 
-  window.openDetailById = function(obraId) {
-    const obra = DB_OBRAS.find(o => String(o.id) === String(obraId));
+  // 10. GUARDAR NUEVO TÉCNICO
+  window.guardarNuevoTecnico = async function() {
+    const nombres = document.getElementById('tec-nombres')?.value.trim();
+    const apellidos = document.getElementById('tec-apellidos')?.value.trim();
+    const cedula = document.getElementById('tec-cedula')?.value.trim();
+    const telefono = document.getElementById('tec-telefono')?.value.trim();
+
+    if (!nombres || !apellidos) {
+      window.showToast('Por favor ingresa al menos nombre y apellido');
+      return;
+    }
+
+    const btn = document.getElementById('btn-submit-tecnico');
+    if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const autoIdTecnico = `TEC-${randomNum}`;
+
+    window.showToast('Registrando técnico...');
+
+    const { error } = await db.from('tecnicos').insert([{
+      codigo_id: autoIdTecnico,
+      nombres,
+      apellidos,
+      numero_cedula: cedula,
+      telefono_1: telefono,
+      activo: true
+    }]);
+
+    if (btn) { btn.disabled = false; btn.textContent = 'Guardar Técnico'; }
+
+    if (error) {
+      window.showToast('Error: ' + error.message);
+    } else {
+      window.closeModal('nuevo-tecnico');
+      document.getElementById('tec-nombres').value = '';
+      document.getElementById('tec-apellidos').value = '';
+      document.getElementById('tec-cedula').value = '';
+      document.getElementById('tec-telefono').value = '';
+      window.showToast(`Técnico registrado con ID: ${autoIdTecnico} ✓`);
+      await cargarTodo();
+    }
+  };
+
+  // 11. DETALLE LATERAL DE OBRA
+  window.verDetalleObra = function(obraId) {
+    const obra = obrasCache.find(o => String(o.id) === String(obraId));
     if (!obra) return;
     currentObraDetalle = obra;
 
-    const cliente = obra.clientes || { nombre: 'Sin cliente', email: '-', telefono: '-' };
-    document.getElementById('detail-codigo').textContent = obra.codigo || '#OBR-' + obra.id;
-    document.getElementById('detail-cliente').textContent = cliente.nombre;
-    document.getElementById('detail-tipo').textContent = obra.tipo;
-    document.getElementById('detail-tipo').className = 'badge ' + getBadgeTipo(obra.tipo);
-    document.getElementById('detail-email').textContent = cliente.email;
-    document.getElementById('detail-phone').textContent = cliente.telefono || '-';
-    document.getElementById('detail-tecnico').textContent = obra.tecnico_asignado || 'Carlos Mora';
-    document.getElementById('detail-fecha').textContent = formatDate(obra.fecha_estimada_entrega);
-    document.getElementById('detail-notas').value = obra.descripcion || '';
+    const cli = obra.clientes || {};
+    const tec = obra.tecnicos || {};
+    const url = `https://disenos-pablin.vercel.app/tracking.html?t=${obra.slug_tracking}`;
 
-    const trackingUrl = `https://disenos-pablin.vercel.app/tracking.html?t=${obra.slug_tracking}`;
-    document.getElementById('detail-link-url').textContent = trackingUrl;
-    document.getElementById('detail-link-copy').onclick = () => window.copyLink(trackingUrl);
+    document.getElementById('det-obra-id').textContent = `Obra ${obra.id_obra}`;
+    document.getElementById('det-cliente-nombre').textContent = `${cli.nombres || ''} ${cli.apellidos || ''}`;
+    document.getElementById('det-tipo-obra').textContent = obra.categoria_obra;
+    document.getElementById('det-tipo-obra').className = `badge ${getBadgeTipoObra(obra.categoria_obra)}`;
+
+    document.getElementById('det-correo').textContent = cli.correo_electronico || '-';
+    document.getElementById('det-telefono').textContent = cli.telefono_1 || '-';
+    document.getElementById('det-tecnico').textContent = tec.nombres ? `${tec.nombres} ${tec.apellidos}` : 'Sin asignar';
+    document.getElementById('det-entrega').textContent = obra.fecha_entrega_estimada || 'Por definir';
+    document.getElementById('det-descripcion').value = obra.descripcion || '';
+
+    document.getElementById('det-link-url').textContent = url;
+    document.getElementById('det-link-copy-btn').onclick = () => window.copyLink(url);
 
     renderFasesDetalle(obra.fase_actual);
-    document.getElementById('detail-panel').classList.add('open');
+    window.openDetail();
   };
 
   function renderFasesDetalle(faseActual) {
-    const container = document.getElementById('detail-phases-container');
-    if (!container) return;
+    const container = document.getElementById('det-phases-list');
     const idxActual = FASES.findIndex(f => f.nombre.toLowerCase() === (faseActual || 'diseño').toLowerCase());
-    
+
     container.innerHTML = FASES.map((f, i) => {
       let dotClass = '';
-      let nameClass = '';
-      let statusText = 'Pendiente';
+      let textClass = '';
+      let infoText = 'Pendiente';
 
       if (i < idxActual) {
         dotClass = 'done';
-        statusText = 'Completado';
+        infoText = 'Completado';
       } else if (i === idxActual) {
         dotClass = 'current';
-        nameClass = '';
-        statusText = `En progreso — ${f.porcentaje}%`;
+        infoText = `En progreso — ${f.porcentaje}%`;
       } else {
-        nameClass = 'pending';
+        textClass = 'pending';
       }
 
       return `
         <div class="phase-item">
           <div class="phase-dot ${dotClass}"></div>
           <div class="phase-info">
-            <div class="phase-name ${nameClass}">${f.nombre}</div>
-            <div class="phase-date">${statusText}</div>
+            <div class="phase-name ${textClass}">${f.nombre}</div>
+            <div class="phase-date">${infoText}</div>
           </div>
         </div>
       `;
@@ -1734,42 +1724,48 @@
     
     if (idx < FASES.length - 1) {
       const nextFase = FASES[idx + 1];
-      currentObraDetalle.fase_actual = nextFase.nombre;
-      currentObraDetalle.porcentaje_avance = nextFase.porcentaje;
-      if (nextFase.porcentaje === 100) currentObraDetalle.estado = 'Finalizada';
+      const btn = document.getElementById('btn-next-phase');
+      if (btn) { btn.disabled = true; btn.textContent = 'Actualizando...'; }
 
-      if (supabaseClient) {
-        supabaseClient.from('obras').update({
-          fase_actual: nextFase.nombre,
-          porcentaje_avance: nextFase.porcentaje,
-          estado: nextFase.porcentaje === 100 ? 'Finalizada' : 'Activa'
-        }).eq('id', currentObraDetalle.id).then();
+      const updateData = {
+        fase_actual: nextFase.nombre,
+        porcentaje_avance: nextFase.porcentaje,
+        estado: nextFase.porcentaje === 100 ? 'Finalizada' : 'Activa'
+      };
+
+      const { error } = await db.from('obras').update(updateData).eq('id', currentObraDetalle.id);
+      if (btn) { btn.disabled = false; btn.textContent = 'Avanzar a siguiente fase'; }
+
+      if (error) {
+        window.showToast('Error al actualizar fase: ' + error.message);
+        return;
       }
 
+      currentObraDetalle.fase_actual = nextFase.nombre;
+      currentObraDetalle.porcentaje_avance = nextFase.porcentaje;
       renderFasesDetalle(nextFase.nombre);
-      renderDashboard();
-      renderObras();
-      window.showToast(`Fase avanzada a: ${nextFase.nombre} (${nextFase.porcentaje}%) ✓`);
+      window.showToast(`Fase actualizada a: ${nextFase.nombre} (${nextFase.porcentaje}%) ✓`);
+      await cargarTodo();
     } else {
-      window.showToast('La obra ya está en la fase final (Entrega 100%)');
+      window.showToast('La obra ya se encuentra en la fase final (Entrega 100%)');
     }
   };
 
-  window.guardarNotasObraActual = function() {
+  window.guardarNotasObraActual = async function() {
     if (!currentObraDetalle) return;
-    const nota = document.getElementById('detail-notas').value;
-    currentObraDetalle.descripcion = nota;
-    if (supabaseClient) {
-      supabaseClient.from('obras').update({ descripcion: nota }).eq('id', currentObraDetalle.id).then();
+    const nota = document.getElementById('det-descripcion').value;
+    const { error } = await db.from('obras').update({ descripcion: nota }).eq('id', currentObraDetalle.id);
+    if (!error) {
+      window.showToast('Notas de la obra guardadas ✓');
+      currentObraDetalle.descripcion = nota;
     }
-    window.showToast('Notas guardadas ✓');
   };
 
   window.enviarCorreoObraActual = async function() {
     if (!currentObraDetalle) return;
-    const cliente = currentObraDetalle.clientes;
-    if (!cliente || !cliente.email) {
-      alert('El cliente no tiene un correo válido.');
+    const cli = currentObraDetalle.clientes;
+    if (!cli || !cli.correo_electronico) {
+      window.showToast('El cliente no tiene un correo registrado.');
       return;
     }
     window.showToast('Enviando correo...');
@@ -1778,51 +1774,82 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          clienteNombre: cliente.nombre,
-          clienteEmail: cliente.email,
-          tipoObra: currentObraDetalle.tipo,
-          codigoObra: currentObraDetalle.codigo,
+          clienteNombre: `${cli.nombres} ${cli.apellidos}`,
+          clienteEmail: cli.correo_electronico,
+          tipoObra: currentObraDetalle.categoria_obra,
+          codigoObra: currentObraDetalle.id_obra,
           slugTracking: currentObraDetalle.slug_tracking
         })
       });
       if (res.ok) window.showToast('Correo reenviado con éxito ✓');
       else window.showToast('Error al enviar correo');
     } catch(e) {
-      window.showToast('Servidor de correos ocupado');
+      window.showToast('Error de conexión con el servidor de correo');
     }
   };
 
   window.enviarWhatsAppObraActual = function() {
     if (!currentObraDetalle) return;
-    const cliente = currentObraDetalle.clientes;
-    const phone = (cliente?.telefono || '').replace(/\D/g, '');
+    const cli = currentObraDetalle.clientes;
+    const phone = (cli?.telefono_1 || '').replace(/\D/g, '');
     const url = `https://disenos-pablin.vercel.app/tracking.html?t=${currentObraDetalle.slug_tracking}`;
-    const msg = encodeURIComponent(`Hola ${cliente?.nombre || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.tipo} (${currentObraDetalle.codigo}): ${url}`);
+    const msg = encodeURIComponent(`Hola ${cli?.nombres || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.categoria_obra} (${currentObraDetalle.id_obra}): ${url}`);
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
 
-  function getInitials(name) {
-    if (!name) return 'DP';
-    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-  }
+  // 12. NAVEGACIÓN Y MODALES
+  window.showView = function(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    const target = document.getElementById('view-' + name);
+    if (target) target.classList.add('active');
 
-  function formatDate(dStr) {
-    if (!dStr) return 'Pendiente';
-    try {
-      const d = new Date(dStr);
-      return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-    } catch {
-      return dStr;
+    const nav = document.getElementById('nav-' + name);
+    if (nav) nav.classList.add('active');
+
+    const titles = {
+      dashboard:'Dashboard', clientes:'Clientes', obras:'Obras',
+      enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp',
+      tecnicos:'Técnicos', configuracion:'Configuración'
+    };
+    const titleEl = document.getElementById('topbar-title');
+    if (titleEl) titleEl.textContent = titles[name] || name;
+    window.closeDetail();
+  };
+
+  window.openModal = function(id) { document.getElementById('modal-' + id)?.classList.add('open'); };
+  window.closeModal = function(id) { document.getElementById('modal-' + id)?.classList.remove('open'); };
+  window.openDetail = function() { document.getElementById('detail-panel')?.classList.add('open'); };
+  window.closeDetail = function() { document.getElementById('detail-panel')?.classList.remove('open'); };
+
+  window.copyLink = function(url) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => window.showToast('Enlace copiado al portapapeles ✓')).catch(() => window.showToast('Enlace copiado ✓'));
+    } else {
+      window.showToast('Enlace copiado ✓');
     }
-  }
+  };
 
-  function getBadgeTipo(tipo = '') {
-    const t = (tipo || '').toLowerCase();
-    if (t.includes('cocina')) return 'badge-cocina';
-    if (t.includes('baño') || t.includes('bano')) return 'badge-bano';
-    if (t.includes('closet')) return 'badge-closet';
-    return 'badge-deco';
-  }
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-msg');
+    if (msgEl) msgEl.textContent = msg;
+    if (t) {
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+  };
+
+  // Inicialización
+  window.addEventListener('DOMContentLoaded', () => {
+    cargarTodo();
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+  });
 </script>
 </body>
 </html>
