@@ -101,6 +101,7 @@
     transition: all 0.15s;
     border-left: 2px solid transparent;
     text-decoration: none;
+    user-select: none;
   }
   .nav-item:hover {
     color: var(--ivory);
@@ -111,7 +112,7 @@
     border-left-color: var(--bronze);
     background: rgba(183,134,82,0.08);
   }
-  .nav-item svg { opacity: 0.7; flex-shrink: 0; }
+  .nav-item svg { opacity: 0.7; flex-shrink: 0; pointer-events: none; }
   .nav-item.active svg { opacity: 1; }
 
   .sidebar-footer {
@@ -621,46 +622,6 @@
   }
   .link-copy:hover { border-color: var(--bronze); color: var(--bronze); }
 
-  /* Photo grid */
-  .photo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .photo-thumb {
-    aspect-ratio: 1;
-    background: var(--sand);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-  }
-  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .photo-thumb .photo-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(29,29,29,0.6);
-    color: var(--ivory);
-    font-size: 9px;
-    padding: 4px 6px;
-    font-family: var(--font-title);
-    letter-spacing: 0.08em;
-  }
-  .photo-add {
-    aspect-ratio: 1;
-    background: var(--ivory);
-    border: 1px dashed var(--sand);
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--stone);
-    font-size: 22px;
-    transition: all 0.15s;
-  }
-  .photo-add:hover { border-color: var(--bronze); color: var(--bronze); }
-
   /* Search */
   .search-bar {
     display: flex;
@@ -714,7 +675,6 @@
   .toast.show { display: flex; }
   .toast-accent { width: 3px; height: 100%; background: var(--bronze); }
 
-  /* RESPONSIVE */
   @media (max-width: 900px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .detail-panel { width: 100%; }
@@ -732,39 +692,39 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
-    <a class="nav-item active" onclick="showView('dashboard', event)">
+    <a class="nav-item active" id="nav-dashboard" onclick="showView('dashboard')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Dashboard
     </a>
-    <a class="nav-item" onclick="showView('clientes', event)">
+    <a class="nav-item" id="nav-clientes" onclick="showView('clientes')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Clientes
     </a>
-    <a class="nav-item" onclick="showView('obras', event)">
+    <a class="nav-item" id="nav-obras" onclick="showView('obras')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Obras
     </a>
-    <a class="nav-item" onclick="showView('enlaces', event)">
+    <a class="nav-item" id="nav-enlaces" onclick="showView('enlaces')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       Enlaces
     </a>
 
     <div class="nav-section-label">Comunicación</div>
-    <a class="nav-item" onclick="showView('correos', event)">
+    <a class="nav-item" id="nav-correos" onclick="showView('correos')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Correos
     </a>
-    <a class="nav-item" onclick="showView('bot', event)">
+    <a class="nav-item" id="nav-bot" onclick="showView('bot')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Bot WhatsApp
     </a>
 
     <div class="nav-section-label">Sistema</div>
-    <a class="nav-item" onclick="showView('tecnicos', event)">
+    <a class="nav-item" id="nav-tecnicos" onclick="showView('tecnicos')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Técnicos
     </a>
-    <a class="nav-item" onclick="showView('configuracion', event)">
+    <a class="nav-item" id="nav-configuracion" onclick="showView('configuracion')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.41 13.16l-1.41-1.41A8 8 0 0 0 5.34 5.34L3.93 3.93A10 10 0 0 1 19.07 4.93z"/></svg>
       Configuración
     </a>
@@ -796,7 +756,7 @@
           <h1>Dashboard</h1>
           <p>"Espacios que inspiran"</p>
         </div>
-        <span id="current-date" style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;">Martes, 18 Agosto 2026</span>
+        <span style="font-size:11px;color:var(--stone);font-family:var(--font-title);letter-spacing:0.1em;">Martes, 18 Agosto 2026</span>
       </div>
 
       <div class="stats-row">
@@ -822,7 +782,6 @@
         </div>
       </div>
 
-      <!-- Obras recientes -->
       <div class="card">
         <div class="card-title">Obras recientes</div>
         <div class="table-wrap">
@@ -953,7 +912,7 @@
     <div class="view" id="view-correos">
       <div class="page-header">
         <div><h1>Correos</h1><p>"Comunicación automática y personalizada"</p></div>
-        <button class="btn btn-primary" onclick="showToast('El disparador de correo está activo con Gmail SMTP')">Estado del Servicio</button>
+        <button class="btn btn-primary" onclick="showToast('Motor Gmail SMTP conectado y listo')">Estado del Servicio</button>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
         <div class="stat-card"><div class="stat-number" id="correos-enviados-count">0</div><div class="stat-label">Enviados automáticamente</div></div>
@@ -968,7 +927,7 @@
               <td style="font-weight:600;">Nueva obra creada</td>
               <td style="font-size:12px;color:var(--stone);">Bienvenida + enlace tracking personalizado</td>
               <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="showToast('Plantilla automática en funcionamiento')">Ver</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="showToast('Plantilla activa en envíos')">Ver</button></td>
             </tr>
             <tr>
               <td style="font-weight:600;">Cambio de fase</td>
@@ -1073,7 +1032,7 @@
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 </main>
 
 <!-- DETAIL PANEL DINÁMICO -->
@@ -1097,9 +1056,7 @@
 
     <div class="detail-section">
       <div class="detail-section-title">Fases de avance</div>
-      <div class="phases" id="detail-phases-container">
-        <!-- Generado dinámicamente -->
-      </div>
+      <div class="phases" id="detail-phases-container"></div>
       <div style="margin-top:16px;">
         <button class="btn btn-bronze btn-sm" id="btn-next-phase" style="width:100%;" onclick="avanzarFaseObraActual()">Avanzar a siguiente fase</button>
       </div>
@@ -1170,7 +1127,7 @@
       </div>
       <div class="form-group" style="display:flex;align-items:center;gap:10px;">
         <input type="checkbox" id="send-auto" checked style="accent-color:var(--bronze);width:16px;height:16px;">
-        <label for="send-auto" style="font-size:13px;cursor:pointer;">Enviar correo de bienvenida con tracking automático al cliente</label>
+        <label for="send-auto" style="font-size:13px;cursor:pointer;">Enviar correo de bienvenida con tracking automático</label>
       </div>
     </div>
     <div class="modal-footer">
@@ -1254,7 +1211,6 @@
     { nombre: 'Entrega', porcentaje: 100 }
   ];
 
-  // INICIALIZACIÓN
   window.addEventListener('DOMContentLoaded', async () => {
     await cargarDatos();
     renderTecnicos();
@@ -1262,11 +1218,11 @@
 
   async function cargarDatos() {
     try {
-      const { data: clientes, error: errC } = await supabase.from('clientes').select('*').order('created_at', { ascending: false });
-      if (!errC && clientes) DB_CLIENTES = clientes;
+      const { data: clientes } = await supabase.from('clientes').select('*').order('created_at', { ascending: false });
+      if (clientes) DB_CLIENTES = clientes;
 
-      const { data: obras, error: errO } = await supabase.from('obras').select('*, clientes(*)').order('created_at', { ascending: false });
-      if (!errO && obras) DB_OBRAS = obras;
+      const { data: obras } = await supabase.from('obras').select('*, clientes(*)').order('created_at', { ascending: false });
+      if (obras) DB_OBRAS = obras;
 
       renderDashboard();
       renderClientes();
@@ -1274,28 +1230,28 @@
       renderEnlaces();
       poblarSelectClientesModal();
     } catch (e) {
-      console.error('Error cargando datos de Supabase:', e);
+      console.error('Error cargando datos:', e);
     }
   }
 
-  // NAVEGACIÓN DE VISTAS
-  function showView(name, evt) {
+  // NAVEGACIÓN BLINDADA
+  function showView(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     
     const targetView = document.getElementById('view-' + name);
     if (targetView) targetView.classList.add('active');
-    
-    if (evt && evt.currentTarget) {
-      evt.currentTarget.classList.add('active');
-    }
+
+    const activeNav = document.getElementById('nav-' + name);
+    if (activeNav) activeNav.classList.add('active');
     
     const titles = {
       dashboard: 'Dashboard', clientes: 'Clientes', obras: 'Obras',
       enlaces: 'Enlaces', correos: 'Correos', bot: 'Bot WhatsApp',
       tecnicos: 'Técnicos', configuracion: 'Configuración'
     };
-    document.getElementById('topbar-title').textContent = titles[name] || name;
+    const titleEl = document.getElementById('topbar-title');
+    if (titleEl) titleEl.textContent = titles[name] || name;
     closeDetail();
   }
 
@@ -1312,6 +1268,8 @@
     document.getElementById('correos-enviados-count').textContent = DB_OBRAS.length;
 
     const tbody = document.getElementById('dashboard-obras-body');
+    if (!tbody) return;
+
     if (!DB_OBRAS.length) {
       tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--stone);padding:20px;">No hay obras creadas aún.</td></tr>`;
       return;
@@ -1348,6 +1306,8 @@
   // RENDER CLIENTES
   function renderClientes(list = DB_CLIENTES) {
     const tbody = document.getElementById('clientes-table-body');
+    if (!tbody) return;
+
     if (!list.length) {
       tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--stone);padding:20px;">No se encontraron clientes.</td></tr>`;
       return;
@@ -1370,7 +1330,7 @@
           <td style="font-weight:600;">${obrasCount}</td>
           <td><span class="badge ${c.estado === 'En obra' ? 'badge-active' : (c.estado === 'Finalizado' ? 'badge-done' : 'badge-pending')}">${c.estado || 'Prospecto'}</span></td>
           <td style="font-size:12px;color:var(--stone);">${formatDate(c.created_at)}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="showToast('Cliente: ' + '${c.nombre}')">Ver ficha</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="showToast('Cliente: ${c.nombre}')">Ver ficha</button></td>
         </tr>
       `;
     }).join('');
@@ -1407,6 +1367,8 @@
     if (activeObrasFilter === 'finalizadas') filtered = DB_OBRAS.filter(o => o.estado === 'Finalizada' || o.porcentaje_avance === 100);
 
     const tbody = document.getElementById('obras-table-body');
+    if (!tbody) return;
+
     if (!filtered.length) {
       tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--stone);padding:20px;">No hay obras en esta categoría.</td></tr>`;
       return;
@@ -1443,6 +1405,8 @@
   // RENDER ENLACES
   function renderEnlaces() {
     const tbody = document.getElementById('enlaces-table-body');
+    if (!tbody) return;
+
     if (!DB_OBRAS.length) {
       tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--stone);padding:20px;">No hay enlaces generados.</td></tr>`;
       return;
@@ -1469,6 +1433,8 @@
   // RENDER TÉCNICOS
   function renderTecnicos() {
     const tbody = document.getElementById('tecnicos-table-body');
+    if (!tbody) return;
+
     tbody.innerHTML = DB_TECNICOS.map(t => {
       const obrasCount = DB_OBRAS.filter(o => o.tecnico_asignado === t.nombre).length;
       return `
@@ -1485,7 +1451,7 @@
           <td><span style="font-family:monospace;background:var(--ivory);padding:3px 8px;border-radius:2px;font-size:12px;">${t.codigo}</span></td>
           <td style="font-weight:600;">${obrasCount} obras</td>
           <td><span class="badge badge-active">${t.estado}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="showToast('Técnico: ' + '${t.nombre}')">Editar</button></td>
+          <td><button class="btn btn-outline btn-sm" onclick="showToast('Técnico: ${t.nombre}')">Editar</button></td>
         </tr>
       `;
     }).join('');
@@ -1494,6 +1460,8 @@
 
   function poblarSelectClientesModal() {
     const select = document.getElementById('nueva-obra-cliente');
+    if (!select) return;
+
     if (!DB_CLIENTES.length) {
       select.innerHTML = '<option value="">No hay clientes (crea uno primero)</option>';
       return;
@@ -1518,9 +1486,9 @@
     btn.disabled = true;
     btn.textContent = 'Guardando...';
 
-    const { data, error } = await supabase.from('clientes').insert([{
+    const { error } = await supabase.from('clientes').insert([{
       nombre, email, telefono, estado, notas
-    }]).select();
+    }]);
 
     btn.disabled = false;
     btn.textContent = 'Guardar Cliente';
@@ -1567,7 +1535,7 @@
     const slug = Math.random().toString(36).substring(2, 8) + Date.now().toString(36).substring(4);
     const codigo = '#OBR-' + String(DB_OBRAS.length + 1).padStart(3, '0');
 
-    const { data, error } = await supabase.from('obras').insert([{
+    const { error } = await supabase.from('obras').insert([{
       cliente_id: cliente.id,
       codigo: codigo,
       tipo: tipo,
@@ -1578,16 +1546,15 @@
       porcentaje_avance: 10,
       slug_tracking: slug,
       estado: 'Activa'
-    }]).select();
+    }]);
 
     if (error) {
       btn.disabled = false;
       btn.textContent = 'Crear Obra';
-      alert('Error al crear obra en Supabase: ' + error.message);
+      alert('Error al crear obra: ' + error.message);
       return;
     }
 
-    // ENVÍO DE CORREO AUTOMÁTICO VÍA SERVERLESS GMAIL
     if (enviarEmailAuto) {
       try {
         const res = await fetch('/api/send-email', {
