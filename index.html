@@ -1336,50 +1336,120 @@
   <span id="toast-msg"></span>
 </div>
 
+<!-- Librería oficial de Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-  function showView(name) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('view-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
-    const titles = {
-      dashboard:'Dashboard', clientes:'Clientes', obras:'Obras',
-      enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp',
-      tecnicos:'Técnicos', configuracion:'Configuración'
-    };
-    document.getElementById('topbar-title').textContent = titles[name] || name;
-    closeDetail();
+  // 1. Conexión con Supabase
+  const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // 2. Función para guardar cliente real en la base de datos
+  async function guardarNuevoCliente() {
+    const nombres = document.getElementById('cli-nombres')?.value;
+    const apellidos = document.getElementById('cli-apellidos')?.value;
+    const cedula = document.getElementById('cli-cedula')?.value;
+    const correo = document.getElementById('cli-correo')?.value;
+    const telefono = document.getElementById('cli-telefono')?.value;
+    const tipo = document.getElementById('cli-tipo')?.value || 'En obra';
+
+    if (!nombres || !apellidos || !cedula || !correo || !telefono) {
+      showToast('Por favor completa todos los campos requeridos');
+      return;
+    }
+
+    const { error } = await db.from('clientes').insert([{
+      nombres: nombres,
+      apellidos: apellidos,
+      numero_cedula: cedula,
+      correo_electronico: correo,
+      telefono_1: telefono,
+      tipo_cliente: tipo
+    }]);
+
+    if (error) {
+      showToast('Error al guardar: ' + error.message);
+    } else {
+      closeModal('nuevo-cliente');
+      showToast('Cliente guardado con éxito en Supabase ✓');
+      cargarDatosPanel();
+    }
   }
 
-  function openModal(id) {
-    document.getElementById('modal-' + id).classList.add('open');
+  // 3. Función para cargar clientes reales en la tabla
+  async function cargarDatosPanel() {
+    const { data: clientes, error } = await db.from('clientes').select('*').order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error cargando clientes:', error);
+      return;
+    }
+
+    const tbodyClientes = document.getElementById('tabla-clientes-body');
+    if (tbodyClientes && clientes) {
+      tbodyClientes.innerHTML = clientes.map(c => `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">${(c.nombres[0] || '') + (c.apellidos[0] || '')}</div>
+              <div>
+                <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
+                <div style="font-size:11px;color:var(--stone);">${c.correo_electronico}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:12px;color:var(--stone);">${c.telefono_1}</td>
+          <td style="font-weight:600;">${c.numero_cedula}</td>
+          <td><span class="badge badge-active">${c.tipo_cliente || 'En obra'}</span></td>
+          <td style="font-size:12px;color:var(--stone);">${new Date(c.created_at).toLocaleDateString('es-EC')}</td>
+          <td><button class="btn btn-outline btn-sm">Ver ficha</button></td>
+        </tr>
+      `).join('');
+    }
   }
-  function closeModal(id) {
-    document.getElementById('modal-' + id).classList.remove('open');
-  }
-  document.querySelectorAll('.modal-overlay').forEach(o => {
-    o.addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('open');
+
+  // Carga automática al abrir
+  window.addEventListener('DOMContentLoaded', () => {
+    cargarDatosPanel();
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
     });
   });
 
-  function openDetail(id) {
-    document.getElementById('detail-panel').classList.add('open');
-  }
-  function closeDetail() {
-    document.getElementById('detail-panel').classList.remove('open');
+  // Funciones de navegación e interacción de la interfaz
+  function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const target = document.getElementById('view-' + name);
+    if (target) target.classList.add('active');
+    if (event?.currentTarget) event.currentTarget.classList.add('active');
+    const titles = { dashboard:'Dashboard', clientes:'Clientes', obras:'Obras', enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp', tecnicos:'Técnicos', configuracion:'Configuración' };
+    const titleEl = document.getElementById('topbar-title');
+    if (titleEl) titleEl.textContent = titles[name] || name;
+    closeDetail();
   }
 
+  function openModal(id) { document.getElementById('modal-' + id)?.classList.add('open'); }
+  function closeModal(id) { document.getElementById('modal-' + id)?.classList.remove('open'); }
+  function openDetail(id) { document.getElementById('detail-panel')?.classList.add('open'); }
+  function closeDetail() { document.getElementById('detail-panel')?.classList.remove('open'); }
+
   function copyLink(url) {
-    navigator.clipboard?.writeText(url).catch(()=>{});
+    navigator.clipboard?.writeText(url).catch(() => {});
     showToast('Enlace copiado al portapapeles ✓');
   }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    const msgEl = document.getElementById('toast-msg');
+    if (msgEl) msgEl.textContent = msg;
+    if (t) {
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
   }
 </script>
 </body>
