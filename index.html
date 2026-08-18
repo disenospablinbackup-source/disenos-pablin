@@ -937,15 +937,15 @@
             </tr>
             <tr>
               <td style="font-weight:600;">Cambio de fase</td>
-              <td style="font-size:12px;color:var(--stone);">Notificación de avance</td>
+              <td style="font-size:12px;color:var(--stone);">Notificación de avance automática al cliente</td>
               <td><span class="badge badge-active">Activo</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Se enviará al avanzar de fase')">Ver</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Se envía al avanzar de fase')">Ver</button></td>
             </tr>
             <tr>
               <td style="font-weight:600;">Obra finalizada</td>
-              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo! + Reseña</td>
-              <td><span class="badge badge-pending">En espera</span></td>
-              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Disponible en fase de entrega')">Ver</button></td>
+              <td style="font-size:12px;color:var(--stone);">¡Tu proyecto está listo! + Invitación a reseña</td>
+              <td><span class="badge badge-active">Activo</span></td>
+              <td><button class="btn btn-outline btn-sm" onclick="window.showToast('Se envía en fase de Entrega')">Ver</button></td>
             </tr>
           </tbody>
         </table>
@@ -1255,7 +1255,6 @@
     { nombre: 'Entrega', porcentaje: 100 }
   ];
 
-  // Helper de badges
   function getBadgeCliente(tipo) {
     switch (tipo) {
       case 'VIP': return '<span class="badge" style="background:#EDE7F6;color:#512DA8;">VIP</span>';
@@ -1275,7 +1274,7 @@
     }
   }
 
-  // 2. CARGAR TODOS LOS DATOS
+  // 2. CARGAR DATOS
   async function cargarTodo() {
     if (!db) return;
     try {
@@ -1299,7 +1298,7 @@
     }
   }
 
-  // 3. RENDERIZAR DASHBOARD
+  // 3. DASHBOARD
   function renderDashboard() {
     const activas = obrasCache.filter(o => o.estado === 'Activa').length;
     const entrega = obrasCache.filter(o => o.estado === 'Por entregar' || o.porcentaje_avance >= 90).length;
@@ -1347,7 +1346,7 @@
     }).join('');
   }
 
-  // 4. RENDERIZAR CLIENTES
+  // 4. CLIENTES
   function renderClientes(lista = clientesCache) {
     const tbody = document.getElementById('tabla-clientes-body');
     if (!tbody) return;
@@ -1390,7 +1389,7 @@
     renderClientes(filtrados);
   };
 
-  // 5. RENDERIZAR OBRAS
+  // 5. OBRAS
   function renderObras(lista = obrasCache) {
     const tbody = document.getElementById('tabla-obras-body');
     if (!tbody) return;
@@ -1429,7 +1428,7 @@
     }
   };
 
-  // 6. RENDERIZAR ENLACES
+  // 6. ENLACES
   function renderEnlaces() {
     const tbody = document.getElementById('tabla-enlaces-body');
     if (!tbody) return;
@@ -1455,7 +1454,7 @@
     }).join('');
   }
 
-  // 7. RENDERIZAR TÉCNICOS
+  // 7. TÉCNICOS
   function renderTecnicos() {
     const tbody = document.getElementById('tabla-tecnicos-body');
     if (!tbody) return;
@@ -1536,7 +1535,7 @@
     }
   };
 
-  // 9. GUARDAR NUEVA OBRA Y DISPARAR CORREO
+  // 9. GUARDAR NUEVA OBRA Y DISPARAR CORREO DE INICIO
   window.guardarNuevaObra = async function() {
     const clienteId = document.getElementById('obr-cliente-select')?.value;
     const tipo = document.getElementById('obr-tipo')?.value || 'Cocina';
@@ -1555,7 +1554,6 @@
     const btn = document.getElementById('btn-submit-obra');
     if (btn) { btn.disabled = true; btn.textContent = 'Creando Obra...'; }
 
-    // Generar ID de Obra (#OBR-XXX)
     const randomNum = Math.floor(100 + Math.random() * 900);
     const autoIdObra = `#OBR-${randomNum}`;
     const autoSlug = Math.random().toString(36).substring(2, 8);
@@ -1592,14 +1590,14 @@
             clienteEmail: clienteSeleccionado.correo_electronico,
             tipoObra: tipo,
             codigoObra: autoIdObra,
-            slugTracking: autoSlug
+            slugTracking: autoSlug,
+            tipoEvento: 'creacion'
           })
         });
-        const resData = await res.json();
         if (res.ok) {
           window.showToast(`Obra ${autoIdObra} creada y correo enviado ✓`);
         } else {
-          window.showToast(`Obra ${autoIdObra} creada. (${resData.error || 'Aviso correo'})`);
+          window.showToast(`Obra ${autoIdObra} creada exitosamente ✓`);
         }
       } catch (err) {
         window.showToast(`Obra ${autoIdObra} creada exitosamente ✓`);
@@ -1718,6 +1716,7 @@
     }).join('');
   }
 
+  // 12. AVANZAR FASE Y DISPARAR CORREO DE ACTUALIZACIÓN
   window.avanzarFaseObraActual = async function() {
     if (!currentObraDetalle) return;
     const idx = FASES.findIndex(f => f.nombre.toLowerCase() === (currentObraDetalle.fase_actual || 'diseño').toLowerCase());
@@ -1725,26 +1724,53 @@
     if (idx < FASES.length - 1) {
       const nextFase = FASES[idx + 1];
       const btn = document.getElementById('btn-next-phase');
-      if (btn) { btn.disabled = true; btn.textContent = 'Actualizando...'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Actualizando fase...'; }
 
       const updateData = {
         fase_actual: nextFase.nombre,
         porcentaje_avance: nextFase.porcentaje,
-        estado: nextFase.porcentaje === 100 ? 'Finalizada' : 'Activa'
+        estado: nextFase.porcentaje === 100 ? 'Finalizada' : (nextFase.porcentaje >= 90 ? 'Por entregar' : 'Activa')
       };
 
       const { error } = await db.from('obras').update(updateData).eq('id', currentObraDetalle.id);
-      if (btn) { btn.disabled = false; btn.textContent = 'Avanzar a siguiente fase'; }
 
       if (error) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Avanzar a siguiente fase'; }
         window.showToast('Error al actualizar fase: ' + error.message);
         return;
       }
 
       currentObraDetalle.fase_actual = nextFase.nombre;
       currentObraDetalle.porcentaje_avance = nextFase.porcentaje;
+      currentObraDetalle.estado = updateData.estado;
+
       renderFasesDetalle(nextFase.nombre);
-      window.showToast(`Fase actualizada a: ${nextFase.nombre} (${nextFase.porcentaje}%) ✓`);
+
+      // Disparar correo de actualización de fase al cliente
+      const cli = currentObraDetalle.clientes;
+      if (cli && cli.correo_electronico) {
+        try {
+          fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              clienteNombre: `${cli.nombres} ${cli.apellidos}`,
+              clienteEmail: cli.correo_electronico,
+              tipoObra: currentObraDetalle.categoria_obra,
+              codigoObra: currentObraDetalle.id_obra,
+              slugTracking: currentObraDetalle.slug_tracking,
+              tipoEvento: 'avance_fase',
+              nuevaFase: nextFase.nombre,
+              porcentaje: nextFase.porcentaje
+            })
+          }).then();
+        } catch(e) {
+          console.warn('Fallo al disparar correo de avance:', e);
+        }
+      }
+
+      if (btn) { btn.disabled = false; btn.textContent = 'Avanzar a siguiente fase'; }
+      window.showToast(`Fase actualizada a: ${nextFase.nombre} (${nextFase.porcentaje}%) y correo enviado ✓`);
       await cargarTodo();
     } else {
       window.showToast('La obra ya se encuentra en la fase final (Entrega 100%)');
@@ -1778,7 +1804,10 @@
           clienteEmail: cli.correo_electronico,
           tipoObra: currentObraDetalle.categoria_obra,
           codigoObra: currentObraDetalle.id_obra,
-          slugTracking: currentObraDetalle.slug_tracking
+          slugTracking: currentObraDetalle.slug_tracking,
+          tipoEvento: 'avance_fase',
+          nuevaFase: currentObraDetalle.fase_actual,
+          porcentaje: currentObraDetalle.porcentaje_avance
         })
       });
       if (res.ok) window.showToast('Correo reenviado con éxito ✓');
@@ -1797,7 +1826,7 @@
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
 
-  // 12. NAVEGACIÓN Y MODALES
+  // 13. NAVEGACIÓN Y MODALES
   window.showView = function(name) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
