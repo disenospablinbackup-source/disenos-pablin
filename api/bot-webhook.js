@@ -3,9 +3,10 @@ import nodemailer from 'nodemailer';
 
 const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'TU_GEMINI_API_KEY_AQUI';
+// CREDENCIALES INTEGRADAS
+const GEMINI_API_KEY = 'AQ.Ab8RN6IM9rcrzIJ9ubF1ZxwwBqQgmi4hyuiAMhdBCciUHaDpFg';
 const GMAIL_USER = 'disenospablin.ec@gmail.com';
 const GMAIL_PASS = 'kvgodrbplpzqsgks';
 
@@ -13,6 +14,7 @@ const FASES_MAP = {
   'diseño': { nombre: 'Diseño', pct: 10 },
   'materiales': { nombre: 'Materiales', pct: 30 },
   'ejecución': { nombre: 'Ejecución', pct: 65 },
+  'ejecucion': { nombre: 'Ejecución', pct: 65 },
   'acabados': { nombre: 'Acabados', pct: 90 },
   'entrega': { nombre: 'Entrega', pct: 100 }
 };
@@ -24,7 +26,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // Verificación de Webhook (Meta / Twilio)
+  // Verificación de Webhook
   if (req.method === 'GET') {
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
@@ -32,7 +34,7 @@ export default async function handler(req, res) {
     if (mode === 'subscribe' && token === 'pablin_bot_token_2026') {
       return res.status(200).send(challenge);
     }
-    return res.status(200).json({ status: 'Webhook Pablin Bot Activo' });
+    return res.status(200).json({ status: 'Bot Webhook Diseños Pablin Activo' });
   }
 
   if (req.method !== 'POST') {
@@ -48,52 +50,49 @@ export default async function handler(req, res) {
       return res.status(200).json({ status: 'Sin mensaje para procesar' });
     }
 
-    // 1. Obtener contexto de Supabase
-    const { data: tecnicos } = await supabase.from('tecnicos').select('*').eq('activo', true);
-    const { data: obras } = await supabase.from('obras').select('*, clientes(*), tecnicos(*)').order('created_at', { ascending: false });
+    // 1. Obtener contexto en tiempo real desde Supabase
+    const { data: tecnicos } = await db.from('tecnicos').select('*').eq('activo', true);
+    const { data: obras } = await db.from('obras').select('*, clientes(*), tecnicos(*)').order('created_at', { ascending: false });
 
     const contextoTecnicos = (tecnicos || []).map(t => `${t.codigo_id}: ${t.nombres} ${t.apellidos} (Tel: ${t.telefono_1})`).join('\n');
     const contextoObras = (obras || []).map(o => `Obra ${o.id_obra}: Cliente ${o.clientes?.nombres || ''} ${o.clientes?.apellidos || ''}, Tipo: ${o.categoria_obra}, Fase: ${o.fase_actual} (${o.porcentaje_avance}%), Tracking: https://disenos-pablin.vercel.app/tracking.html?t=${o.slug_tracking}`).join('\n');
 
-    // 2. Prompt del Sistema para Gemini
+    // 2. Prompt de IA con reglas de negocio
     const systemPrompt = `
-Eres el Asistente Virtual Oficial de "Diseños Pablin" (Arte en Madera, Guayaquil, Ecuador).
-Tu labor es responder de forma profesional, amable y concisa.
+Eres el Asistente Virtual Inteligente de "Diseños Pablin" (Arte en Madera, Guayaquil, Ecuador).
+Tu trabajo es atender tanto a clientes como a los técnicos del taller.
 
-BASE DE DATOS ACTUAL:
+BASE DE DATOS VIVA:
 --- TÉCNICOS AUTORIZADOS ---
 ${contextoTecnicos}
 
---- OBRAS REGISTRADAS ---
+--- OBRAS ACTIVAS ---
 ${contextoObras}
 
-REGLAS DE ACCIÓN:
-1. SI ES UN CLIENTE preguntando por su obra (por nombre o número): Dale el enlace de tracking directo y su estado actual.
-2. SI ES UN TÉCNICO que envía un comando o actualización:
-   - Debe incluir su código (ej. TEC-XXXX) o identificarse.
-   - Si pide actualizar fase o nota de una obra (#OBR-XXX), responde en formato JSON al inicio con la etiqueta [ACCION_DB] seguido de la respuesta que se enviará al WhatsApp.
-   Ejemplo de actualización técnica:
-   [ACCION_DB]{"tipo":"UPDATE_OBRA","id_obra":"#OBR-270","fase":"Acabados","nota":"Mueble lijado y listo"}[/ACCION_DB]
-   ¡Actualización procesada con éxito! La obra #OBR-270 pasó a fase Acabados.
-
-3. Si es un prospecto nuevo: Salúdalo con elegancia y ofrece asesoría para muebles a medida.
+REGLAS:
+1. CLIENTES: Si un cliente consulta por su proyecto o mueble, identifícalo por su nombre o teléfono, dale su fase actual y su enlace de seguimiento: https://disenos-pablin.vercel.app/tracking.html?t=[slug].
+2. TÉCNICOS: Si un técnico se identifica con su código (ej. TEC-4821) y solicita actualizar una obra (ej. #OBR-270):
+   - Genera una orden de base de datos iniciando tu respuesta EXACTAMENTE con este bloque:
+   [ACCION_DB]{"tipo":"UPDATE_OBRA","id_obra":"#OBR-XXX","fase":"NombreFase","nota":"Texto de la nota"}[/ACCION_DB]
+   - Luego añade el texto cordial de confirmación.
+3. PROSPECTOS: Si saludan o piden cotización, explica con calidez que se fabrican cocinas, closets, baños y muebles a medida de alta gama.
 `;
 
-    // 3. Consulta a la API de Gemini
+    // 3. Consulta a Gemini
     const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [
-          { role: 'user', parts: [{ text: `${systemPrompt}\n\nMensaje recibido de (${remitente}): "${textoMensaje}"` }] }
+          { role: 'user', parts: [{ text: `${systemPrompt}\n\nMensaje entrante (${remitente}): "${textoMensaje}"` }] }
         ]
       })
     });
 
     const geminiData = await geminiRes.json();
-    const respuestaIA = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'Disculpa, no pude procesar tu solicitud en este momento.';
+    const respuestaIA = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'Disculpa, no pude procesar el mensaje en este momento.';
 
-    // 4. Ejecutar acciones en base de datos si la IA detectó un comando técnico
+    // 4. Si la IA reconoció una instrucción técnica, actualizar Supabase y enviar correo
     if (respuestaIA.includes('[ACCION_DB]')) {
       const match = respuestaIA.match(/\[ACCION_DB\]([\s\S]*?)\[\/ACCION_DB\]/);
       if (match && match[1]) {
@@ -101,19 +100,20 @@ REGLAS DE ACCIÓN:
           const accion = JSON.parse(match[1]);
           if (accion.tipo === 'UPDATE_OBRA') {
             const faseNormalizada = FASES_MAP[accion.fase?.toLowerCase()] || { nombre: accion.fase, pct: 50 };
-            
-            // Buscar la obra
             const obraTarget = (obras || []).find(o => o.id_obra === accion.id_obra);
+
             if (obraTarget) {
-              await supabase.from('obras').update({
+              await db.from('obras').update({
                 fase_actual: faseNormalizada.nombre,
                 porcentaje_avance: faseNormalizada.pct,
                 descripcion: accion.nota || obraTarget.descripcion,
                 estado: faseNormalizada.pct === 100 ? 'Finalizada' : (faseNormalizada.pct >= 90 ? 'Por entregar' : 'Activa')
               }).eq('id', obraTarget.id);
 
-              // Disparar correo al cliente automáticamente
-              if (obraTarget.clientes?.correo_electronico) {
+              const correoCliente = obraTarget.clientes?.correo_electronico || obraTarget.clientes?.email;
+
+              // Enviar correo automático de aviso al cliente
+              if (correoCliente) {
                 const transporter = nodemailer.createTransport({
                   host: 'smtp.gmail.com',
                   port: 465,
@@ -123,14 +123,19 @@ REGLAS DE ACCIÓN:
 
                 await transporter.sendMail({
                   from: `"Diseños Pablin" <${GMAIL_USER}>`,
-                  to: obraTarget.clientes.correo_electronico,
-                  subject: `Actualización de Avance: ${faseNormalizada.nombre} — Diseños Pablin`,
+                  to: correoCliente,
+                  subject: `Actualización de Avance: ${faseNormalizada.nombre} (${faseNormalizada.pct}%) — Diseños Pablin`,
                   html: `
-                    <div style="font-family:Arial,sans-serif;padding:24px;background:#F8F6F2;">
-                      <h2>Hola, ${obraTarget.clientes.nombres}</h2>
-                      <p>Tu proyecto <strong>${obraTarget.categoria_obra} (${obraTarget.id_obra})</strong> ha avanzado a la fase de <strong>${faseNormalizada.nombre} (${faseNormalizada.pct}%)</strong>.</p>
-                      <p><em>Nota técnica: ${accion.nota || 'En proceso conforme al cronograma.'}</em></p>
-                      <a href="https://disenos-pablin.vercel.app/tracking.html?t=${obraTarget.slug_tracking}" style="background:#B78652;color:#fff;padding:10px 20px;text-decoration:none;display:inline-block;margin-top:12px;">Ver Avance</a>
+                    <div style="font-family:Arial,sans-serif;padding:24px;background:#F8F6F2;color:#1D1D1D;">
+                      <div style="max-width:540px;margin:0 auto;background:#fff;padding:30px;border:1px solid #DCCFBE;">
+                        <h3 style="color:#B78652;text-transform:uppercase;letter-spacing:0.1em;font-size:12px;">Diseños Pablin</h3>
+                        <h2 style="margin-top:4px;">Tu proyecto ha avanzado</h2>
+                        <p>Hola <strong>${obraTarget.clientes?.nombres || 'Cliente'}</strong>, tu proyecto de <strong>${obraTarget.categoria_obra} (${obraTarget.id_obra})</strong> ahora está en fase: <strong>${faseNormalizada.nombre} (${faseNormalizada.pct}%)</strong>.</p>
+                        <p style="background:#F8F6F2;padding:12px;border-left:3px solid #B78652;font-style:italic;">Nota técnica: ${accion.nota || 'Actualizado en taller.'}</p>
+                        <div style="text-align:center;margin:24px 0;">
+                          <a href="https://disenos-pablin.vercel.app/tracking.html?t=${obraTarget.slug_tracking}" style="background:#B78652;color:#fff;text-decoration:none;padding:12px 24px;font-weight:bold;font-size:11px;text-transform:uppercase;display:inline-block;">Ver Avance</a>
+                        </div>
+                      </div>
                     </div>
                   `
                 });
@@ -138,17 +143,16 @@ REGLAS DE ACCIÓN:
             }
           }
         } catch (e) {
-          console.error('Error ejecutando acción DB del bot:', e);
+          console.error('Error procesando acción de DB:', e);
         }
       }
     }
 
-    // Limpiar respuesta final para el usuario
-    const mensajeLimpio = respuestaIA.replace(/\[ACCION_DB\][\s\S]*?\[\/ACCION_DB\]/, '').trim();
+    const respuestaFinal = respuestaIA.replace(/\[ACCION_DB\][\s\S]*?\[\/ACCION_DB\]/, '').trim();
 
     return res.status(200).json({
       success: true,
-      respuesta: mensajeLimpio
+      respuesta: respuestaFinal
     });
 
   } catch (error) {
