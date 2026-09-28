@@ -6,7 +6,7 @@
 <title>Diseños Pablin — Panel Interno</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
 <!-- Librería Oficial de Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/supabase.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -682,7 +682,19 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+<style>body.locked > :not(#auth-screen):not(script):not(style) { display:none !important; }
+#auth-screen { max-width:420px; margin:12vh auto; padding:32px; background:#fff; }
+#auth-screen label { display:block; margin-top:18px; }
+#auth-screen input { display:block; width:100%; padding:12px; margin:8px 0; border:1px solid #DCCFBE; }
+#logout { position:fixed; bottom:12px; left:16px; z-index:60; }</style>
+<section id="auth-screen" aria-labelledby="auth-title"><h1 id="auth-title">Diseños Pablin</h1>
+<p>Acceso de administración</p><form id="auth-form">
+<label>Correo<input id="auth-email" type="email" autocomplete="username" required></label>
+<label>Contraseña<input id="auth-password" type="password" autocomplete="current-password" required></label>
+<button type="submit" class="btn btn-bronze">Ingresar</button>
+<p id="auth-status" role="status" aria-live="polite">Preparando acceso…</p></form></section>
+<button id="logout" class="btn btn-outline">Cerrar sesión</button>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -717,7 +729,7 @@
     </a>
     <a class="nav-item" id="nav-bot" onclick="window.showView('bot')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Bot WhatsApp
+      Asistente
     </a>
 
     <div class="nav-section-label">Sistema</div>
@@ -955,21 +967,21 @@
     <!-- 6. BOT WHATSAPP CON SIMULADOR GEMINI -->
     <div class="view" id="view-bot">
       <div class="page-header">
-        <div><h1>Bot WhatsApp</h1><p>"Tu asistente 24/7 con Gemini"</p></div>
+        <div><h1>Asistente</h1><p>Ayuda para redactar y resolver consultas</p></div>
       </div>
       <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
         <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label">Disponibilidad</div></div>
         <div class="stat-card"><div class="stat-number" id="bot-tecnicos-count">0</div><div class="stat-label">Técnicos conectados</div></div>
-        <div class="stat-card"><div class="stat-number" style="color:var(--bronze);">Gemini IA</div><div class="stat-label">Motor Inteligente Activo</div></div>
+        <div class="stat-card"><div class="stat-number" style="color:var(--bronze);">Gemini IA</div><div class="stat-label">Asistente de consulta</div></div>
       </div>
 
       <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:20px;">
         <!-- Consola de Prueba Directa -->
         <div class="card">
-          <div class="card-title">Consola de Prueba en Vivo (Simulador de WhatsApp)</div>
+          <div class="card-title">Consultar al asistente</div>
           <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="font-size:12px;color:var(--stone);">Prueba cómo responde la IA como cliente o como técnico:</div>
-            <textarea class="form-textarea" id="bot-test-input" placeholder="Ej: Hola, soy Jeremy Chica, ¿cómo va mi cocina?&#10;o: TEC-4821 actualiza la obra #OBR-270 a Entrega con nota: Proyecto instalado"></textarea>
+            <div style="font-size:12px;color:var(--stone);">Redacta mensajes o consulta sobre carpintería. Evita incluir datos personales:</div>
+            <textarea class="form-textarea" id="bot-test-input" maxlength="2000" placeholder="Ayúdame a explicar los cuidados de un mueble de madera."></textarea>
             <div style="display:flex;justify-content:space-between;align-items:center;">
               <button class="btn btn-bronze btn-sm" id="btn-bot-test" onclick="window.probarBotDesdePanel()">Enviar a Gemini</button>
               <span id="bot-test-status" style="font-size:11px;color:var(--stone);"></span>
@@ -980,14 +992,14 @@
 
         <!-- Comandos y Referencias -->
         <div class="card">
-          <div class="card-title">Comandos de WhatsApp para Técnicos</div>
+          <div class="card-title">Ayuda de redacción</div>
           <div style="font-size:13px;line-height:1.7;color:var(--carbon);">
-            <p>Los técnicos pueden enviar mensajes naturales o estructurados usando su <b>Código ID</b> y el <b>#OBR</b>:</p>
+            <p>Pide ayuda para redactar mensajes. El asistente no modifica obras ni envía correos:</p>
             <div style="background:var(--ivory);padding:12px;border:1px solid var(--sand);margin:10px 0;font-family:monospace;font-size:11px;">
-              Soy TEC-4821, la obra #OBR-270 pasa a Acabados. Nota: Lijado listo.
+              Ayúdame a redactar un aviso cordial para informar que el lijado está listo.
             </div>
             <p style="font-size:11px;color:var(--stone);margin-top:8px;">
-              La IA detectará la orden técnica, actualizará la base de datos de Supabase y enviará el correo correspondiente al cliente de inmediato.
+              El asistente ayuda a redactar mensajes. Los cambios de obras y los envíos se realizan desde los controles del panel.
             </p>
           </div>
         </div>
@@ -1250,17 +1262,47 @@
 </div>
 
 <script>
-  // 1. CONFIGURACIÓN SUPABASE
-  const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
+
   let db = null;
-  
-  try {
-    if (window.supabase && typeof window.supabase.createClient === 'function') {
-      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    }
-  } catch(e) {
-    console.warn('Error inicializando Supabase:', e);
+  function escapeHtml(value = '') {
+    return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  async function adminFetch(url, options) {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) throw new Error('Inicia sesión');
+    return fetch(url, { ...options, headers: { ...options.headers, Authorization: 'Bearer ' + session.access_token } });
+  }
+  async function bootstrapAuth() {
+    const status = document.getElementById('auth-status');
+    try {
+      const response = await fetch('/api/config');
+      if (!response.ok) throw new Error('Configuración pendiente');
+      const config = await response.json();
+      db = window.supabase.createClient(config.url, config.key);
+      const unlock = async () => {
+        const { data: { user }, error } = await db.auth.getUser();
+        if (error || user?.app_metadata?.role !== 'admin') return false;
+        document.body.classList.remove('locked');
+        document.getElementById('auth-screen').hidden = true;
+        await cargarTodo();
+        return true;
+      };
+      db.auth.onAuthStateChange(event => { if (event === 'SIGNED_OUT') window.location.reload(); });
+      document.getElementById('auth-form').addEventListener('submit', async event => {
+        event.preventDefault();
+        status.textContent = 'Verificando acceso…';
+        try {
+          const { error } = await db.auth.signInWithPassword({
+            email: document.getElementById('auth-email').value.trim(),
+            password: document.getElementById('auth-password').value
+          });
+          document.getElementById('auth-password').value = '';
+          if (error || !(await unlock())) status.textContent = 'Verifica tus credenciales y permisos.';
+        } catch (_) { status.textContent = 'No se pudo conectar. Inténtalo de nuevo.'; }
+      });
+      document.getElementById('logout').onclick = () => db.auth.signOut();
+      if (!(await unlock())) status.textContent = 'Usa tu cuenta de administración.';
+    } catch (_) { status.textContent = 'No se pudo iniciar el acceso. Revisa la configuración e inténtalo de nuevo.'; }
   }
 
   let clientesCache = [];
@@ -1347,22 +1389,22 @@
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${iniciales}</div>
+              <div class="avatar">${escapeHtml(iniciales)}</div>
               <div>
-                <div style="font-weight:600;">${cli.nombres || 'Sin nombre'} ${cli.apellidos || ''}</div>
-                <div style="font-size:11px;color:var(--stone);">${correoCli}</div>
+                <div style="font-weight:600;">${escapeHtml(cli.nombres || 'Sin nombre')} ${escapeHtml(cli.apellidos || '')}</div>
+                <div style="font-size:11px;color:var(--stone);">${escapeHtml(correoCli)}</div>
               </div>
             </div>
           </td>
-          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${escapeHtml(o.categoria_obra)}</span></td>
           <td>
-            <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
-            <div class="progress-label">${o.porcentaje_avance || 10}% — ${o.fase_actual || 'Diseño'}</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${escapeHtml(o.porcentaje_avance || 10)}%"></div></div>
+            <div class="progress-label">${escapeHtml(o.porcentaje_avance || 10)}% — ${escapeHtml(o.fase_actual || 'Diseño')}</div>
           </td>
-          <td style="color:var(--stone);font-size:12px;">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
-          <td style="font-size:12px;">${o.fecha_entrega_estimada || 'Por definir'}</td>
-          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : (o.estado === 'Finalizada' ? 'badge-done' : 'badge-pending')}">${o.estado || 'Activa'}</span></td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.verDetalleObra('${o.id}')">Ver</button></td>
+          <td style="color:var(--stone);font-size:12px;">${escapeHtml(tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar')}</td>
+          <td style="font-size:12px;">${escapeHtml(o.fecha_entrega_estimada || 'Por definir')}</td>
+          <td><span class="badge ${escapeHtml(o.estado === 'Activa' ? 'badge-active' : (o.estado === 'Finalizada' ? 'badge-done' : 'badge-pending'))}">${escapeHtml(o.estado || 'Activa')}</span></td>
+          <td><button class="btn btn-outline btn-sm" data-obra="${escapeHtml(o.id)}" onclick="window.verDetalleObra(this.dataset.obra)">Ver</button></td>
         </tr>
       `;
     }).join('');
@@ -1384,17 +1426,17 @@
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${ini}</div>
+              <div class="avatar">${escapeHtml(ini)}</div>
               <div>
-                <div style="font-weight:600;">${c.nombres} ${c.apellidos}</div>
-                <div style="font-size:11px;color:var(--stone);">${correoCli}</div>
+                <div style="font-weight:600;">${escapeHtml(c.nombres)} ${escapeHtml(c.apellidos)}</div>
+                <div style="font-size:11px;color:var(--stone);">${escapeHtml(correoCli)}</div>
               </div>
             </div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${c.telefono_1 || c.telefono || '-'}</td>
-          <td style="font-weight:600;">${c.numero_cedula || '-'}</td>
+          <td style="font-size:12px;color:var(--stone);">${escapeHtml(c.telefono_1 || c.telefono || '-')}</td>
+          <td style="font-weight:600;">${escapeHtml(c.numero_cedula || '-')}</td>
           <td>${getBadgeCliente(c.tipo_cliente)}</td>
-          <td style="font-size:12px;color:var(--stone);">${fecha}</td>
+          <td style="font-size:12px;color:var(--stone);">${escapeHtml(fecha)}</td>
         </tr>
       `;
     }).join('');
@@ -1427,17 +1469,17 @@
       const tec = o.tecnicos || {};
       return `
         <tr>
-          <td style="font-weight:700;color:var(--bronze);">${o.id_obra || '#OBR'}</td>
-          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
-          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra}</span></td>
-          <td style="font-size:12px;">${o.fase_actual || 'Diseño'}</td>
+          <td style="font-weight:700;color:var(--bronze);">${escapeHtml(o.id_obra || '#OBR')}</td>
+          <td><b>${escapeHtml(cli.nombres || '')} ${escapeHtml(cli.apellidos || '')}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${escapeHtml(o.categoria_obra)}</span></td>
+          <td style="font-size:12px;">${escapeHtml(o.fase_actual || 'Diseño')}</td>
           <td>
-            <div class="progress-bar"><div class="progress-fill" style="width:${o.porcentaje_avance || 10}%"></div></div>
-            <div class="progress-label">${o.porcentaje_avance || 10}%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${escapeHtml(o.porcentaje_avance || 10)}%"></div></div>
+            <div class="progress-label">${escapeHtml(o.porcentaje_avance || 10)}%</div>
           </td>
-          <td style="font-size:12px;color:var(--stone);">${tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar'}</td>
-          <td style="font-size:12px;">${o.fecha_entrega_estimada || '-'}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="window.verDetalleObra('${o.id}')">Ver</button></td>
+          <td style="font-size:12px;color:var(--stone);">${escapeHtml(tec.nombres ? tec.nombres + ' ' + (tec.apellidos?.[0] || '') + '.' : 'Sin asignar')}</td>
+          <td style="font-size:12px;">${escapeHtml(o.fecha_entrega_estimada || '-')}</td>
+          <td><button class="btn btn-outline btn-sm" data-obra="${escapeHtml(o.id)}" onclick="window.verDetalleObra(this.dataset.obra)">Ver</button></td>
         </tr>
       `;
     }).join('');
@@ -1463,16 +1505,16 @@
     }
     tbody.innerHTML = obrasCache.map(o => {
       const cli = o.clientes || {};
-      const url = `https://disenos-pablin.vercel.app/tracking.html?t=${o.slug_tracking}`;
+      const url = `${window.location.origin}/tracking.html?t=${encodeURIComponent(o.slug_tracking)}`;
       return `
         <tr>
-          <td><b>${cli.nombres || ''} ${cli.apellidos || ''}</b></td>
-          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${o.categoria_obra} ${o.id_obra || ''}</span></td>
-          <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${url}</span></td>
-          <td><span class="badge ${o.estado === 'Activa' ? 'badge-active' : 'badge-done'}">${o.estado || 'Activa'}</span></td>
+          <td><b>${escapeHtml(cli.nombres || '')} ${escapeHtml(cli.apellidos || '')}</b></td>
+          <td><span class="badge ${getBadgeTipoObra(o.categoria_obra)}">${escapeHtml(o.categoria_obra)} ${escapeHtml(o.id_obra || '')}</span></td>
+          <td><span style="font-family:monospace;font-size:11px;color:var(--bronze);">${escapeHtml(url)}</span></td>
+          <td><span class="badge ${escapeHtml(o.estado === 'Activa' ? 'badge-active' : 'badge-done')}">${escapeHtml(o.estado || 'Activa')}</span></td>
           <td style="display:flex;gap:6px;padding:14px 0;">
-            <button class="btn btn-outline btn-sm" onclick="window.copyLink('${url}')">Copiar</button>
-            <button class="btn btn-outline btn-sm" onclick="window.open('${url}','_blank')">Abrir</button>
+            <button class="btn btn-outline btn-sm" data-url="${escapeHtml(url)}" onclick="window.copyLink(this.dataset.url)">Copiar</button>
+            <button class="btn btn-outline btn-sm" data-url="${escapeHtml(url)}" onclick="window.open(this.dataset.url,'_blank','noopener')">Abrir</button>
           </td>
         </tr>
       `;
@@ -1493,16 +1535,16 @@
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar">${ini}</div>
+              <div class="avatar">${escapeHtml(ini)}</div>
               <div>
-                <div style="font-weight:600;">${t.nombres} ${t.apellidos}</div>
-                <div style="font-size:11px;color:var(--stone);">${t.telefono_1 || '-'}</div>
+                <div style="font-weight:600;">${escapeHtml(t.nombres)} ${escapeHtml(t.apellidos)}</div>
+                <div style="font-size:11px;color:var(--stone);">${escapeHtml(t.telefono_1 || '-')}</div>
               </div>
             </div>
           </td>
-          <td><span style="font-family:monospace;background:var(--ivory);padding:4px 8px;border-radius:2px;font-size:12px;font-weight:700;color:var(--bronze);">${t.codigo_id}</span></td>
-          <td>${t.numero_cedula || '-'}</td>
-          <td><span class="badge badge-active">${t.activo ? 'Activo' : 'Inactivo'}</span></td>
+          <td><span style="font-family:monospace;background:var(--ivory);padding:4px 8px;border-radius:2px;font-size:12px;font-weight:700;color:var(--bronze);">${escapeHtml(t.codigo_id)}</span></td>
+          <td>${escapeHtml(t.numero_cedula || '-')}</td>
+          <td><span class="badge badge-active">${escapeHtml(t.activo ? 'Activo' : 'Inactivo')}</span></td>
         </tr>
       `;
     }).join('');
@@ -1512,12 +1554,12 @@
     const selCli = document.getElementById('obr-cliente-select');
     if (selCli) {
       selCli.innerHTML = '<option value="">Seleccionar cliente…</option>' + 
-        clientesCache.map(c => `<option value="${c.id}">${c.nombres} ${c.apellidos} (${c.numero_cedula || c.correo_electronico || ''})</option>`).join('');
+        clientesCache.map(c => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.nombres)} ${escapeHtml(c.apellidos)} (${escapeHtml(c.numero_cedula || c.correo_electronico || '')})</option>`).join('');
     }
     const selTec = document.getElementById('obr-tecnico-select');
     if (selTec) {
       selTec.innerHTML = '<option value="">Sin asignar</option>' + 
-        tecnicosCache.map(t => `<option value="${t.id}">${t.nombres} ${t.apellidos} (${t.codigo_id})</option>`).join('');
+        tecnicosCache.map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.nombres)} ${escapeHtml(t.apellidos)} (${escapeHtml(t.codigo_id)})</option>`).join('');
     }
   }
 
@@ -1580,9 +1622,9 @@
     const btn = document.getElementById('btn-submit-obra');
     if (btn) { btn.disabled = true; btn.textContent = 'Creando Obra...'; }
 
-    const randomNum = Math.floor(100 + Math.random() * 900);
+    const randomNum = crypto.randomUUID().slice(0, 12);
     const autoIdObra = `#OBR-${randomNum}`;
-    const autoSlug = Math.random().toString(36).substring(2, 8);
+    const autoSlug = crypto.randomUUID().replaceAll('-', '');
 
     window.showToast('Creando obra en Supabase...');
 
@@ -1608,7 +1650,7 @@
     // Disparador de correo por Gmail SMTP
     if (sendAuto && correoDestino) {
       try {
-        const res = await fetch('/api/send-email', {
+        const res = await adminFetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1654,7 +1696,7 @@
     const btn = document.getElementById('btn-submit-tecnico');
     if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
 
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const randomNum = crypto.randomUUID().slice(0, 12);
     const autoIdTecnico = `TEC-${randomNum}`;
 
     window.showToast('Registrando técnico...');
@@ -1691,7 +1733,7 @@
 
     const cli = obra.clientes || {};
     const tec = obra.tecnicos || {};
-    const url = `https://disenos-pablin.vercel.app/tracking.html?t=${obra.slug_tracking}`;
+    const url = `${window.location.origin}/tracking.html?t=${obra.slug_tracking}`;
     const correoCli = cli.correo_electronico || cli.email || '-';
 
     document.getElementById('det-obra-id').textContent = `Obra ${obra.id_obra || ''}`;
@@ -1779,7 +1821,7 @@
 
       if (correoCliente && correoCliente.includes('@')) {
         try {
-          const res = await fetch('/api/send-email', {
+          const res = await adminFetch('/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1834,7 +1876,7 @@
     }
     window.showToast('Enviando correo...');
     try {
-      const res = await fetch('/api/send-email', {
+      const res = await adminFetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1859,7 +1901,7 @@
     if (!currentObraDetalle) return;
     const cli = currentObraDetalle.clientes || {};
     const phone = (cli.telefono_1 || cli.telefono || '').replace(/\D/g, '');
-    const url = `https://disenos-pablin.vercel.app/tracking.html?t=${currentObraDetalle.slug_tracking}`;
+    const url = `${window.location.origin}/tracking.html?t=${currentObraDetalle.slug_tracking}`;
     const msg = encodeURIComponent(`Hola ${cli.nombres || ''}, te compartimos el enlace para seguir el avance de tu proyecto de ${currentObraDetalle.categoria_obra || 'Muebles'} (${currentObraDetalle.id_obra || ''}): ${url}`);
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
@@ -1882,7 +1924,7 @@
     responseBox.style.display = 'none';
 
     try {
-      const res = await fetch('/api/bot-webhook', {
+      const res = await adminFetch('/api/bot-webhook', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mensaje: input, telefono: '+593990000000' })
@@ -1894,7 +1936,8 @@
 
       if (data.respuesta) {
         responseBox.style.display = 'block';
-        responseBox.innerHTML = `<strong>Respuesta de Diseños Pablin Bot:</strong><br><br>${data.respuesta.replace(/\n/g, '<br>')}`;
+        responseBox.style.whiteSpace = 'pre-wrap';
+        responseBox.textContent = data.respuesta;
         window.showToast('Respuesta generada con éxito ✓');
         await cargarTodo();
       } else {
@@ -1922,7 +1965,7 @@
 
     const titles = {
       dashboard:'Dashboard', clientes:'Clientes', obras:'Obras',
-      enlaces:'Enlaces', correos:'Correos', bot:'Bot WhatsApp',
+      enlaces:'Enlaces', correos:'Correos', bot:'Asistente',
       tecnicos:'Técnicos', configuracion:'Configuración'
     };
     const titleEl = document.getElementById('topbar-title');
@@ -1955,7 +1998,7 @@
 
   // Inicialización
   window.addEventListener('DOMContentLoaded', () => {
-    cargarTodo();
+    bootstrapAuth();
     document.querySelectorAll('.modal-overlay').forEach(o => {
       o.addEventListener('click', function(e) {
         if (e.target === this) this.classList.remove('open');
