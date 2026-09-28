@@ -6,7 +6,7 @@
 <title>Tu Proyecto — Diseños Pablin</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
 <!-- Supabase JS -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -745,10 +745,17 @@
 </footer>
 
 <script>
-  // 1. CONEXIÓN SUPABASE
-  const SUPABASE_URL = 'https://ysupbkkivqacsqhfxrof.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_ygm_Ge0X3ogErxTRJu3y_w_i2Whpwe6';
-  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function escapeHtml(value = '') {
+    return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  const trackingToken = new URLSearchParams(window.location.search).get('t');
+  async function trackingRequest(body) {
+    const response = await fetch('/api/tracking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, token: trackingToken }) });
+    const data = await response.json();
+    return response.ok ? { data, error: null } : { data: null, error: { message: data.error || 'No se pudo completar la solicitud' } };
+  }
+
 
   let currentObra = null;
   let selectedStars = 5;
@@ -786,11 +793,7 @@
       return;
     }
 
-    const { data: obra, error } = await db
-      .from('obras')
-      .select('*, clientes(*), tecnicos(*)')
-      .eq('slug_tracking', slug)
-      .single();
+    const { data: obra, error } = await trackingRequest({ action: 'read' });
 
     if (error || !obra) {
       document.getElementById('loading-screen').innerHTML = `
@@ -835,7 +838,7 @@
       let nameClass = isDone ? '' : (isCurrent ? '' : 'pending');
       let badge = isDone ? '<span class="phase-badge">Completado</span>' : (isCurrent ? '<span class="phase-badge">En progreso</span>' : '');
       let descText = f.desc;
-      let noteHtml = (isCurrent && obra.descripcion) ? `<div class="phase-note">"${obra.descripcion}"</div>` : '';
+      let noteHtml = (isCurrent && obra.descripcion) ? `<div class="phase-note">"${escapeHtml(obra.descripcion)}"</div>` : '';
 
       return `
         <div class="phase-item">
@@ -861,17 +864,17 @@
       notesList.innerHTML = `
         <div class="note-item">
           <div class="note-header">
-            <div class="note-phase">${obra.fase_actual} — ${autorTec}</div>
+            <div class="note-phase">${escapeHtml(obra.fase_actual)} — ${escapeHtml(autorTec)}</div>
             <div class="note-date">${fechaNota}</div>
           </div>
-          <div class="note-text">${obra.descripcion}</div>
+          <div class="note-text">${escapeHtml(obra.descripcion)}</div>
         </div>
       `;
     } else {
       notesList.innerHTML = `
         <div class="note-item">
           <div class="note-header">
-            <div class="note-phase">${obra.fase_actual}</div>
+            <div class="note-phase">${escapeHtml(obra.fase_actual)}</div>
             <div class="note-date">Actualizado</div>
           </div>
           <div class="note-text">Proyecto en proceso conforme al cronograma establecido.</div>
@@ -923,7 +926,7 @@
         </div>
         <div style="font-size:26px;color:var(--bronze);letter-spacing:3px;margin:12px 0;">${estrellas}</div>
         <p style="font-size:14px;font-style:italic;color:var(--carbon);max-width:480px;margin:0 auto;">
-          "${obra.resena_comentario || 'Excelente servicio y acabados.'}"
+          "${escapeHtml(obra.resena_comentario || 'Excelente servicio y acabados.')}"
         </p>
       `;
       return;
@@ -972,11 +975,9 @@
     btn.disabled = true;
     btn.textContent = 'Enviando...';
 
-    const { error } = await db.from('obras').update({
-      calificacion_estrellas: selectedStars,
-      resena_comentario: comentario,
-      resena_fecha: new Date().toISOString()
-    }).eq('id', currentObra.id);
+    let error;
+    try { ({ error } = await trackingRequest({ action: 'review', stars: selectedStars, comment: comentario })); }
+    catch (_) { error = { message: 'Error de conexión; vuelve a intentarlo' }; }
 
     if (error) {
       alert('Error al guardar valoración: ' + error.message);
@@ -1023,7 +1024,7 @@
     }, 2000);
   }
 
-  window.addEventListener('DOMContentLoaded', cargarTrackingReal);
+  window.addEventListener('DOMContentLoaded', () => cargarTrackingReal().catch(() => { document.getElementById('loading-screen').textContent = 'No se pudo cargar el seguimiento. Inténtalo de nuevo.'; }));
 </script>
 </body>
 </html>
