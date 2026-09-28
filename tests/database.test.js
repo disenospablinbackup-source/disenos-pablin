@@ -14,6 +14,8 @@ test('migration restricts tables, limits tracking, protects reviews and enforces
       create function auth.uid() returns uuid language sql as $$ select (auth.jwt()->>'sub')::uuid $$;
       create table clientes(id uuid primary key, nombres text, apellidos text, correo_electronico text, numero_cedula text);
       create table tecnicos(id uuid primary key, nombres text, telefono_1 text);
+      create table avances_obra(id uuid primary key);
+      create table chats(id bigint primary key);
       create table obras(id uuid primary key, cliente_id uuid, tecnico_id uuid, id_obra text, categoria_obra text, fase_actual text, porcentaje_avance integer, estado text, fecha_entrega_estimada date, calificacion_estrellas integer, resena_comentario text, resena_fecha timestamptz, slug_tracking text, descripcion text);
       insert into clientes values ('11111111-1111-4111-8111-111111111111','Cliente','Privado','private@example.com','private-id');
       insert into obras values ('22222222-2222-4222-8222-222222222222','11111111-1111-4111-8111-111111111111',null,'OBR-1','Cocina','Entrega',100,'Finalizada',null,null,null,null,'abc123','private internal note');
@@ -25,6 +27,9 @@ test('migration restricts tables, limits tracking, protects reviews and enforces
     assert.match(token,/^[a-f0-9]{32}$/);
     await db.exec('set role anon');
     await assert.rejects(db.query('select * from clientes'), /permission denied/);
+    await assert.rejects(db.query('select * from avances_obra'), /permission denied/);
+    await assert.rejects(db.query('select * from chats'), /permission denied/);
+    await assert.rejects(db.query('select * from private.admin_quota'), /permission denied/);
     await assert.rejects(db.query("update obras set fase_actual='Diseño'"), /permission denied/);
     const payload=(await db.query('select get_public_tracking($1) as data',[token])).rows[0].data;
     assert.equal(payload.clientes.nombres,'Cliente');

@@ -3,33 +3,45 @@
 begin;
 create schema if not exists private;
 revoke all on schema private from public;
+grant usage on schema private to anon, authenticated;
 create table if not exists private.admin_quota (
   user_id uuid not null, action_name text not null, window_start timestamptz not null,
   requests integer not null, primary key(user_id, action_name)
 );
+alter table private.admin_quota enable row level security;
+revoke all on private.admin_quota from public, anon, authenticated;
 
 -- Remove permissive legacy policies before installing the admin-only boundary.
 do $$
 declare p record; t text;
 begin
-  foreach t in array array['clientes','tecnicos','obras'] loop
+  foreach t in array array['clientes','tecnicos','obras','avances_obra','chats'] loop
     execute format('alter table public.%I enable row level security', t);
-    execute format('revoke all on public.%I from anon', t);
+    execute format('revoke all on public.%I from public, anon, authenticated', t);
     execute format('grant select, insert, update, delete on public.%I to authenticated', t);
     for p in select policyname from pg_policies where schemaname='public' and tablename=t loop
       execute format('drop policy %I on public.%I', p.policyname, t);
     end loop;
     execute format(
-      'create policy admin_only on public.%I for all to authenticated using ((auth.jwt()->''app_metadata''->>''role'') = ''admin'') with check ((auth.jwt()->''app_metadata''->>''role'') = ''admin'')', t
+      'create policy admin_only on public.%I for all to authenticated using (((select auth.jwt())->''app_metadata''->>''role'') = ''admin'') with check (((select auth.jwt())->''app_metadata''->>''role'') = ''admin'')', t
     );
   end loop;
 end $$;
 
+create table if not exists private.tracking_token_backup (
+  obra_id uuid primary key, old_token text not null, saved_at timestamptz not null default now()
+);
+alter table private.tracking_token_backup enable row level security;
+revoke all on private.tracking_token_backup from public, anon, authenticated;
+insert into private.tracking_token_backup(obra_id, old_token)
+select id, slug_tracking from public.obras
+where slug_tracking is not null and slug_tracking !~ '^[a-f0-9]{32,64}$'
+on conflict (obra_id) do nothing;
 update public.obras set slug_tracking = replace(gen_random_uuid()::text, '-', '')
 where slug_tracking is null or slug_tracking !~ '^[a-f0-9]{32,64}$';
-create unique index if not exists obras_tracking_unique on public.obras(slug_tracking);
+-- The production schema already has obras_slug_tracking_key (UNIQUE).
 
-create or replace function public.consume_admin_quota(action_name text)
+create or replace function private.consume_admin_quota(action_name text)
 returns boolean language plpgsql security definer set search_path = '' as $$
 #variable_conflict use_column
 declare used integer; bucket timestamptz := date_trunc('minute', now());
@@ -45,10 +57,10 @@ begin
   returning requests into used;
   return used <= 10;
 end $$;
-revoke all on function public.consume_admin_quota(text) from public, anon;
-grant execute on function public.consume_admin_quota(text) to authenticated;
+revoke all on function private.consume_admin_quota(text) from public, anon;
+grant execute on function private.consume_admin_quota(text) to authenticated;
 
-create or replace function public.get_public_tracking(tracking_token text)
+create or replace function private.get_public_tracking(tracking_token text)
 returns jsonb language sql stable security definer set search_path = '' as $$
   select jsonb_build_object(
     'id_obra', o.id_obra, 'categoria_obra', o.categoria_obra, 'fase_actual', o.fase_actual,
@@ -65,10 +77,10 @@ returns jsonb language sql stable security definer set search_path = '' as $$
   where tracking_token ~ '^[a-f0-9]{32,64}$' and o.slug_tracking = tracking_token
   limit 1;
 $$;
-revoke all on function public.get_public_tracking(text) from public;
-grant execute on function public.get_public_tracking(text) to anon, authenticated;
+revoke all on function private.get_public_tracking(text) from public;
+grant execute on function private.get_public_tracking(text) to anon, authenticated;
 
-create or replace function public.submit_tracking_review(tracking_token text, stars integer, comment text)
+create or replace function private.submit_tracking_review(tracking_token text, stars integer, comment text)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare updated integer;
 begin
@@ -83,6 +95,28 @@ begin
   if updated = 0 then return null; end if;
   return jsonb_build_object('success', true);
 end $$;
+revoke all on function private.submit_tracking_review(text, integer, text) from public;
+grant execute on function private.submit_tracking_review(text, integer, text) to anon, authenticated;
+-- API wrappers are invoker functions; privileged implementations remain outside
+-- the exposed schema. Tracking authenticates possession of a high-entropy token.
+create or replace function public.consume_admin_quota(action_name text)
+returns boolean language sql security invoker set search_path = '' as $$
+  select private.consume_admin_quota(action_name);
+$$;
+revoke all on function public.consume_admin_quota(text) from public, anon;
+grant execute on function public.consume_admin_quota(text) to authenticated;
+
+create or replace function public.get_public_tracking(tracking_token text)
+returns jsonb language sql stable security invoker set search_path = '' as $$
+  select private.get_public_tracking(tracking_token);
+$$;
+revoke all on function public.get_public_tracking(text) from public;
+grant execute on function public.get_public_tracking(text) to anon, authenticated;
+
+create or replace function public.submit_tracking_review(tracking_token text, stars integer, comment text)
+returns jsonb language sql security invoker set search_path = '' as $$
+  select private.submit_tracking_review(tracking_token, stars, comment);
+$$;
 revoke all on function public.submit_tracking_review(text, integer, text) from public;
 grant execute on function public.submit_tracking_review(text, integer, text) to anon, authenticated;
 commit;

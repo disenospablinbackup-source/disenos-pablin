@@ -7,7 +7,7 @@ Sitio estático con funciones Node.js en Vercel y datos en Supabase.
 1. Revocar la contraseña de aplicación de Gmail y la clave Gemini expuestas en el historial público. Crear credenciales nuevas; no reutilizar las anteriores. Borrarlas del código no las revoca. No pegarlas en issues, PR ni mensajes.
 2. Hacer respaldo de Supabase e inspeccionar tablas, tipos, políticas y funciones existentes. La migración presupone las columnas utilizadas por la aplicación anterior; debe comprobarse contra el esquema real antes de producción.
 3. Crear una cuenta en Supabase Auth para cada administrador. Asignar `app_metadata.role = "admin"` con herramientas administrativas seguras; `user_metadata` no concede permisos. No habilitar registro público de administradores. Cerrar sesión y volver a entrar después de asignar el rol.
-4. Probar `supabase/migrations/20260928_security.sql` en una base de ensayo y después aplicarla a producción durante una ventana de mantenimiento. Sustituye todas las políticas previas de `clientes`, `tecnicos` y `obras`; revisar accesos de otras integraciones. Rotará los enlaces cortos existentes. Los clientes necesitarán recibir los nuevos enlaces desde el panel; esta migración no envía mensajes.
+4. Probar `supabase/migrations/20260928_security.sql` en una base de ensayo y después aplicarla a producción durante una ventana de mantenimiento. Sustituye todas las políticas previas de `clientes`, `tecnicos`, `obras`, `avances_obra` y `chats`; revisar accesos de otras integraciones. Rotará los enlaces cortos existentes, guardando una copia de los anteriores en `private.tracking_token_backup`, inaccesible para los clientes de la API. Los clientes necesitarán recibir los nuevos enlaces desde el panel; esta migración no envía mensajes.
 5. Configurar en Vercel las variables de `.env.example`. Preview debe usar su propia base y credenciales de prueba. `SITE_URL` es la URL HTTPS de ese entorno. `SUPABASE_PUBLISHABLE_KEY` debe ser una clave publicable, nunca una clave secret/service_role. No se necesita una clave de servicio.
 6. Elegir un modelo de Gemini disponible en la cuenta y asignar su identificador a `GEMINI_MODEL`. Gemini 1.5 está bloqueado; no hay fallback a un modelo retirado.
 7. Desplegar primero una vista previa. Verificar acceso anónimo denegado al panel/datos, acceso administrador, creación de obra, correo a una dirección de prueba controlada, seguimiento y reseña única. Solo después activar producción.
@@ -46,7 +46,7 @@ npm run build
 
 El build copia únicamente las páginas y el SDK de navegador fijado en el lockfile a `public/`. Vercel sirve esa carpeta y las funciones de `api/`. No publica los archivos de pruebas, SQL o configuración como contenido estático.
 
-Las pruebas no usan credenciales reales ni envían correo. Cubren sesiones, roles, destinatario, escape HTML, errores del proveedor, límites, bloqueo de acciones IA y políticas SQL sobre Postgres local (PGlite). El esquema local de prueba es una representación del código existente, no una validación del esquema real de producción.
+Las pruebas no usan credenciales reales ni envían correo. Cubren sesiones, roles, destinatario, escape HTML, errores del proveedor, límites, bloqueo de acciones IA y políticas SQL sobre Postgres local (PGlite). Incluyen una copia de la estructura verificada del proyecto Supabase (tipos, restricciones y relaciones), sin datos de clientes. La copia se encuentra en `tests/fixtures/production-schema.sql`. También comprueban la conservación de registros y la copia privada de códigos de seguimiento.
 
 ## Referencias
 
